@@ -1,0 +1,187 @@
+.logo {
+    width: 148px;
+}
+
+.airplane {
+    position: absolute;
+    top: -20px;
+    left: 10%;
+    height: 16px;
+    animation: airplane 5s infinite;
+}
+
+.city {
+    height: 64px;
+}
+
+.shipment-icon {
+    width: 100px;
+    height: 100px;
+}
+
+.stores {
+    height: 40px;
+}
+
+.header-bg {
+    position: absolute;
+    z-index: -10;
+    left: 0;
+    top: 0;
+    height: 1000px;
+    z-index: -10;
+    object-fit: cover;
+}
+
+@keyframes airplane {
+    50% {
+        top: -32px;
+    }
+
+    100% {
+        left: 70%;
+    }
+}
+
+@media (min-width:578px) {
+    .header-bg {
+        left: 0;
+        top: 0;
+        height: 1000px;
+        z-index: -10;
+        object-fit: cover;
+    }
+
+    .airplane {
+        top: -24px;
+        left: 15%;
+        height: 24px;
+    }
+
+    .city {
+        height: 96px;
+    }
+
+    @keyframes airplane {
+        50% {
+            top: -32px;
+        }
+
+        100% {
+            left: 75%;
+        }
+    }
+
+    .shipment-icon {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+@media (min-width:768px) {
+    .header-bg {
+        left: 0;
+        top: 0;
+        height: 900px;
+        z-index: -10;
+        object-fit: cover;
+    }
+
+    .airplane {
+        top: -40px;
+        left: 60px;
+        height: 28px;
+    }
+
+    .city {
+        height: 128px;
+    }
+
+    @keyframes airplane {
+        50% {
+            top: -40px;
+        }
+
+        100% {
+            left: 82%;
+        }
+    }
+
+    .shipment-icon {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (min-width:992px) {
+    .header-bg {
+        left: 0;
+        top: 0;
+        height: 1000px;
+        z-index: -10;
+        object-fit: cover;
+    }
+
+    .airplane {
+        top: -44px;
+        left: 245px;
+        height: 44px;
+    }
+
+    .city {
+        height: 176px;
+    }
+
+    @keyframes airplane {
+        50% {
+            top: -52px;
+        }
+
+        100% {
+            left: 80%;
+        }
+    }
+
+    .shipment-icon {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (min-width:1200px) {
+    .header-bg {
+        left: 0;
+        top: 0;
+        height: 1000px;
+        z-index: -10;
+        object-fit: cover;
+    }
+
+    .airplane {
+        top: -32px;
+        left: 200px;
+        height: 36px;
+    }
+
+    .city {
+        height: 148px;
+    }
+
+    @keyframes airplane {
+        50% {
+            top: -56px;
+        }
+
+        100% {
+            left: 80%;
+            height: 44px;
+        }
+    }
+
+    .shipment-icon {
+        width: 180px;
+        height: 180px;
+    }
+
+
+}

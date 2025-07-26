@@ -4,29 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PackageRequest;
 use App\Models\Package;
-use App\Models\PackageFile;
-use App\Models\PackageItem;
 use App\Models\User;
 use App\Repositories\PackageFileRepository;
 use App\Repositories\PackageItemRepository;
 use App\Repositories\PackageRepository;
+use App\Repositories\UserRepository;
 use App\Traits\CommonTrait;
 use DB;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Redirect;
 
 class PackageController extends Controller
 {
     use CommonTrait;
-    protected $packageRepository, $packageItemRepository, $packageFileRepository;
+    protected $packageRepository, $packageItemRepository, $packageFileRepository, $userRepository;
 
-    public function __construct(PackageRepository $packageRepository, PackageItemRepository $packageItemRepository, PackageFileRepository $packageFileRepository)
+    public function __construct(PackageRepository $packageRepository, PackageItemRepository $packageItemRepository, PackageFileRepository $packageFileRepository, UserRepository $userRepository)
     {
         $this->packageRepository = $packageRepository;
         $this->packageItemRepository = $packageItemRepository;
         $this->packageFileRepository = $packageFileRepository;
+        $this->userRepository = $userRepository;
     }
     public function index()
     {
@@ -64,9 +62,35 @@ class PackageController extends Controller
             return Redirect::route('admin.packages')->with('alert', 'Package added successfully');
         } catch (\Exception $e) {
             DB::rollBack();
+            info($e);
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
 
+    public function edit(Package $package)
+    {
+        $package->load('files', 'items');
+        return Inertia::render('Package/EditTabs/Basic', [
+            'package' => $package,
+            'customers' => $this->userRepository->customers(),
+        ]);
+    }
+
+    public function destroy(Package $package)
+    {
+        try {
+            DB::beginTransaction();
+            $isDelete = $this->packageRepository->deletePackage($package->id);
+            if ($isDelete) {
+                $this->packageItemRepository->itemsDeleteByPackageId($package->id);
+                $this->packageFileRepository->deletePackageFilesByPackageId($package->id);
+            }
+            DB::commit();
+            return Redirect::route('admin.packages')->with('alert', 'Package deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => $e->getMessage()]);
+        }
+    }
 
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\PackageStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Package extends Model
 {
@@ -22,13 +23,13 @@ class Package extends Model
     public function getStatusNameAttribute()
     {
         switch ($this->status) {
-            case 1:
+            case PackageStatus::ACTION_REQUIRED:
                 return "Action Required";
-            case 2:
+            case PackageStatus::IN_REVIEW:
                 return "In Review";
-            case 3:
+            case PackageStatus::READY_TO_SEND:
                 return "Ready to Send";
-            case 4:
+            case PackageStatus::CONSOLIDATE:
                 return "Consolidate";
             default:
                 return "Invalid status code";

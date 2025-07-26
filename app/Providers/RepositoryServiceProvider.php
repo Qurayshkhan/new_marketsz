@@ -6,7 +6,9 @@ use App\Interfaces\PackageInterface;
 use App\Interfaces\PackageItemInterface;
 use App\Repositories\PackageItemRepository;
 use App\Repositories\PackageRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
+use League\Uri\Contracts\UserInfoInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PackageInterface::class, PackageRepository::class);
         $this->app->bind(PackageItemInterface::class, PackageItemRepository::class);
         $this->app->bind(PackageFileInterface::class, PackageRepository::class);
+        $this->app->bind(UserInfoInterface::class, UserRepository::class);
     }
 
     /**

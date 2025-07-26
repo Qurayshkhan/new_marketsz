@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [PackageController::class, 'index'])->name('admin.packages');
         Route::get('/create', [PackageController::class, 'create'])->name('admin.packages.create');
         Route::post('/store', [PackageController::class, 'store'])->name('admin.packages.store');
+        Route::get('/edit/{package}', [PackageController::class, 'edit'])->name('admin.packages.edit');
+        Route::delete('/delete/{package}', [PackageController::class, 'destroy'])->name('admin.packages.delete');
     });
 });
 

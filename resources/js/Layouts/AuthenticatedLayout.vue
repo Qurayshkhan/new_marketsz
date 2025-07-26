@@ -304,6 +304,7 @@ const isActiveDropdown = (prefix) => {
 </template>
 
 <style>
+@import "../../css/custom.css";
 @import "@vuepic/vue-datepicker/dist/main.css";
 @import "vue-select/dist/vue-select.css";
 </style>

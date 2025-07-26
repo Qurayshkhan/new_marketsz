@@ -23,11 +23,35 @@ class PackageItemRepository implements PackageItemInterface
     }
     public function insert($items, $package)
     {
-        foreach ($items as &$item) {
-            $item['package_id'] = $package->id;
-            $item['created_at'] = Carbon::now();
-            $item['updated_at'] = Carbon::now();
+        $exitItems = $this->getPackageById($package->id);
+        if (count($exitItems) > 0) {
+            $this->itemsDeleteByPackageId($package->id);
         }
-        return $this->packageItem->insert($items);
+        $data = [];
+        foreach ($items as $item) {
+            $data[] = [
+                'package_id' => $package->id,
+                'title' => $item['title'],
+                'description' => $item['description'],
+                'item_note' => $item['item_note'],
+                'quantity' => $item['quantity'],
+                'value_per_unit' => $item['value_per_unit'],
+                'total_line_value' => $item['total_line_value'],
+                'total_line_weight' => $item['total_line_weight'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+        return $this->packageItem->insert($data);
+    }
+
+    public function getPackageById($packageId)
+    {
+        return $this->packageItem->where('package_id', $packageId)->get();
+    }
+
+    public function itemsDeleteByPackageId($packageId)
+    {
+        return $this->packageItem->where('package_id', $packageId)->delete();
     }
 }

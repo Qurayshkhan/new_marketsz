@@ -37,7 +37,6 @@ const props = defineProps({
                                     <!-- head -->
                                     <thead class="text-black">
                                         <tr>
-                                            <th class="border">#</th>
                                             <th class="border">From</th>
                                             <th class="border">Package Id</th>
                                             <th class="border">Tracking Id</th>
@@ -45,18 +44,15 @@ const props = defineProps({
                                                 Date Received
                                             </th>
                                             <th class="border">Status</th>
+                                            <th class="border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!-- row 1 -->
                                         <tr
-                                            v-for="(list, index) in props
-                                                .packages.data"
+                                            v-for="list in props.packages.data"
                                             :key="list?.id"
                                         >
-                                            <th class="border">
-                                                {{ index + 1 }}
-                                            </th>
                                             <td class="border">
                                                 {{ list?.from }}
                                             </td>
@@ -71,6 +67,21 @@ const props = defineProps({
                                             </td>
                                             <td class="border">
                                                 {{ list?.status_name }}
+                                            </td>
+                                            <td class="border text-center">
+                                                <Link
+                                                    :href="
+                                                        route(
+                                                            'admin.packages.edit',
+                                                            list?.id
+                                                        )
+                                                    "
+                                                >
+                                                    <i
+                                                        class="fa fa-angle-right"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </Link>
                                             </td>
                                         </tr>
                                     </tbody>

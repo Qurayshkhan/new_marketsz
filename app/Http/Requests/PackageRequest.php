@@ -22,6 +22,7 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'sometimes',
             'from' => 'required|string',
             'date_received' => 'required|date',
             'sender_id' => 'required|exists:users,id',

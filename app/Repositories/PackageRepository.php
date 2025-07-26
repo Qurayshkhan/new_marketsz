@@ -20,7 +20,13 @@ class PackageRepository implements PackageInterface
     }
     public function store($data)
     {
-        return $this->package->create($data);
+        $packageId = isset($data['id']) ? $data['id'] : null;
+        return $this->package->updateOrCreate(['id' => $packageId], $data);
+    }
+
+    public function deletePackage($packageId)
+    {
+        return $this->package->where('id', $packageId)->delete();
     }
 
 }

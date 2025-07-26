@@ -10,4 +10,10 @@ class PackageFile extends Model
         'package_id',
         'file'
     ];
+    protected $appends = ['file_with_url'];
+
+    public function getFileWithUrlAttribute()
+    {
+        return asset($this->file);
+    }
 }

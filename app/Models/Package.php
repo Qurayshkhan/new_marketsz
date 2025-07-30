@@ -35,4 +35,9 @@ class Package extends Model
                 return "Invalid status code";
         }
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'sender_id', 'id');
+    }
 }

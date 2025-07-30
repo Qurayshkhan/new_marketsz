@@ -2,16 +2,20 @@
 
 namespace App\Repositories;
 
+use App\Helpers\PackageStatus;
 use App\Interfaces\PackageInterface;
 use App\Models\Package;
+use App\Models\SpecialRequest;
+use Auth;
 
 class PackageRepository implements PackageInterface
 {
 
-    protected $package;
-    public function __construct(Package $package)
+    protected $package, $specialRequest;
+    public function __construct(Package $package, SpecialRequest $specialRequest)
     {
         $this->package = $package;
+        $this->specialRequest = $specialRequest;
     }
 
     public function packages()
@@ -27,6 +31,16 @@ class PackageRepository implements PackageInterface
     public function deletePackage($packageId)
     {
         return $this->package->where('id', $packageId)->delete();
+    }
+
+    public function userActionRequiredPackage()
+    {
+        return $this->package->where('sender_id', Auth::id())->where('status', PackageStatus::ACTION_REQUIRED)->with('files', 'items', 'customer')->get();
+    }
+
+    public function packageSpecialRequests()
+    {
+        return $this->specialRequest->get();
     }
 
 }

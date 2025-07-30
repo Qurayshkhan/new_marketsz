@@ -19,11 +19,11 @@ Route::get('/welcome', function () {
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -49,3 +49,4 @@ Route::get("/calculator", [WebsiteController::class, "calculator"])->name('web.c
 Route::get("/contact", [WebsiteController::class, "contact"])->name('web.contact');
 Route::get('/about', [WebsiteController::class, 'about'])->name('web.about');
 require __DIR__ . '/auth.php';
+require __DIR__ . '/customer.php';

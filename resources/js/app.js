@@ -7,7 +7,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
+import helpers from './helper';
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -17,8 +17,10 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const vueApp = createApp({ render: () => h(App, props) })
+            .mixin(helpers)
             .use(plugin)
             .use(ZiggyVue);
+
 
         const updateBodyClass = (componentName) => {
             if (componentName === 'Auth/Login' || componentName === 'Auth/Register') {

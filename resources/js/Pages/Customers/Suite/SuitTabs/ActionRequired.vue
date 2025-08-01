@@ -90,6 +90,9 @@ const upload = async () => {
             response.data.message || "Invoices uploaded successfully"
         );
         closeModal();
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
     } catch (error) {
         toast.error(
             error.response?.data?.message || "Failed to upload invoices"

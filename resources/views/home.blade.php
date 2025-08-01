@@ -66,9 +66,9 @@
                             address</label>
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <!-- <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                                             </svg> -->
+                                                                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                                                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                                                             </svg> -->
                         </div>
                         <input
                             class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
@@ -86,17 +86,21 @@
         </div>
     </header>
     <div class="relative max-w-7xl mx-auto z-10 mt-12">
-        <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
+        <img src="{{ asset('assets') }}/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
         <div class="flex justify-between items-end">
-            <img src="assets/image/home/svg/world2.svg" alt="U.S. illustration" class="city">
-            <img src="assets/image/home/island.svg" alt="Island illustration" class="city hidden">
-            <img src="assets/image/home/svg/home2.svg" alt="EU illustration" class="city">
+            <img src="{{ asset('assets/image/home/world2.svg') }}" alt="U.S. illustration" class="city">
+            <img src="{{ asset('assets/image/home/island.svg') }}" alt="Island illustration" class="city">
+            <img src="{{ asset('assets/image/home/home2.svg') }}" alt="EU illustration" class="city">
         </div>
     </div>
-    <img src="assets/image/home/box.svg" alt="floating icon" class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
-    <img src="assets/image/home/box.svg" alt="floating icon" class="absolute h-8 mt-2 ml-64 opacity-25 top-32 left-1/2">
-    <img src="assets/image/home/box.svg" alt="floating icon" class="absolute right-8 h-10 mr-8 opacity-50 top-64">
-    <img src="assets/image/home/box.svg" alt="floating icon" class="absolute h-8 opacity-25 top-80 left-20">
+    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+        class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
+    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+        class="absolute h-8 mt-2 ml-64 opacity-25 top-32 left-1/2">
+    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+        class="absolute right-8 h-10 mr-8 opacity-50 top-64">
+    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+        class="absolute h-8 opacity-25 top-80 left-20">
     <section class="container space-y-12 pt-12 sm:pt-20">
         <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
             <h2 class="text-3xl font-bold leading-snug sm:text-4xl">Hassle-Free Worldwide Shopping and Shipping
@@ -109,7 +113,8 @@
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         1</div>
-                    <div><img src="assets/image/home/home.svg" alt="" class="mx-auto shipment-icon">
+                    <div><img src="{{ asset('assets') }}/image/home/home.svg" alt=""
+                            class="mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight">Get a <strong>Marketsz USA Shipping Address</strong>
                         instantly when you sign up</div>
@@ -118,7 +123,8 @@
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         2</div>
-                    <div><img src="assets/image/home/cart.svg" alt="" class="mx-auto shipment-icon">
+                    <div><img src="{{ asset('assets') }}/image/home/cart.svg" alt=""
+                            class="mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight">Shop at ANY online store using your <strong>Marketsz
                             unique USA Address</strong> as your shipping address</div>
@@ -127,7 +133,8 @@
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         3</div>
-                    <div><img src="assets/image/home/airplane-icon.svg" alt="" class="mx-auto shipment-icon">
+                    <div><img src="{{ asset('assets') }}/image/home/airplane-icon.svg" alt=""
+                            class="mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight"><strong>Marketsz ships your orders</strong> to you in
                         the
@@ -165,7 +172,7 @@
         <div class="absolute right-0 z-30 inline w-auto p-3 -mb-16 overflow-hidden bottom-full" id="whale"
             style="transform: translateX(-20px);">
             <div class="animate-wiggle">
-                <img src="assets/image/home/cartoon-plane.svg" alt="Whale illustration"
+                <img src="{{ asset('assets') }}/image/home/cartoon-plane.svg" alt="Whale illustration"
                     class="h-20 md:h-36 lg:h-40 xl:h-48 transform">
             </div>
         </div>
@@ -190,23 +197,25 @@
                 </div>
                 <div class="grid grid-cols-1 gap-12 px-4 md:grid-cols-3 sm:px-0">
                     <div class="text-center bg-gray-50 p-4 rounded-xl">
-                        <div class="flex items-center justify-center"><img src="assets/image/home/shipment.svg"
-                                alt="" class="max-h-32"></div>
+                        <div class="flex items-center justify-center"><img
+                                src="{{ asset('assets') }}/image/home/shipment.svg" alt="" class="max-h-32">
+                        </div>
                         <div class="mt-5 text-2xl font-bold leading-tight">Quick and Guaranteed Shopping and
                             Shipping</div>
                         <div class="pt-2 text-lg text-gray-600">Shop from any online store and get your order
                             within 1-3 days</div>
                     </div>
                     <div class="text-center bg-gray-50 p-4 rounded-xl">
-                        <div class="flex items-center justify-center"><img src="assets/image/home/monitor.svg"
-                                alt="" class="max-h-32"></div>
+                        <div class="flex items-center justify-center"><img
+                                src="{{ asset('assets') }}/image/home/monitor.svg" alt="" class="max-h-32">
+                        </div>
                         <div class="mt-5 text-2xl font-bold leading-tight">Easy to Use Dashboard</div>
                         <div class="pt-2 text-lg text-gray-600">From your dashboard you can see all of your
                             orders, upload invoices, combine and track your packages</div>
                     </div>
                     <div class="text-center bg-gray-50 p-4 rounded-xl">
-                        <div class="flex items-center justify-center"><img src="assets/image/home/call-center.svg"
-                                alt="" class="max-h-32">
+                        <div class="flex items-center justify-center"><img
+                                src="{{ asset('assets') }}/image/home/call-center.svg" alt="" class="max-h-32">
                         </div>
                         <div class="mt-5 text-2xl font-bold leading-tight">24/7 Live Support</div>
                         <div class="pt-2 text-lg text-gray-600">
@@ -569,124 +578,130 @@
                             class="grid flex-1 grid-flow-row grid-cols-2 gap-2 sm:grid-flow-row auto-cols-max sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/aliexpress">
-                                <img alt="stores" src="assets/image/home/AliExpress-logo.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/AliExpress-logo.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/amazon">
-                                <img alt="stores" src="assets/image/home/Amazon_color.webp" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Amazon_color.webp"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/apple">
-                                <img alt="stores" src="assets/image/home/Apple-logo_2021-03-11-001728.png"
+                                <img alt="stores"
+                                    src="{{ asset('assets') }}/image/home/Apple-logo_2021-03-11-001728.png"
                                     decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/bath-body-works">
-                                <img alt="stores" src="assets/image/home/Bath-and-body-works.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Bath-and-body-works.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/coach">
-                                <img alt="stores" src="assets/image/home/Coach.png" decoding="async" class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Coach.png" decoding="async"
+                                    class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/ebay">
-                                <img alt="stores" src="assets/image/home/Ebay-logo.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Ebay-logo.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/fashion-nova">
-                                <img alt="stores" src="assets/image/home/Fashion-nova.jpg" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Fashion-nova.jpg"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/forever">
-                                <img alt="stores" src="assets/image/home/Forever_color.webp" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Forever_color.webp"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/gap">
-                                <img alt="stores" src="assets/image/home/Gap-logo.png" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Gap-logo.png" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/h-m">
-                                <img alt="stores" src="assets/image/home/HM.png" decoding="async" class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/HM.png" decoding="async"
+                                    class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/home-depot">
-                                <img alt="stores" src="assets/image/home/Home-Depot.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Home-Depot.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/jc-penney">
-                                <img alt="stores" src="assets/image/home/JCPenney_color.webp" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/JCPenney_color.webp"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/macys">
-                                <img alt="stores" src="assets/image/home/macys_color.webp" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/macys_color.webp"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/nike">
-                                <img alt="stores" src="assets/image/home/Nike-logo.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Nike-logo.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/old-navy">
-                                <img alt="stores" src="assets/image/home/Old-navy.png" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Old-navy.png" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/pretty-little-thing">
-                                <img alt="stores" src="assets/image/home/Pretty-little-thing.png" decoding="async"
-                                    class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Pretty-little-thing.png"
+                                    decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/shein">
-                                <img alt="stores" src="assets/image/home/Shein.png" decoding="async" class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Shein.png" decoding="async"
+                                    class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/tory-burch">
-                                <img alt="stores" src="assets/image/home/Tory-Burch_2021-03-10-223425.png"
+                                <img alt="stores"
+                                    src="{{ asset('assets') }}/image/home/Tory-Burch_2021-03-10-223425.png"
                                     decoding="async" class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/victorias-secret">
-                                <img alt="stores" src="assets/image/home/VS-logo.webp" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/VS-logo.webp" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/walmart">
-                                <img alt="stores" src="assets/image/home/Walmart.webp" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Walmart.webp" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/zaful">
-                                <img alt="stores" src="assets/image/home/Zaful.webp" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Zaful.webp" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/zappos">
-                                <img alt="stores" src="assets/image/home/Zappos.webp" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Zappos.webp" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/zara">
-                                <img alt="stores" src="assets/image/home/Zara.webp " decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Zara.webp " decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/zulily">
-                                <img alt="stores" src="assets/image/home/Zulily.webp" decoding="async"
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Zulily.webp" decoding="async"
                                     class="stores" />
                             </a>
                             <a class="relative flex justify-center col-span-1 py-4 md:py-8 px-4 bg-white rounded-tl-3xl rounded-br-3xl snap-center"
                                 href="/shops/vans">
-                                <img alt="stores" src="assets/image/home/Vans.webp" decoding="async" class="stores" />
+                                <img alt="stores" src="{{ asset('assets') }}/image/home/Vans.webp" decoding="async"
+                                    class="stores" />
                             </a>
                             <div class="w-4 sm:hidden"></div>
                         </div>
@@ -710,24 +725,24 @@
         </div>
     </section>
     <div class="relative mt-12 overflow-hidden sm:mt-28 pt-60">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute top-0 w-auto h-10 ml-24 text-blue-100 opacity-75 left-1/2">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute w-auto h-10 text-blue-100 opacity-50 top-64 left-1/2">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute w-auto h-12 text-blue-100 opacity-75 top-12 right-8">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute w-auto h-8 text-blue-100 opacity-50 top-8 left-8">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute w-auto h-6 -ml-48 text-blue-100 opacity-50 top-24 left-1/2">
-        <img src="assets/image/home/box-gray.svg" alt="box"
+        <img src="{{ asset('assets') }}/image/home/box-gray.svg" alt="box"
             class="absolute left-0 w-auto h-8 text-blue-100 opacity-50 top-80 ml-80">
         <div
             class="absolute w-32 h-32 p-3 border-2 border-primary border-dashed rounded-full opacity-50 top-4 right-64 animate-spin-slow">
             <div class="w-full h-full bg-primary rounded-full"></div>
         </div>
         <div class="absolute left-0 z-0 w-auto top-12 h-72 flamingo" style="transform: translateX(20px);">
-            <div class="animate-float"><img src="assets/image/ballon.svg" alt="Flamingo illustration"
+            <div class="animate-float"><img src="{{ asset('assets') }}/image/ballon.svg" alt="Flamingo illustration"
                     class="h-48 sm:52 transform"></div>
         </div>
         <section class="container space-y-12 pt-12 sm:pt-20">
@@ -745,13 +760,13 @@
                         <button
                             class="mt-2 ml-2 flex-1 text-lg rounded-lg h-14 px-4 flex items-center justify-center whitespace-nowrap border-2 border-black bg-gray-50">
                             <div><img draggable="false" class="flex-shrink-0 w-6 mr-2" alt="🇺🇸"
-                                    src="assets/image/home/1f1fa-1f1f8.png"></div>
+                                    src="{{ asset('assets') }}/image/home/1f1fa-1f1f8.png"></div>
                             <span>United States</span>
                         </button>
                         <button
                             class="mt-2 flex ml-2 flex-1 text-lg rounded-lg h-14 px-4 items-center justify-center whitespace-nowrap border-2 border-gray-300 bg-white">
                             <div><img draggable="false" class="flex-shrink-0 w-6 mr-2" alt="🇪🇺"
-                                    src="assets/image/home/1f1ea-1f1fa.png"></div>
+                                    src="{{ asset('assets') }}/image/home/1f1ea-1f1fa.png"></div>
                             <span>Europe</span>
                         </button>
                     </div>
@@ -1141,37 +1156,37 @@
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-gray-300 bg-white flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="📱"
-                                        src="assets/image/home/1f4f1.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f4f1.png"></div>
                                 <div class="mt-3 leading-tight">Phone / Tablet</div>
                             </button>
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-gray-300 bg-white flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="💻"
-                                        src="assets/image/home/1f4bb.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f4bb.png"></div>
                                 <div class="mt-3 leading-tight">Laptop</div>
                             </button>
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-gray-300 bg-white flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="🥾"
-                                        src="assets/image/home/1f97e.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f97e.png"></div>
                                 <div class="mt-3 leading-tight">Shoes</div>
                             </button>
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-gray-300 bg-white flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="👕"
-                                        src="assets/image/home/1f455.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f455.png"></div>
                                 <div class="mt-3 leading-tight">Clothes</div>
                             </button>
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-gray-300 bg-white flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="💄"
-                                        src="assets/image/home/1f484.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f484.png"></div>
                                 <div class="mt-3 leading-tight">Beauty products</div>
                             </button>
                             <button
                                 class="max-w-12 rounded-lg border-2 p-4 text-center border-black bg-gray-50 flex gap-3">
                                 <div><img draggable="false" class="h-12 mx-auto" alt="👀"
-                                        src="assets/image/home/1f440.png"></div>
+                                        src="{{ asset('assets') }}/image/home/1f440.png"></div>
                                 <div class="mt-3 leading-tight">Other</div>
                             </button>
                         </div>
@@ -1258,9 +1273,9 @@
     </section>
     <div class="mt-auto">
         <div class="relative pt-8 pb-40 mt-20 bg-rose-50 sm:pt-0 sm:mt-40">
-            <img alt="Seahorse illustration" src="assets/image/ballon.svg"
+            <img alt="Seahorse illustration" src="{{ asset('assets') }}/image/ballon.svg"
                 class="absolute hidden w-auto h-40 md:-left-36 lg:left-2 xl:left-24 top-48 animate-float md:block">
-            <img alt="Fish illustration" src="assets/image/home/cartoon-plane.svg"
+            <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/cartoon-plane.svg"
                 class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:-mr-0 md:right-2 md:top-1/2 md:-translate-y-1/2 lg:right-24 xl:right-32 animate-wiggle">
             <section class="container space-y-12 pt-12 sm:pt-20">
                 <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">

@@ -4,12 +4,14 @@ import Report from "../Report.vue";
 import TextInput from "@/Components/TextInput.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import Modal from "@/Components/Modal.vue";
+import axios from "axios";
+import { useToast } from "vue-toastification";
 
 const props = defineProps({
     actions: Object,
     specialRequests: Object,
 });
-
+const toast = useToast();
 const actions = props.actions;
 
 const expandedRows = ref(new Set());
@@ -17,7 +19,9 @@ const selectedService = ref(null);
 const dropdownOpen = ref(false);
 const isShowNote = ref(false);
 const isShowUploadInvoiceModal = ref(false);
+const addNote = ref(null);
 const files = ref([]);
+const packageId = ref(null);
 const toggleRow = (id) => {
     if (expandedRows.value.has(id)) {
         expandedRows.value.delete(id);
@@ -50,7 +54,8 @@ const closeModal = () => {
     isShowUploadInvoiceModal.value = false;
     files.value = [];
 };
-const showUploadInvoiceModal = () => {
+const showUploadInvoiceModal = (id) => {
+    packageId.value = id;
     isShowUploadInvoiceModal.value = true;
 };
 
@@ -58,10 +63,46 @@ const onFileChange = (e) => {
     files.value = Array.from(e.target.files);
 };
 
-const upload = () => {
+const upload = async () => {
     const formData = new FormData();
     files.value.forEach((file) => formData.append("invoices[]", file));
+    formData.append("package_id", packageId.value);
+    formData.append("status", 2);
+
+    try {
+        const response = await axios.post(
+            route("customers.packageUploadInvoices"),
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+        toast.success(
+            response.data.message || "Invoices uploaded successfully"
+        );
+    } catch (error) {
+        toast.error(
+            error.response?.data?.message || "Failed to upload invoices"
+        );
+    }
+
     close();
+};
+
+const handleAddNote = async (e, id) => {
+    e.preventDefault();
+    try {
+        const response = await axios.post(route("customer.packageAddNote"), {
+            note: addNote.value,
+            id: id,
+        });
+        isShowNote.value = false;
+        toast.success(response.data.message);
+    } catch (error) {
+        toast.error(response.data.message);
+    }
 };
 </script>
 
@@ -121,7 +162,11 @@ const upload = () => {
                                     <div>
                                         <button
                                             class="text-primary-500"
-                                            @click="showUploadInvoiceModal()"
+                                            @click="
+                                                showUploadInvoiceModal(
+                                                    action.id
+                                                )
+                                            "
                                         >
                                             Upload Merchant Invoice
                                         </button>
@@ -281,14 +326,24 @@ const upload = () => {
                                                             <TextInput
                                                                 class="w-full"
                                                                 placeholder="Please add note here"
+                                                                v-model="
+                                                                    addNote
+                                                                "
                                                             />
                                                             <div
                                                                 class="my-2 flex gap-2 items-center"
                                                             >
                                                                 <DangerButton
-                                                                    >Save your
-                                                                    note</DangerButton
+                                                                    @click.prevent="
+                                                                        handleAddNote(
+                                                                            $event,
+                                                                            action.id
+                                                                        )
+                                                                    "
                                                                 >
+                                                                    Save your
+                                                                    note
+                                                                </DangerButton>
                                                                 <a
                                                                     @click="
                                                                         handleShowNote()
@@ -298,6 +353,17 @@ const upload = () => {
                                                                 >
                                                             </div>
                                                         </div>
+                                                        <p class="">
+                                                            Note:
+                                                            <span
+                                                                class="text-red-500"
+                                                                >{{
+                                                                    addNote
+                                                                        ? addNote
+                                                                        : action?.note
+                                                                }}</span
+                                                            >
+                                                        </p>
                                                         <hr />
                                                     </td>
                                                 </tr>
@@ -391,7 +457,9 @@ const upload = () => {
                                                                 type="button"
                                                                 class="btn btn-big mt-4 bg-primary-600 text-white hover:bg-primary-700"
                                                                 @click="
-                                                                    showUploadInvoiceModal()
+                                                                    showUploadInvoiceModal(
+                                                                        action.id
+                                                                    )
                                                                 "
                                                             >
                                                                 Upload Invoice

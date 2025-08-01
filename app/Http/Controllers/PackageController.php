@@ -11,8 +11,10 @@ use App\Repositories\PackageRepository;
 use App\Repositories\UserRepository;
 use App\Traits\CommonTrait;
 use DB;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
+use Response;
 
 class PackageController extends Controller
 {
@@ -90,6 +92,34 @@ class PackageController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function addNote(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $this->packageRepository->addPackageNote($request->all());
+            DB::commit();
+
+            return response()->json(['message' => 'Note added successfully.'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function uploadInvoices(Request $request)
+    {
+        // dd($request->all());
+        try {
+            DB::beginTransaction();
+            $this->packageRepository->changeStatus($request->all());
+            DB::commit();
+            return response()->json(['message' => 'Package invoices uploaded successfully.'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 

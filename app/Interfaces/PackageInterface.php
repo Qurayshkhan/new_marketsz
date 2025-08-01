@@ -14,4 +14,8 @@ interface PackageInterface
     public function userActionRequiredPackage();
 
     public function packageSpecialRequests();
+
+    public function addPackageNote($data);
+
+    public function changeStatus($data);
 }

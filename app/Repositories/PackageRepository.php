@@ -43,4 +43,16 @@ class PackageRepository implements PackageInterface
         return $this->specialRequest->get();
     }
 
+    public function addPackageNote($data)
+    {
+        $this->package->updateOrCreate(['id' => $data['id']], [
+            'note' => $data['note'],
+        ]);
+    }
+
+    public function changeStatus($data)
+    {
+        $this->package->where('id', $data['id'])->update(['status' => $data['status']]);
+    }
+
 }

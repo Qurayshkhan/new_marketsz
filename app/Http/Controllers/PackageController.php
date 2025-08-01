@@ -6,6 +6,7 @@ use App\Http\Requests\PackageRequest;
 use App\Models\Package;
 use App\Models\User;
 use App\Repositories\PackageFileRepository;
+use App\Repositories\PackageInvoiceRepository;
 use App\Repositories\PackageItemRepository;
 use App\Repositories\PackageRepository;
 use App\Repositories\UserRepository;
@@ -19,14 +20,15 @@ use Response;
 class PackageController extends Controller
 {
     use CommonTrait;
-    protected $packageRepository, $packageItemRepository, $packageFileRepository, $userRepository;
+    protected $packageRepository, $packageItemRepository, $packageFileRepository, $userRepository, $packageInvoiceRepository;
 
-    public function __construct(PackageRepository $packageRepository, PackageItemRepository $packageItemRepository, PackageFileRepository $packageFileRepository, UserRepository $userRepository)
+    public function __construct(PackageRepository $packageRepository, PackageItemRepository $packageItemRepository, PackageFileRepository $packageFileRepository, UserRepository $userRepository, PackageInvoiceRepository $packageInvoiceRepository)
     {
         $this->packageRepository = $packageRepository;
         $this->packageItemRepository = $packageItemRepository;
         $this->packageFileRepository = $packageFileRepository;
         $this->userRepository = $userRepository;
+        $this->packageInvoiceRepository = $packageInvoiceRepository;
     }
     public function index()
     {
@@ -64,7 +66,6 @@ class PackageController extends Controller
             return Redirect::route('admin.packages')->with('alert', 'Package added successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            info($e);
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
@@ -95,32 +96,6 @@ class PackageController extends Controller
         }
     }
 
-    public function addNote(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $this->packageRepository->addPackageNote($request->all());
-            DB::commit();
 
-            return response()->json(['message' => 'Note added successfully.'], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
-    }
-
-    public function uploadInvoices(Request $request)
-    {
-        // dd($request->all());
-        try {
-            DB::beginTransaction();
-            $this->packageRepository->changeStatus($request->all());
-            DB::commit();
-            return response()->json(['message' => 'Package invoices uploaded successfully.'], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
-    }
 
 }

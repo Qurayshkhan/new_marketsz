@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'last_name' => 'admin',
             'email' => 'admin@marketz.com',
             'password' => Hash::make('password'),
+            'type' => 1,
         ]);
     }
 }

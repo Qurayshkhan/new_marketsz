@@ -52,7 +52,9 @@ class PackageRepository implements PackageInterface
 
     public function changeStatus($data)
     {
-        $this->package->where('id', $data['id'])->update(['status' => $data['status']]);
+        return $this->package->where('id', $data['package_id'])->update(['status' => $data['status']]);
     }
+
+
 
 }

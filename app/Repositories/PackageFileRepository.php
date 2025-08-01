@@ -40,4 +40,9 @@ class PackageFileRepository implements PackageFileInterface
     {
         return $this->packageFile->where('package_id', $packageId)->delete();
     }
+
+    public function getPackageFiles($packageId)
+    {
+        return $this->packageFile->where('package_id', $packageId)->get();
+    }
 }

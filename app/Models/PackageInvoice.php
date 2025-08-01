@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PackageInvoice extends Model
 {
-    //
+    protected $fillable = ['package_id', 'image'];
 }

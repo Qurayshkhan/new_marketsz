@@ -19,9 +19,12 @@ const selectedService = ref(null);
 const dropdownOpen = ref(false);
 const isShowNote = ref(false);
 const isShowUploadInvoiceModal = ref(false);
+const isShowPhotosModal = ref(false);
 const addNote = ref(null);
 const files = ref([]);
 const packageId = ref(null);
+const isUploadingInvoice = ref(false);
+const packagePhotos = ref([]);
 const toggleRow = (id) => {
     if (expandedRows.value.has(id)) {
         expandedRows.value.delete(id);
@@ -52,7 +55,9 @@ const handleShowNote = () => {
 };
 const closeModal = () => {
     isShowUploadInvoiceModal.value = false;
+    isShowPhotosModal.value = false;
     files.value = [];
+    packagePhotos.value = [];
 };
 const showUploadInvoiceModal = (id) => {
     packageId.value = id;
@@ -64,6 +69,7 @@ const onFileChange = (e) => {
 };
 
 const upload = async () => {
+    isUploadingInvoice.value = true;
     const formData = new FormData();
     files.value.forEach((file) => formData.append("invoices[]", file));
     formData.append("package_id", packageId.value);
@@ -79,13 +85,17 @@ const upload = async () => {
                 },
             }
         );
+
         toast.success(
             response.data.message || "Invoices uploaded successfully"
         );
+        closeModal();
     } catch (error) {
         toast.error(
             error.response?.data?.message || "Failed to upload invoices"
         );
+    } finally {
+        isUploadingInvoice.value = false;
     }
 
     close();
@@ -102,6 +112,17 @@ const handleAddNote = async (e, id) => {
         toast.success(response.data.message);
     } catch (error) {
         toast.error(response.data.message);
+    }
+};
+const showPackagePhotos = async (packageId) => {
+    try {
+        const response = await axios.get(
+            route("customers.packageGetPhotos", { package_id: packageId })
+        );
+        packagePhotos.value = response.data.data || [];
+        isShowPhotosModal.value = true;
+    } catch (error) {
+        toast.error("Failed to fetch photos");
     }
 };
 </script>
@@ -219,6 +240,11 @@ const handleAddNote = async (e, id) => {
                                                         <div>
                                                             <button
                                                                 class="btn bg-white text-black"
+                                                                @click="
+                                                                    showPackagePhotos(
+                                                                        action.id
+                                                                    )
+                                                                "
                                                             >
                                                                 Photo
                                                             </button>
@@ -454,8 +480,11 @@ const handleAddNote = async (e, id) => {
                                                                 </div>
                                                             </div>
                                                             <button
+                                                                :disabled="
+                                                                    isUploadingInvoice
+                                                                "
                                                                 type="button"
-                                                                class="btn btn-big mt-4 bg-primary-600 text-white hover:bg-primary-700"
+                                                                class="btn btn-big mt-4 bg-primary-600 text-white hover:bg-primary-700 disabled:bg-primary-400"
                                                                 @click="
                                                                     showUploadInvoiceModal(
                                                                         action.id
@@ -525,6 +554,31 @@ const handleAddNote = async (e, id) => {
                 >
                     Upload Document
                 </button>
+            </div>
+        </div>
+    </Modal>
+    <Modal :show="isShowPhotosModal" @close="closeModal">
+        <div class="p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    Package Photos
+                </h2>
+                <button
+                    @click="closeModal"
+                    class="text-gray-500 hover:text-gray-800"
+                >
+                    Close
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img
+                    v-for="(photo, index) in packagePhotos"
+                    :key="index"
+                    :src="photo.file_with_url"
+                    alt="Package Photo"
+                    class="rounded shadow border"
+                />
             </div>
         </div>
     </Modal>

@@ -27,7 +27,7 @@ const props = defineProps({
                         class="flex items-center p-3 rounded-md hover:bg-gray-700 transition-colors duration-200"
                         :class="{
                             'text-white bg-gray-700':
-                                route().current('customer.dashboard'),
+                                $page.url.startsWith('/customer/suite'),
                         }"
                     >
                         <i class="fa-solid fa-house w-5 h-5 mr-3"></i>

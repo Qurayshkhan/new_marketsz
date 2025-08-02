@@ -11,6 +11,13 @@ export default {
             } catch (error) {
                 console.log("🚀 ~ __format_date_time ~ error:", error);
             }
+        },
+        __to_fixed_number(num) {
+            if (num) {
+                return Number(num)?.toFixed(2);
+            } else {
+                return "0.00";
+            }
         }
     },
 }

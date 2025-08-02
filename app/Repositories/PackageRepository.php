@@ -33,9 +33,14 @@ class PackageRepository implements PackageInterface
         return $this->package->where('id', $packageId)->delete();
     }
 
-    public function userActionRequiredPackage()
+    public function shipmentPackages($userId, $status = PackageStatus::ACTION_REQUIRED)
     {
-        return $this->package->where('sender_id', Auth::id())->where('status', PackageStatus::ACTION_REQUIRED)->with('files', 'items', 'customer', 'specialRequest')->get();
+        $query = $this->package->query();
+        if ($userId) {
+            $query->where('sender_id', $userId);
+        }
+
+        return $this->package->where('status', $status)->with('files', 'items', 'customer', 'specialRequest')->get();
     }
 
     public function packageSpecialRequests()
@@ -55,6 +60,14 @@ class PackageRepository implements PackageInterface
         return $this->package->where('id', $data['package_id'])->update(['status' => $data['status']]);
     }
 
-
+    public function packageCounts($userId)
+    {
+        return [
+            'action_required' => $this->shipmentPackages($userId, PackageStatus::ACTION_REQUIRED)->count(),
+            'in_review' => $this->shipmentPackages($userId, PackageStatus::IN_REVIEW)->count(),
+            'ready_to_send' => $this->shipmentPackages($userId, PackageStatus::READY_TO_SEND)->count(),
+            'all' => $this->shipmentPackages($userId)->count(),
+        ];
+    }
 
 }

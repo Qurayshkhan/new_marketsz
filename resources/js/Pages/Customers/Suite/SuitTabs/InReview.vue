@@ -6,15 +6,14 @@ import DangerButton from "@/Components/DangerButton.vue";
 import Modal from "@/Components/Modal.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
-import { Head } from "@inertiajs/vue3";
 
 const props = defineProps({
-    actions: Object,
+    inReviews: Object,
     specialRequests: Object,
     packageCounts: Array,
 });
 const toast = useToast();
-const actions = props.actions;
+const inReviews = props.inReviews;
 
 const expandedRows = ref(new Set());
 const selectedService = ref(null);
@@ -27,7 +26,6 @@ const files = ref([]);
 const packageId = ref(null);
 const isUploadingInvoice = ref(false);
 const packagePhotos = ref([]);
-const previews = ref([]);
 const toggleRow = (id) => {
     if (expandedRows.value.has(id)) {
         expandedRows.value.delete(id);
@@ -36,14 +34,14 @@ const toggleRow = (id) => {
     }
 };
 const toggleAll = () => {
-    if (expandedRows.value.size === actions.length) {
+    if (expandedRows.value.size === inReviews.length) {
         expandedRows.value.clear();
     } else {
-        expandedRows.value = new Set(actions.map((a) => a.id));
+        expandedRows.value = new Set(inReviews.map((a) => a.id));
     }
 };
 
-const allExpanded = () => expandedRows.value.size === actions.length;
+const allExpanded = () => expandedRows.value.size === inReviews.length;
 
 const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value;
@@ -83,26 +81,9 @@ const showUploadInvoiceModal = (id) => {
 };
 
 const onFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    files.value = selectedFiles;
-    previews.value = [];
+    files.value = Array.from(e.target.files);
+};
 
-    selectedFiles.forEach((file) => {
-        if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previews.value.push(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            previews.value.push(null); // for non-images (like PDF)
-        }
-    });
-};
-const removeImage = (index) => {
-    files.value.splice(index, 1);
-    previews.value.splice(index, 1);
-};
 const upload = async () => {
     isUploadingInvoice.value = true;
     const formData = new FormData();
@@ -166,7 +147,6 @@ const showPackagePhotos = async (packageId) => {
 </script>
 
 <template>
-    <Head title="Action Required" />
     <Report
         :actionCount="props?.packageCounts.action_required"
         :inReviewCount="props?.packageCounts?.in_review"
@@ -194,60 +174,57 @@ const showPackagePhotos = async (packageId) => {
                             <th>From</th>
                             <th>Package ID</th>
                             <th>Date Received</th>
-                            <th class="bg-primary-500 text-white">
-                                Action Required
-                            </th>
+                            <th>Total value</th>
+                            <th>Total weight</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-for="action in actions" :key="action.id">
+                        <template
+                            v-for="in_review in inReviews"
+                            :key="in_review.id"
+                        >
                             <tr>
                                 <td
-                                    @click="toggleRow(action.id)"
+                                    @click="toggleRow(in_review.id)"
                                     class="cursor-pointer"
                                 >
                                     <i
                                         :class="[
                                             'fas',
-                                            expandedRows.has(action.id)
+                                            expandedRows.has(in_review.id)
                                                 ? 'fa-chevron-down'
                                                 : 'fa-chevron-right',
                                             'text-primary-500',
                                         ]"
                                     ></i>
                                 </td>
-                                <td>{{ action.from }}</td>
-                                <td>{{ action.package_id }}</td>
+                                <td>{{ in_review.from }}</td>
+                                <td>{{ in_review.package_id }}</td>
                                 <td>
                                     {{
-                                        __format_date_time(action.date_received)
+                                        __format_date_time(
+                                            in_review.date_received
+                                        )
                                     }}
                                 </td>
                                 <td>
-                                    <div>
-                                        <button
-                                            class="text-primary-500"
-                                            @click="
-                                                showUploadInvoiceModal(
-                                                    action.id
-                                                )
-                                            "
-                                        >
-                                            Upload Merchant Invoice
-                                        </button>
-                                        <p>As required by Customs</p>
-                                    </div>
+                                    {{
+                                        __to_fixed_number(in_review.total_value)
+                                    }}
+                                    USD
                                 </td>
+                                <td>{{ in_review.weight }} lbs</td>
                             </tr>
                             <transition name="fade">
                                 <tr
-                                    v-if="expandedRows.has(action.id)"
+                                    v-if="expandedRows.has(in_review.id)"
                                     class="bg-gray-50"
                                 >
-                                    <td colspan="5" class="text-left px-5">
+                                    <td colspan="6" class="text-left px-5">
                                         <div>
-                                            <strong
-                                                >Upload Merchant Invoice</strong
+                                            <strong class="bold"
+                                                >Why is this package in
+                                                review?</strong
                                             >
                                             <p class="text-sm text-gray-600">
                                                 Please upload the merchant
@@ -274,7 +251,7 @@ const showPackagePhotos = async (packageId) => {
                                                             <p>
                                                                 To:
                                                                 {{
-                                                                    action
+                                                                    in_review
                                                                         ?.customer
                                                                         ?.name
                                                                 }}
@@ -286,7 +263,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 class="btn bg-white text-black"
                                                                 @click="
                                                                     showPackagePhotos(
-                                                                        action.id
+                                                                        in_review.id
                                                                     )
                                                                 "
                                                             >
@@ -301,7 +278,7 @@ const showPackagePhotos = async (packageId) => {
                                             </thead>
                                             <tbody>
                                                 <template
-                                                    v-for="item in action.items"
+                                                    v-for="item in in_review.items"
                                                     :key="item.id"
                                                 >
                                                     <tr
@@ -357,7 +334,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     >Total
                                                                     weight: </span
                                                                 >{{
-                                                                    action?.weight
+                                                                    in_review?.weight
                                                                 }}
                                                                 lbs
                                                             </p>
@@ -368,7 +345,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     of this
                                                                     package: </span
                                                                 >{{
-                                                                    action.total_value
+                                                                    in_review.total_value
                                                                 }}
                                                                 USD
                                                             </p>
@@ -410,7 +387,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     @click.prevent="
                                                                         handleAddNote(
                                                                             $event,
-                                                                            action.id
+                                                                            in_review.id
                                                                         )
                                                                     "
                                                                 >
@@ -433,7 +410,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 >{{
                                                                     addNote
                                                                         ? addNote
-                                                                        : action?.note
+                                                                        : in_review?.note
                                                                 }}</span
                                                             >
                                                         </p>
@@ -496,7 +473,7 @@ const showPackagePhotos = async (packageId) => {
                                                                             @click="
                                                                                 selectService(
                                                                                     service,
-                                                                                    action.id
+                                                                                    in_review.id
                                                                                 )
                                                                             "
                                                                         >
@@ -530,7 +507,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 <div
                                                                     class="py-2"
                                                                     v-if="
-                                                                        action.special_request
+                                                                        in_review.special_request
                                                                     "
                                                                 >
                                                                     <p
@@ -545,7 +522,7 @@ const showPackagePhotos = async (packageId) => {
                                                                             class="text-primary-800"
                                                                         >
                                                                             {{
-                                                                                action
+                                                                                in_review
                                                                                     .special_request
                                                                                     ?.title ??
                                                                                 ""
@@ -562,7 +539,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 class="btn btn-big mt-4 bg-primary-600 text-white hover:bg-primary-700 disabled:bg-primary-400"
                                                                 @click="
                                                                     showUploadInvoiceModal(
-                                                                        action.id
+                                                                        in_review.id
                                                                     )
                                                                 "
                                                             >
@@ -600,12 +577,7 @@ const showPackagePhotos = async (packageId) => {
             </div>
 
             <div>
-                <input
-                    type="file"
-                    multiple
-                    @change="onFileChange($event)"
-                    accept=".bmp, .jpg, .jpeg, .gif, .tif, .tiff, .pdf"
-                />
+                <input type="file" multiple @change="onFileChange($event)" />
                 <p class="text-sm text-gray-600 mt-1">
                     Accepted File Types: BMP, JPG, JPEG, GIF, TIF, TIFF, PDF
                 </p>
@@ -619,39 +591,6 @@ const showPackagePhotos = async (packageId) => {
                         {{ file.name }}
                     </li>
                 </ul>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                <template v-for="(preview, index) in previews" :key="index">
-                    <div class="relative group">
-                        <img
-                            v-if="preview"
-                            :src="preview"
-                            alt="Preview"
-                            class="w-full h-auto border rounded shadow"
-                        />
-                        <button
-                            @click="removeImage(index)"
-                            class="absolute top-1 right-1 bg-white text-red-500 border border-red-300 rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 hover:bg-red-100"
-                            title="Remove"
-                        >
-                            ❌
-                        </button>
-
-                        <div
-                            v-if="!preview"
-                            class="p-4 text-sm text-gray-500 bg-gray-100 border rounded"
-                        >
-                            {{ files[index].type }} preview not supported.
-                            <button
-                                @click="removeImage(index)"
-                                class="ml-2 text-red-500 underline text-xs"
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                </template>
             </div>
 
             <div class="flex justify-end gap-2">

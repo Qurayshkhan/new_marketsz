@@ -9,6 +9,9 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
     Route::prefix('suite')->group(function () {
         Route::get('/action-required', [SuiteController::class, 'actionRequired'])->name('customer.suiteActionRequired');
+
+        Route::get('/in-review', [SuiteController::class, 'inReview'])->name('customer.suite.inReview');
+
         Route::post('/package/add-note', [SuiteController::class, 'addNote'])->name('customer.packageAddNote');
         Route::post('/package/upload-invoices', [SuiteController::class, 'uploadInvoices'])->name('customers.packageUploadInvoices');
         Route::get('/package/photos', [SuiteController::class, 'getPackagePhotos'])->name('customers.packageGetPhotos');

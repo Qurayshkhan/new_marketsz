@@ -6,39 +6,43 @@ import TabLink from "@/Components/TabLink.vue";
 const currentUrl = usePage().url;
 const props = defineProps({
     actionCount: Object,
+    inReviewCount: Object,
+    readyToSendCount: Object,
+    allPackagesCount: Object,
 });
 </script>
 
 <template>
-    <Head title="My Suite" />
+    <!-- <Head title="My Suite" /> -->
 
     <AuthenticatedLayout>
         <div class="flex gap-2 border-b pb-2">
             <TabLink
                 label="Action Required"
                 :href="route('customer.suiteActionRequired')"
-                :count="props?.actionCount.length"
+                :count="props?.actionCount"
                 color="red"
                 :active="currentUrl === '/customer/suite/action-required'"
             />
+
             <TabLink
                 label="In Review"
-                href="#"
-                :count="1"
+                :href="route('customer.suite.inReview')"
+                :count="props?.inReviewCount"
                 color="yellow"
-                :active="currentUrl === '/myaccount/in-review/'"
+                :active="currentUrl === '/customer/suite/in-review'"
             />
             <TabLink
                 label="Ready to Send"
                 href="/myaccount/"
-                :count="9"
+                :count="props?.readyToSendCount"
                 color="green"
                 :active="currentUrl === '/myaccount/'"
             />
             <TabLink
                 label="View All"
                 href="/myaccount/all-packages/"
-                :count="11"
+                :count="props?.allPackagesCount"
                 color="slate"
                 :active="currentUrl === '/myaccount/all-packages/'"
             />

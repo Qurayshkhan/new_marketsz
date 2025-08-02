@@ -14,8 +14,6 @@ const props = defineProps({
         default: false,
     },
 });
-
-// Tailwind color classes for tab background, text, border, and badge
 const tabColors = {
     green: {
         base: "bg-gray-100 text-green-800 border-t-green-500",

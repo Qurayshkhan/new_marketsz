@@ -3,6 +3,8 @@
 
 namespace App\Interfaces;
 
+use App\Helpers\PackageStatus;
+
 interface PackageInterface
 {
 
@@ -11,11 +13,13 @@ interface PackageInterface
 
     public function deletePackage($packageId);
 
-    public function userActionRequiredPackage();
+    public function shipmentPackages($userId, $status = PackageStatus::ACTION_REQUIRED);
 
     public function packageSpecialRequests();
 
     public function addPackageNote($data);
 
     public function changeStatus($data);
+
+    public function packageCounts($userId);
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Helpers\PackageStatus;
 use App\Http\Controllers\Controller;
 use App\Repositories\PackageFileRepository;
 use App\Repositories\PackageInvoiceRepository;
 use App\Repositories\PackageRepository;
 use App\Traits\CommonTrait;
+use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,10 +31,19 @@ class SuiteController extends Controller
 
     public function actionRequired()
     {
-        // dd($this->packageRepository->userActionRequiredPackage());
         return Inertia::render('Customers/Suite/SuitTabs/ActionRequired', [
-            'actions' => $this->packageRepository->userActionRequiredPackage(),
+            'actions' => $this->packageRepository->shipmentPackages(Auth::id()),
             'specialRequests' => $this->packageRepository->packageSpecialRequests(),
+            'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
+        ]);
+    }
+
+    public function inReview()
+    {
+        return Inertia::render('Customers/Suite/SuitTabs/InReview', [
+            'inReviews' => $this->packageRepository->shipmentPackages(Auth::id(), PackageStatus::IN_REVIEW),
+            'specialRequests' => $this->packageRepository->packageSpecialRequests(),
+            'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
         ]);
     }
 

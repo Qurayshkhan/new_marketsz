@@ -6,7 +6,7 @@ import DangerButton from "@/Components/DangerButton.vue";
 import Modal from "@/Components/Modal.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     actions: Object,
@@ -125,9 +125,7 @@ const upload = async () => {
             response.data.message || "Invoices uploaded successfully"
         );
         closeModal();
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
+        router.visit(route("customer.suite.inReview"));
     } catch (error) {
         toast.error(
             error.response?.data?.message || "Failed to upload invoices"

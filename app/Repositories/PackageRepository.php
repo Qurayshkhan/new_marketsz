@@ -39,12 +39,12 @@ class PackageRepository implements PackageInterface
         if ($userId) {
             $query->where('sender_id', $userId);
         }
-        if (!$status) {
-            $query->whereIn('status', [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::IN_REVIEW]);
-        } else if ($status) {
+        if ($status == null) {
+            $query->whereIn('status', [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::READY_TO_SEND]);
+        } else {
             $query->where('status', $status);
         }
-        return $this->package->with('files', 'items', 'customer', 'specialRequest')->get();
+        return $query->with('files', 'items', 'customer', 'specialRequest')->get();
     }
 
     public function packageSpecialRequests()

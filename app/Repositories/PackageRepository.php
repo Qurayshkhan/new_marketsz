@@ -33,14 +33,18 @@ class PackageRepository implements PackageInterface
         return $this->package->where('id', $packageId)->delete();
     }
 
-    public function shipmentPackages($userId, $status = PackageStatus::ACTION_REQUIRED)
+    public function shipmentPackages($userId, $status = null)
     {
         $query = $this->package->query();
         if ($userId) {
             $query->where('sender_id', $userId);
         }
-
-        return $this->package->where('status', $status)->with('files', 'items', 'customer', 'specialRequest')->get();
+        if (!$status) {
+            $query->whereIn('status', [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::IN_REVIEW]);
+        } else if ($status) {
+            $query->where('status', $status);
+        }
+        return $this->package->with('files', 'items', 'customer', 'specialRequest')->get();
     }
 
     public function packageSpecialRequests()

@@ -12,6 +12,10 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
         Route::get('/in-review', [SuiteController::class, 'inReview'])->name('customer.suite.inReview');
 
+        Route::get('/ready-to-send', [SuiteController::class, 'readyToSend'])->name('customer.suite.readyToSend');
+
+        Route::get('/view-all', [SuiteController::class, 'viewAll'])->name('customer.suite.viewAll');
+
         Route::post('/package/add-note', [SuiteController::class, 'addNote'])->name('customer.packageAddNote');
         Route::post('/package/upload-invoices', [SuiteController::class, 'uploadInvoices'])->name('customers.packageUploadInvoices');
         Route::get('/package/photos', [SuiteController::class, 'getPackagePhotos'])->name('customers.packageGetPhotos');

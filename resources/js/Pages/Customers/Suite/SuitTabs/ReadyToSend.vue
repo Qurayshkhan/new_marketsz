@@ -1,20 +1,23 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Report from "../Report.vue";
 import TextInput from "@/Components/TextInput.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import Modal from "@/Components/Modal.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
+import Checkbox from "@/Components/Checkbox.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
 
 const props = defineProps({
-    inReviews: Object,
+    readyToSends: Object,
     specialRequests: Object,
     packageCounts: Array,
 });
 const toast = useToast();
-const inReviews = props.inReviews;
+const readyToSends = props.readyToSends;
 
 const expandedRows = ref(new Set());
 const isShowNote = ref(false);
@@ -23,6 +26,24 @@ const isShowPhotosModal = ref(false);
 const addNote = ref(null);
 const files = ref([]);
 const packagePhotos = ref([]);
+const selectedIds = ref([]);
+const bulkCheckbox = ref(false);
+const selectedService = ref(null);
+const dropdownOpen = ref(false);
+watch(selectedIds, () => {
+    bulkCheckbox.value = selectedIds.value.length === readyToSends.length;
+});
+
+const selectAll = (e) => {
+    selectedIds.value = e.target.checked
+        ? readyToSends.map((item) => item.id)
+        : [];
+};
+const resetSelection = () => {
+    bulkCheckbox.value = false;
+    selectedIds.value = [];
+};
+
 const toggleRow = (id) => {
     if (expandedRows.value.has(id)) {
         expandedRows.value.delete(id);
@@ -31,15 +52,17 @@ const toggleRow = (id) => {
     }
 };
 const toggleAll = () => {
-    if (expandedRows.value.size === inReviews.length) {
+    if (expandedRows.value.size === readyToSends.length) {
         expandedRows.value.clear();
     } else {
-        expandedRows.value = new Set(inReviews.map((a) => a.id));
+        expandedRows.value = new Set(readyToSends.map((a) => a.id));
     }
 };
 
-const allExpanded = () => expandedRows.value.size === inReviews.length;
-
+const allExpanded = () => expandedRows.value.size === readyToSends.length;
+const toggleDropdown = () => {
+    dropdownOpen.value = !dropdownOpen.value;
+};
 const handleShowNote = () => {
     isShowNote.value = !isShowNote.value;
 };
@@ -74,9 +97,34 @@ const showPackagePhotos = async (packageId) => {
         toast.error("Failed to fetch photos");
     }
 };
+
+onMounted(() => {
+    selectedIds.value = readyToSends.map((item) => item.id);
+});
+
+const selectService = (service, id) => {
+    selectedService.value = service;
+    try {
+        const response = axios.post(
+            route("customer.packageSetSpecialRequest"),
+            {
+                package_id: id,
+                special_request: service.id,
+            }
+        );
+        toast.success(
+            response.message || "Special request added successfully."
+        );
+    } catch (error) {
+        toast.error(error);
+    } finally {
+        dropdownOpen.value = false;
+    }
+};
 </script>
 
 <template>
+    <Head title="Ready to send" />
     <Report
         :actionCount="props?.packageCounts.action_required"
         :inReviewCount="props?.packageCounts?.in_review"
@@ -106,66 +154,80 @@ const showPackagePhotos = async (packageId) => {
                             <th>Date Received</th>
                             <th>Total value</th>
                             <th>Total weight</th>
+                            <th>
+                                <input
+                                    class="border-gray-300 text-primary-600 shadow-sm focus:ring-primary-500"
+                                    type="checkbox"
+                                    v-model="bulkCheckbox"
+                                    @change="selectAll"
+                                />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <template
-                            v-for="in_review in inReviews"
-                            :key="in_review.id"
+                            v-for="readyToSend in readyToSends"
+                            :key="readyToSend.id"
                         >
                             <tr>
                                 <td
-                                    @click="toggleRow(in_review.id)"
+                                    @click="toggleRow(readyToSend.id)"
                                     class="cursor-pointer"
                                 >
                                     <i
                                         :class="[
                                             'fas',
-                                            expandedRows.has(in_review.id)
+                                            expandedRows.has(readyToSend.id)
                                                 ? 'fa-chevron-down'
                                                 : 'fa-chevron-right',
                                             'text-primary-500',
                                         ]"
                                     ></i>
                                 </td>
-                                <td>{{ in_review.from }}</td>
-                                <td>{{ in_review.package_id }}</td>
+                                <td>{{ readyToSend.from }}</td>
+                                <td>{{ readyToSend.package_id }}</td>
                                 <td>
                                     {{
                                         __format_date_time(
-                                            in_review.date_received
+                                            readyToSend.date_received
                                         )
                                     }}
                                 </td>
                                 <td>
                                     {{
-                                        __to_fixed_number(in_review.total_value)
+                                        __to_fixed_number(
+                                            readyToSend.total_value
+                                        )
                                     }}
                                     USD
                                 </td>
-                                <td>{{ in_review.weight }} lbs</td>
+                                <td>{{ readyToSend.weight }} lbs</td>
+                                <td class="whitespace-nowrap !text-center">
+                                    <input
+                                        class="border-gray-300 text-primary-600 shadow-sm focus:ring-primary-500"
+                                        type="checkbox"
+                                        :value="readyToSend.id"
+                                        v-model="selectedIds"
+                                    />
+                                </td>
                             </tr>
                             <transition name="fade">
                                 <tr
-                                    v-if="expandedRows.has(in_review.id)"
+                                    v-if="expandedRows.has(readyToSend.id)"
                                     class="bg-gray-50"
                                 >
                                     <td colspan="6" class="text-left px-5">
                                         <div>
-                                            <strong class="bold"
-                                                >Why is this package in
-                                                review?</strong
-                                            ><br />
-                                            <p
-                                                class="text-sm text-white bg-[#f19445] uppercase px-2 inline-block"
+                                            <strong
+                                                >Upload Merchant Invoice</strong
                                             >
-                                                Dangerous Goods
-                                            </p>
-                                            <p class="py-1">
-                                                We are reviewing your package
-                                                and will email you if it is not
-                                                ready to send within two
-                                                business days.
+                                            <p class="text-sm text-gray-600">
+                                                Please upload the merchant
+                                                invoice for this package. When
+                                                your invoice is successfully
+                                                uploaded, your package will be
+                                                placed In Review until it is
+                                                verified by Marketsz
                                             </p>
                                             <hr />
                                         </div>
@@ -184,7 +246,7 @@ const showPackagePhotos = async (packageId) => {
                                                             <p>
                                                                 To:
                                                                 {{
-                                                                    in_review
+                                                                    readyToSend
                                                                         ?.customer
                                                                         ?.name
                                                                 }}
@@ -196,7 +258,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 class="btn bg-white text-black"
                                                                 @click="
                                                                     showPackagePhotos(
-                                                                        in_review.id
+                                                                        readyToSend.id
                                                                     )
                                                                 "
                                                             >
@@ -211,7 +273,7 @@ const showPackagePhotos = async (packageId) => {
                                             </thead>
                                             <tbody>
                                                 <template
-                                                    v-for="item in in_review.items"
+                                                    v-for="item in readyToSend.items"
                                                     :key="item.id"
                                                 >
                                                     <tr
@@ -257,7 +319,7 @@ const showPackagePhotos = async (packageId) => {
                                                     </tr>
                                                 </template>
                                                 <tr>
-                                                    <td colspan="6">
+                                                    <td colspan="5">
                                                         <div
                                                             class="flex items-center justify-between"
                                                         >
@@ -267,7 +329,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     >Total
                                                                     weight: </span
                                                                 >{{
-                                                                    in_review?.weight
+                                                                    readyToSend?.weight
                                                                 }}
                                                                 lbs
                                                             </p>
@@ -278,7 +340,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     of this
                                                                     package: </span
                                                                 >{{
-                                                                    in_review.total_value
+                                                                    readyToSend.total_value
                                                                 }}
                                                                 USD
                                                             </p>
@@ -286,28 +348,148 @@ const showPackagePhotos = async (packageId) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td
-                                                        colspan="6"
-                                                        class="text-gray-500"
-                                                    >
-                                                        **Values shown are
-                                                        obtained from the
-                                                        merchant invoices, when
-                                                        available. Researched
-                                                        values based on current
-                                                        market prices have been
-                                                        provided above for any
-                                                        items that arrived
-                                                        without invoices. The
-                                                        value should be updated
-                                                        to reflect the actual
-                                                        price paid for each
-                                                        item, and must be
-                                                        confirmed.
+                                                    <td colspan="5">
+                                                        <div
+                                                            class="flex items-center justify-between w-full"
+                                                        >
+                                                            <div class="w-full">
+                                                                <label
+                                                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                                                    >Optional
+                                                                    Services</label
+                                                                >
+                                                                <div
+                                                                    class="relative w-full max-w-md"
+                                                                >
+                                                                    <button
+                                                                        type="button"
+                                                                        class="w-full border border-gray-300 bg-white rounded-md shadow-sm pl-4 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                                                                        @click="
+                                                                            toggleDropdown
+                                                                        "
+                                                                    >
+                                                                        <span
+                                                                            class="block truncate"
+                                                                        >
+                                                                            {{
+                                                                                selectedService?.title ||
+                                                                                "Select Optional Service"
+                                                                            }}
+                                                                        </span>
+                                                                        <span
+                                                                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                                                                        >
+                                                                            <i
+                                                                                class="fa fa-chevron-down text-gray-400"
+                                                                            ></i>
+                                                                        </span>
+                                                                    </button>
+
+                                                                    <ul
+                                                                        v-if="
+                                                                            dropdownOpen
+                                                                        "
+                                                                        class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-sm ring-1 ring-black ring-opacity-5 overflow-auto"
+                                                                    >
+                                                                        <li
+                                                                            v-for="(
+                                                                                service,
+                                                                                index
+                                                                            ) in props?.specialRequests"
+                                                                            :key="
+                                                                                index
+                                                                            "
+                                                                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                                            @click="
+                                                                                selectService(
+                                                                                    service,
+                                                                                    readyToSend.id
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="flex justify-between font-medium"
+                                                                            >
+                                                                                <span
+                                                                                    class="text-primary-500 fw-bold"
+                                                                                    >{{
+                                                                                        service?.title
+                                                                                    }}</span
+                                                                                >
+                                                                                <span
+                                                                                    class="text-primary-600"
+                                                                                    >${{
+                                                                                        service?.price
+                                                                                    }}</span
+                                                                                >
+                                                                            </div>
+                                                                            <p
+                                                                                class="text-gray-500 text-xs mt-1"
+                                                                            >
+                                                                                {{
+                                                                                    service?.description
+                                                                                }}
+                                                                            </p>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div
+                                                                    class="py-2"
+                                                                    v-if="
+                                                                        readyToSend?.special_request
+                                                                    "
+                                                                >
+                                                                    <p
+                                                                        class="bold"
+                                                                    >
+                                                                        Your
+                                                                        current
+                                                                        special
+                                                                        request
+                                                                        is:
+                                                                        <span
+                                                                            class="text-primary-800"
+                                                                        >
+                                                                            {{
+                                                                                readyToSend
+                                                                                    .special_request
+                                                                                    ?.title ??
+                                                                                ""
+                                                                            }}
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="6">
+                                                        <p
+                                                            class="text-gray-500"
+                                                        >
+                                                            **Values shown are
+                                                            obtained from the
+                                                            merchant invoices,
+                                                            when available.
+                                                            Researched values
+                                                            based on current
+                                                            market prices have
+                                                            been provided above
+                                                            for any items that
+                                                            arrived without
+                                                            invoices. The value
+                                                            should be updated to
+                                                            reflect the actual
+                                                            price paid for each
+                                                            item, and must be
+                                                            confirmed.
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6">
                                                         <div
                                                             class="my-2 w-full"
                                                         >
@@ -326,7 +508,6 @@ const showPackagePhotos = async (packageId) => {
                                                             not review this
                                                             area.
                                                         </div>
-
                                                         <div v-if="isShowNote">
                                                             <TextInput
                                                                 class="w-full"
@@ -342,7 +523,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     @click.prevent="
                                                                         handleAddNote(
                                                                             $event,
-                                                                            in_review.id
+                                                                            readyToSend.id
                                                                         )
                                                                     "
                                                                 >
@@ -365,7 +546,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 >{{
                                                                     addNote
                                                                         ? addNote
-                                                                        : in_review?.note
+                                                                        : readyToSend?.note
                                                                 }}</span
                                                             >
                                                         </p>
@@ -383,9 +564,36 @@ const showPackagePhotos = async (packageId) => {
             </div>
             <div class="col-span-3 bg-gray-50 p-4 rounded">
                 <CurrencyDollarText />
+                <div class="col-span-3 bg-white p-4 mt-4 rounded shadow">
+                    <div class="flex items-center justify-between md:flex-wrap">
+                        <h3 class="text-lg font-semibold mb-2">
+                            Estimated Shipping:
+                        </h3>
+                        <p class="text-red-600 font-medium mt-2">N/A</p>
+                    </div>
+                    <p class="text-sm text-gray-700">How is this calculated?</p>
+                    <p class="text-sm text-gray-700 mt-2">
+                        One or more packages in this ship request cannot be
+                        delivered. Please contact customer service for more
+                        information.
+                    </p>
+                    <div class="text-center">
+                        <PrimaryButton class="mt-4 font-medium">
+                            Create ship request
+                        </PrimaryButton>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">
+                        All items are subject to a customs duty upon receipt of
+                        package. Payment will be due when your package is
+                        delivered.
+                    </p>
+                </div>
+
+                <PackageLinks />
             </div>
         </div>
     </Report>
+
     <Modal :show="isShowPhotosModal" @close="closeModal">
         <div class="p-6 space-y-4">
             <div class="flex justify-between items-center">

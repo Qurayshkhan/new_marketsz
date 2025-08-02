@@ -7,15 +7,16 @@ import Modal from "@/Components/Modal.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import { Head, router } from "@inertiajs/vue3";
+import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
 
 const props = defineProps({
-    actions: Object,
+    viewAllPackages: Object,
     specialRequests: Object,
     packageCounts: Array,
 });
 const toast = useToast();
-const actions = props.actions;
+const viewAllPackages = props.viewAllPackages;
 
 const expandedRows = ref(new Set());
 const selectedService = ref(null);
@@ -37,14 +38,14 @@ const toggleRow = (id) => {
     }
 };
 const toggleAll = () => {
-    if (expandedRows.value.size === actions.length) {
+    if (expandedRows.value.size === viewAllPackages.length) {
         expandedRows.value.clear();
     } else {
-        expandedRows.value = new Set(actions.map((a) => a.id));
+        expandedRows.value = new Set(viewAllPackages.map((a) => a.id));
     }
 };
 
-const allExpanded = () => expandedRows.value.size === actions.length;
+const allExpanded = () => expandedRows.value.size === viewAllPackages.length;
 
 const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value;
@@ -193,13 +194,16 @@ const showPackagePhotos = async (packageId) => {
                             <th>From</th>
                             <th>Package ID</th>
                             <th>Date Received</th>
-                            <th class="bg-primary-500 text-white">
-                                Action Required
-                            </th>
+                            <th>Total value</th>
+                            <th>Total weight</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-for="action in actions" :key="action.id">
+                        <template
+                            v-for="action in viewAllPackages"
+                            :key="action.id"
+                        >
                             <tr>
                                 <td
                                     @click="toggleRow(action.id)"
@@ -215,27 +219,64 @@ const showPackagePhotos = async (packageId) => {
                                         ]"
                                     ></i>
                                 </td>
-                                <td>{{ action.from }}</td>
-                                <td>{{ action.package_id }}</td>
+                                <td>{{ action?.from }}</td>
+                                <td>{{ action?.package_id }}</td>
                                 <td>
                                     {{
-                                        __format_date_time(action.date_received)
+                                        __format_date_time(
+                                            action?.date_received
+                                        )
                                     }}
                                 </td>
                                 <td>
-                                    <div>
-                                        <button
-                                            class="text-primary-500"
-                                            @click="
-                                                showUploadInvoiceModal(
-                                                    action.id
-                                                )
-                                            "
-                                        >
-                                            Upload Merchant Invoice
-                                        </button>
-                                        <p>As required by Customs</p>
-                                    </div>
+                                    {{ __to_fixed_number(action?.total_value) }}
+                                    USD
+                                </td>
+                                <td>{{ action?.weight }} lbs</td>
+                                <td>
+                                    <p
+                                        v-if="
+                                            action?.status_name ==
+                                            'Ready to Send'
+                                        "
+                                    >
+                                        <i
+                                            class="fa-solid fa-check text-primary-500 font-extrabold"
+                                        ></i
+                                        ><br />
+                                        <span class="text-red-500">
+                                            {{ action?.status_name }}
+                                        </span>
+                                    </p>
+                                    <p
+                                        v-if="
+                                            action?.status_name ==
+                                            'Action Required'
+                                        "
+                                        class="text-primary-500"
+                                    >
+                                        <i
+                                            class="fa-solid fa-triangle-exclamation"
+                                        ></i>
+                                        <br />
+                                        <span>
+                                            {{ action?.status_name }}
+                                        </span>
+                                    </p>
+                                    <p
+                                        v-if="
+                                            action?.status_name == 'In Review'
+                                        "
+                                        class="text-primary-500"
+                                    >
+                                        <i
+                                            class="fa-solid fa-magnifying-glass"
+                                        ></i>
+                                        <br />
+                                        <span class="text-red-500">
+                                            {{ action?.status_name }}
+                                        </span>
+                                    </p>
                                 </td>
                             </tr>
                             <transition name="fade">
@@ -243,8 +284,13 @@ const showPackagePhotos = async (packageId) => {
                                     v-if="expandedRows.has(action.id)"
                                     class="bg-gray-50"
                                 >
-                                    <td colspan="5" class="text-left px-5">
-                                        <div>
+                                    <td colspan="7" class="text-left px-5">
+                                        <div
+                                            v-if="
+                                                action.status_name ==
+                                                'Action Required'
+                                            "
+                                        >
                                             <strong
                                                 >Upload Merchant Invoice</strong
                                             >
@@ -257,6 +303,31 @@ const showPackagePhotos = async (packageId) => {
                                                 verified by Marketsz
                                             </p>
                                             <hr />
+                                        </div>
+                                        <div
+                                            v-if="
+                                                action.status_name ==
+                                                'In Review'
+                                            "
+                                        >
+                                            <div>
+                                                <strong class="bold"
+                                                    >Why is this package in
+                                                    review?</strong
+                                                ><br />
+                                                <p
+                                                    class="text-sm text-white bg-[#f19445] uppercase px-2 inline-block"
+                                                >
+                                                    Dangerous Goods
+                                                </p>
+                                                <p class="py-1">
+                                                    We are reviewing your
+                                                    package and will email you
+                                                    if it is not ready to send
+                                                    within two business days.
+                                                </p>
+                                                <hr />
+                                            </div>
                                         </div>
                                         <table class="w-full my-5">
                                             <thead>
@@ -346,7 +417,7 @@ const showPackagePhotos = async (packageId) => {
                                                     </tr>
                                                 </template>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="6">
                                                         <div
                                                             class="flex items-center justify-between"
                                                         >
@@ -375,7 +446,7 @@ const showPackagePhotos = async (packageId) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="7">
                                                         <div
                                                             class="my-2 w-full"
                                                         >
@@ -440,7 +511,7 @@ const showPackagePhotos = async (packageId) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="5">
+                                                    <td colspan="7">
                                                         <div
                                                             class="flex items-center justify-between w-full"
                                                         >
@@ -554,6 +625,10 @@ const showPackagePhotos = async (packageId) => {
                                                                 </div>
                                                             </div>
                                                             <button
+                                                                v-if="
+                                                                    action.status_name ==
+                                                                    'Action Required'
+                                                                "
                                                                 :disabled="
                                                                     isUploadingInvoice
                                                                 "
@@ -581,6 +656,7 @@ const showPackagePhotos = async (packageId) => {
             </div>
             <div class="col-span-3 bg-gray-50 p-4 rounded">
                 <CurrencyDollarText />
+                <PackageLinks />
             </div>
         </div>
     </Report>

@@ -13,7 +13,7 @@ interface PackageInterface
 
     public function deletePackage($packageId);
 
-    public function shipmentPackages($userId, $status = PackageStatus::ACTION_REQUIRED);
+    public function shipmentPackages($userId, $status = null);
 
     public function packageSpecialRequests();
 

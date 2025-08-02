@@ -34,17 +34,17 @@ const props = defineProps({
             />
             <TabLink
                 label="Ready to Send"
-                href="/myaccount/"
+                :href="route('customer.suite.readyToSend')"
                 :count="props?.readyToSendCount"
                 color="green"
-                :active="currentUrl === '/myaccount/'"
+                :active="currentUrl === '/customer/suite/ready-to-send'"
             />
             <TabLink
                 label="View All"
-                href="/myaccount/all-packages/"
+                :href="route('customer.suite.viewAll')"
                 :count="props?.allPackagesCount"
                 color="slate"
-                :active="currentUrl === '/myaccount/all-packages/'"
+                :active="currentUrl === '/customer/suite/view-all'"
             />
         </div>
 

@@ -32,7 +32,7 @@ class SuiteController extends Controller
     public function actionRequired()
     {
         return Inertia::render('Customers/Suite/SuitTabs/ActionRequired', [
-            'actions' => $this->packageRepository->shipmentPackages(Auth::id()),
+            'actions' => $this->packageRepository->shipmentPackages(Auth::id(), PackageStatus::ACTION_REQUIRED),
             'specialRequests' => $this->packageRepository->packageSpecialRequests(),
             'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
         ]);
@@ -42,6 +42,23 @@ class SuiteController extends Controller
     {
         return Inertia::render('Customers/Suite/SuitTabs/InReview', [
             'inReviews' => $this->packageRepository->shipmentPackages(Auth::id(), PackageStatus::IN_REVIEW),
+            'specialRequests' => $this->packageRepository->packageSpecialRequests(),
+            'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
+        ]);
+    }
+    public function readyToSend()
+    {
+        return Inertia::render('Customers/Suite/SuitTabs/ReadyToSend', [
+            'readyToSends' => $this->packageRepository->shipmentPackages(Auth::id(), PackageStatus::READY_TO_SEND),
+            'specialRequests' => $this->packageRepository->packageSpecialRequests(),
+            'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
+        ]);
+    }
+
+    public function viewAll()
+    {
+        return Inertia::render('Customers/Suite/SuitTabs/ViewAll', [
+            'viewAllPackages' => $this->packageRepository->shipmentPackages(Auth::id()),
             'specialRequests' => $this->packageRepository->packageSpecialRequests(),
             'packageCounts' => $this->packageRepository->packageCounts(Auth::id()),
         ]);

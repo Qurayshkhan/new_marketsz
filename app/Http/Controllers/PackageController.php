@@ -63,7 +63,7 @@ class PackageController extends Controller
                 }
             }
             DB::commit();
-            return Redirect::route('admin.packages')->with('alert', 'Package added successfully');
+            return Redirect::route('admin.packages')->with('alert', 'Package added successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
@@ -95,7 +95,4 @@ class PackageController extends Controller
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
-
-
-
 }

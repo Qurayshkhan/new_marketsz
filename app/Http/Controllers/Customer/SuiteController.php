@@ -29,6 +29,7 @@ class SuiteController extends Controller
 
     public function actionRequired()
     {
+        // dd($this->packageRepository->userActionRequiredPackage());
         return Inertia::render('Customers/Suite/SuitTabs/ActionRequired', [
             'actions' => $this->packageRepository->userActionRequiredPackage(),
             'specialRequests' => $this->packageRepository->packageSpecialRequests(),
@@ -74,6 +75,23 @@ class SuiteController extends Controller
             $packageFiles = $this->packageFileRepository->getPackageFiles($request->package_id);
             return response()->json(['message' => 'Photos fetched successfully', 'data' => $packageFiles], 200);
         } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function setSpecialRequest(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $data = [
+                'id' => $request->package_id,
+                'special_request' => $request->special_request,
+            ];
+            $this->packageRepository->store($data);
+            DB::commit();
+            return response()->json(['message' => 'Special request added successfully.'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => 'Photos fetched successfully'], 500);
         }
     }

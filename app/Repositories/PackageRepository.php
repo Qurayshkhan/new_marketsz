@@ -35,7 +35,7 @@ class PackageRepository implements PackageInterface
 
     public function userActionRequiredPackage()
     {
-        return $this->package->where('sender_id', Auth::id())->where('status', PackageStatus::ACTION_REQUIRED)->with('files', 'items', 'customer')->get();
+        return $this->package->where('sender_id', Auth::id())->where('status', PackageStatus::ACTION_REQUIRED)->with('files', 'items', 'customer', 'specialRequest')->get();
     }
 
     public function packageSpecialRequests()

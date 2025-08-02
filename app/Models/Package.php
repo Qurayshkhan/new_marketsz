@@ -40,4 +40,9 @@ class Package extends Model
     {
         return $this->belongsTo(User::class, 'sender_id', 'id');
     }
+
+    public function specialRequest()
+    {
+        return $this->belongsTo(SpecialRequest::class, 'special_request', 'id');
+    }
 }

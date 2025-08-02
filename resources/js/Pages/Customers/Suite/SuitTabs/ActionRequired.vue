@@ -46,9 +46,24 @@ const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value;
 };
 
-const selectService = (service) => {
+const selectService = (service, id) => {
     selectedService.value = service;
-    dropdownOpen.value = false;
+    try {
+        const response = axios.post(
+            route("customer.packageSetSpecialRequest"),
+            {
+                package_id: id,
+                special_request: service.id,
+            }
+        );
+        toast.success(
+            response.message || "Special request added successfully."
+        );
+    } catch (error) {
+        toast.error(error);
+    } finally {
+        dropdownOpen.value = false;
+    }
 };
 const handleShowNote = () => {
     isShowNote.value = !isShowNote.value;
@@ -272,12 +287,15 @@ const showPackagePhotos = async (packageId) => {
                                                                     item?.title
                                                                 }}
                                                             </p>
-                                                            <p>
+                                                            <p
+                                                                class="text-md text-gray-600"
+                                                            >
                                                                 {{
                                                                     item?.description
                                                                 }}
                                                             </p>
                                                             <p
+                                                                class="text-sm"
                                                                 v-if="
                                                                     item?.item_note
                                                                 "
@@ -451,7 +469,8 @@ const showPackagePhotos = async (packageId) => {
                                                                             class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                                                             @click="
                                                                                 selectService(
-                                                                                    service
+                                                                                    service,
+                                                                                    action.id
                                                                                 )
                                                                             "
                                                                         >
@@ -480,6 +499,33 @@ const showPackagePhotos = async (packageId) => {
                                                                             </p>
                                                                         </li>
                                                                     </ul>
+                                                                </div>
+
+                                                                <div
+                                                                    class="py-2"
+                                                                    v-if="
+                                                                        action.special_request
+                                                                    "
+                                                                >
+                                                                    <p
+                                                                        class="bold"
+                                                                    >
+                                                                        Your
+                                                                        current
+                                                                        special
+                                                                        request
+                                                                        is:
+                                                                        <span
+                                                                            class="text-primary-800"
+                                                                        >
+                                                                            {{
+                                                                                action
+                                                                                    .special_request
+                                                                                    ?.title ??
+                                                                                ""
+                                                                            }}
+                                                                        </span>
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                             <button
@@ -574,7 +620,10 @@ const showPackagePhotos = async (packageId) => {
                 </button>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                v-if="packagePhotos.length > 0"
+            >
                 <img
                     v-for="(photo, index) in packagePhotos"
                     :key="index"
@@ -582,6 +631,9 @@ const showPackagePhotos = async (packageId) => {
                     alt="Package Photo"
                     class="rounded shadow border"
                 />
+            </div>
+            <div class="text-center text-gray-900" v-else>
+                <h3>No photos available</h3>
             </div>
         </div>
     </Modal>

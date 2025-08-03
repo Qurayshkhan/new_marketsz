@@ -1,1 +1,0 @@
-import{_ as t}from"./AuthenticatedLayout-D1S7-Bhn.js";import{g as s,o as r,a as e,d as l,h as o,w as n,b as _,F as u}from"./app-DNwxumsc.js";const c={__name:"Dashboard",setup(m){return(d,a)=>(r(),s(u,null,[e(l(o),{title:"Dashboard"}),e(t,null,{default:n(()=>a[0]||(a[0]=[_("template",null,null,-1)])),_:1,__:[0]})],64))}};export{c as default};

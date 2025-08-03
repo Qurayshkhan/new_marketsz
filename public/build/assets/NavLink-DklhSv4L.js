@@ -1,1 +1,0 @@
-import{j as r,c as n,o as l,w as c,q as o,n as i,d as u,l as f}from"./app-DNwxumsc.js";const v={__name:"NavLink",props:{href:{type:String,required:!0},active:{type:Boolean}},setup(e){const a=e,s=r(()=>a.active?"nav-link-active":"nav-link");return(t,p)=>(l(),n(u(f),{href:e.href,class:i(s.value)},{default:c(()=>[o(t.$slots,"default")]),_:3},8,["href","class"]))}};export{v as _};

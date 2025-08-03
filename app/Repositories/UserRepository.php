@@ -18,4 +18,5 @@ class UserRepository implements UserInterface
     {
         return $this->user->active()->customer()->get();
     }
+
 }

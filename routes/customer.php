@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserAddressController;
 
 Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
@@ -36,6 +37,16 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('customer.account.destroy');
 
         Route::put('password', [PasswordController::class, 'update'])->name('customer.account.password.update');
+
+
+        Route::get('/address-book', [UserAddressController::class, 'index'])->name('customer.account.addressBook');
+
+        Route::prefix('addresses')->group(function () {
+            Route::post('/', [UserAddressController::class, 'store'])->name('customer.addresses.store');
+            Route::put('/{address}', [UserAddressController::class, 'update'])->name('customer.addresses.update');
+            Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('customer.addresses.destroy');
+            Route::put('/{address}/set-default', [UserAddressController::class, 'setDefault'])->name('customer.addresses.setDefault');
+        });
 
     });
 

@@ -81,4 +81,39 @@ class User extends Authenticatable
     {
         return $query->where('type', User::USER_TYPE_CUSTOMER);
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the user's default US address
+     */
+    public function defaultUsAddress()
+    {
+        return $this->hasOne(UserAddress::class, 'user_id', 'id')
+            ->where('is_default_us', true);
+    }
+
+    /**
+     * Get the user's default UK address
+     */
+    public function defaultUkAddress()
+    {
+        return $this->hasOne(UserAddress::class, 'user_id', 'id')
+            ->where('is_default_uk', true);
+    }
+
+    /**
+     * Get all default addresses for the user
+     */
+    public function defaultAddresses()
+    {
+        return $this->hasMany(UserAddress::class, 'user_id', 'id')
+            ->where(function ($query) {
+                $query->where('is_default_us', true)
+                    ->orWhere('is_default_uk', true);
+            });
+    }
 }

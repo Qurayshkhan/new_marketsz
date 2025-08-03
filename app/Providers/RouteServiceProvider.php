@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\UserAddress;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Route;
 
@@ -16,11 +17,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Route model binding
+        Route::model('address', UserAddress::class);
+
         Route::middleware('web')
-            ->domain(env('APP_URL'))
             ->group(base_path('routes/auth.php'))
             ->group(base_path('routes/customer.php'))
             ->group(base_path('routes/web.php'));
-
     }
 }

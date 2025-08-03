@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Customer\PaymentMethodController;
 use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
@@ -46,6 +47,19 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
             Route::put('/{address}', [UserAddressController::class, 'update'])->name('customer.addresses.update');
             Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('customer.addresses.destroy');
             Route::put('/{address}/set-default', [UserAddressController::class, 'setDefault'])->name('customer.addresses.setDefault');
+        });
+
+        Route::prefix('payments')->group(function () {
+            Route::get('/', [PaymentMethodController::class, 'paymentMethods'])->name('customer.payment.paymentMethods');
+
+            Route::post('/add-card', [PaymentMethodController::class, 'storeCard'])->name('customer.card.add');
+
+            Route::put('/customer/card/set-default/{id}', [PaymentMethodController::class, 'setDefault'])->name('customer.card.setDefault');
+            Route::delete('/customer/card/{id}', [PaymentMethodController::class, 'destroy'])->name('customer.card.delete');
+
+            Route::put('/card/update/{id}', [PaymentMethodController::class, 'updateCard'])->name('customer.card.update');
+
+
         });
 
     });

@@ -38,6 +38,7 @@ class User extends Authenticatable
         'stripe_id',
         'type',
         'avatar',
+        'stripe_id'
     ];
 
     /**

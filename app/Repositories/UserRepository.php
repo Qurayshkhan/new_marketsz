@@ -19,4 +19,14 @@ class UserRepository implements UserInterface
         return $this->user->active()->customer()->get();
     }
 
+    public function findById($userId)
+    {
+        return $this->user->find($userId);
+    }
+
+    public function updateUser($userId, $data)
+    {
+        return $this->user->where('id', $userId)->update($data);
+    }
+
 }

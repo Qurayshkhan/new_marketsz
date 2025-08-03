@@ -15,6 +15,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
                 :active="route().current('customer.account.addressBook')"
                 >Address Book</NavLink
             >
+            <NavLink
+                :href="route('customer.payment.paymentMethods')"
+                :active="route().current('customer.payment.paymentMethods')"
+                >Payments</NavLink
+            >
         </div>
         <div class="mt-6">
             <slot />

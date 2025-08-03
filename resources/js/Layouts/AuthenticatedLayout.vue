@@ -105,8 +105,13 @@ const isActiveDropdown = (prefix) => {
                     tabindex="0"
                     class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm bg-white"
                 >
-                    <li>
+                    <li v-if="$page.props.auth.user.type == 1">
                         <Link :href="route('profile.edit')">Profile</Link>
+                    </li>
+                    <li v-if="$page.props.auth.user.type == 2">
+                        <Link :href="route('customer.account.profile')"
+                            >Account Setting</Link
+                        >
                     </li>
                     <li>
                         <Link :href="route('logout')" method="post" as="button"

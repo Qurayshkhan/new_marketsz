@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ProfileController;
 
 Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
@@ -20,6 +22,21 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
         Route::post('/package/upload-invoices', [SuiteController::class, 'uploadInvoices'])->name('customers.packageUploadInvoices');
         Route::get('/package/photos', [SuiteController::class, 'getPackagePhotos'])->name('customers.packageGetPhotos');
         Route::post('/package/special-request', [SuiteController::class, 'setSpecialRequest'])->name('customer.packageSetSpecialRequest');
+    });
+
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::prefix('account-setting')->group(function () {
+
+        Route::get('/profile', [ProfileController::class, 'customerProfile'])->name('customer.account.profile');
+
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('customer.account.update');
+
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('customer.account.destroy');
+
+        Route::put('password', [PasswordController::class, 'update'])->name('customer.account.password.update');
+
     });
 
 });

@@ -20,6 +20,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
                 :active="route().current('customer.payment.paymentMethods')"
                 >Payments</NavLink
             >
+            <NavLink
+                :href="route('customer.shippingPreferences.preference')"
+                :active="
+                    route().current('customer.shippingPreferences.preference')
+                "
+                >Shipping Preferences</NavLink
+            >
         </div>
         <div class="mt-6">
             <slot />

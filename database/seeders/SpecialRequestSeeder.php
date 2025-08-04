@@ -13,6 +13,7 @@ class SpecialRequestSeeder extends Seeder
      */
     public function run(): void
     {
+        SpecialRequest::truncate();
         $specialRequests = [
             [
                 'title' => 'Abandon Entire Package',

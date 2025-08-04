@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProformaInvoiceOptions;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,6 +23,12 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
+            SpecialRequestSeeder::class,
+            PreferredShipMethodSeeder::class,
+            InternationalShippingOptionsSeeder::class,
+            ShippingPreferenceOptionSeeder::class,
+            ProformaInvoiceOptionsSeeder::class,
+            LoginOptionSeeder::class,
         ]);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Interfaces\UserAddressInterface;
 use App\Models\User;
 use App\Models\UserAddress;
+use Auth;
 
 class UserAddressRepository implements UserAddressInterface
 {
@@ -70,5 +71,16 @@ class UserAddressRepository implements UserAddressInterface
         return $this->userAddress->where('user_id', $userId)
             ->where($field, true)
             ->update([$field => false]);
+    }
+
+    public function getDefaultAddressByType($type)
+    {
+        $query = $this->userAddress->query()->where('user_id', Auth::id());
+        if ($type == "is_uk") {
+            $query->where('is_default_uk', true);
+        } else if ($type == "is_us") {
+            $query->where('is_default_us', true);
+        }
+        return $query->first();
     }
 }

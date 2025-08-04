@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customer\PaymentMethodController;
+use App\Http\Controllers\Customer\ShippingPreferenceController;
 use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
@@ -58,10 +59,16 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
             Route::delete('/customer/card/{id}', [PaymentMethodController::class, 'destroy'])->name('customer.card.delete');
 
             Route::put('/card/update/{id}', [PaymentMethodController::class, 'updateCard'])->name('customer.card.update');
-
-
         });
 
+        Route::prefix('shipping-preference')->group(function () {
+
+            Route::get('/', [ShippingPreferenceController::class, 'index'])->name('customer.shippingPreferences.preference');
+
+            Route::post('/preference-address', [ShippingPreferenceController::class, 'setPreferAddress'])->name('customer.preference.changeAddress');
+
+            Route::post('/preferences-save-changes', [ShippingPreferenceController::class, 'saveChangePreferences'])->name('customer.preferences.saveChange');
+        });
     });
 
 });

@@ -67,7 +67,7 @@ const handleSubmitPreferences = () => {
     <Head title="Shipping Preferences" />
     <Edit>
         <ShippingPreferenceAddress
-            :address="props?.shippingPreference.address"
+            :address="props?.shippingPreference?.address"
             @setAddress="handleSetAddress"
         />
         <PreferenceAddress

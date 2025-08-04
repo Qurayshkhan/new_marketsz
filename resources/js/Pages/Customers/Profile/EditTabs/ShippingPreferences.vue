@@ -22,11 +22,6 @@ const props = defineProps({
     loginOptions: Object,
     addresses: Object,
 });
-console.log(
-    "🚀 ~ props.shippingPreference:",
-    props.shippingPreference.proforma_invoice_options
-);
-
 const form = useForm({
     preferred_ship_method:
         props.shippingPreference?.preferred_ship_method ?? null,

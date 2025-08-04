@@ -10,6 +10,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     readyToSends: Object,
@@ -579,7 +580,9 @@ const selectService = (service, id) => {
                     </p>
                     <div class="text-center">
                         <PrimaryButton class="mt-4 font-medium">
-                            Create ship request
+                            <Link :href="route('customers.checkoutPage')">
+                                Create ship request
+                            </Link>
                         </PrimaryButton>
                     </div>
                     <p class="text-sm text-gray-600 mt-2">

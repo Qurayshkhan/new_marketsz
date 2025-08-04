@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAddressController;
+use Inertia\Inertia;
 
 Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
@@ -70,5 +71,7 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
             Route::post('/preferences-save-changes', [ShippingPreferenceController::class, 'saveChangePreferences'])->name('customer.preferences.saveChange');
         });
     });
-
+    Route::get('/checkout-page', function () {
+        return Inertia::render('Customers/Checkout/Report');
+    })->name('customers.checkoutPage');
 });

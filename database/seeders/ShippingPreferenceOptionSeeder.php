@@ -13,7 +13,7 @@ class ShippingPreferenceOptionSeeder extends Seeder
      */
     public function run(): void
     {
-        ShippingPreferenceOption::truncate();
+        // ShippingPreferenceOption::truncate();
         $options = [
             [
                 'title' => 'Enhanced Liability Protection',

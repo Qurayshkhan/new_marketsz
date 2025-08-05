@@ -13,7 +13,7 @@ class PackingOptionsSeeder extends Seeder
      */
     public function run(): void
     {
-        PackingOptions::truncate();
+        // PackingOptions::truncate();
         $options = [
             [
                 'title' => 'Fragile Stickers',

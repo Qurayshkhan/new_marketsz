@@ -13,7 +13,7 @@ class LoginOptionSeeder extends Seeder
      */
     public function run(): void
     {
-        LoginOption::truncate();
+        // LoginOption::truncate();
         $options = [
             [
                 'title' => 'Additional Email Address (Optional)',

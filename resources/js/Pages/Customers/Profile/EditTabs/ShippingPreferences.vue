@@ -107,7 +107,7 @@ const handleSubmitPreferences = () => {
         <hr />
 
         <div class="my-5">
-            <h1 class="text-xl">Preferred Ship Method</h1>
+            <h1 class="text-xl">International Shipping Options</h1>
 
             <label
                 class="flex items-center space-x-2 mt-2"

@@ -10,7 +10,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     readyToSends: Object,
@@ -120,6 +120,40 @@ const selectService = (service, id) => {
         toast.error(error);
     } finally {
         dropdownOpen.value = false;
+    }
+};
+
+const handleCreateShipRequest = async () => {
+    if (selectedIds.value.length === 0) {
+        toast.error(
+            "Please select at least one package to create a ship request."
+        );
+        return;
+    }
+    try {
+        router.post(
+            route("customer.shipment.create"),
+            {
+                package_ids: selectedIds.value,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.success("Ship request created successfully.");
+                    resetSelection();
+                },
+                onError: (error) => {
+                    toast.error(
+                        error.response.data.message ||
+                            "Failed to create ship request."
+                    );
+                },
+            }
+        );
+    } catch (error) {
+        toast.error(
+            error.response.data.message || "Failed to create ship request."
+        );
     }
 };
 </script>
@@ -579,10 +613,11 @@ const selectService = (service, id) => {
                         information.
                     </p>
                     <div class="text-center">
-                        <PrimaryButton class="mt-4 font-medium">
-                            <Link :href="route('customers.checkoutPage')">
-                                Create ship request
-                            </Link>
+                        <PrimaryButton
+                            class="mt-4 font-medium"
+                            @click="handleCreateShipRequest"
+                        >
+                            Create ship request
                         </PrimaryButton>
                     </div>
                     <p class="text-sm text-gray-600 mt-2">

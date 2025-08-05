@@ -50,7 +50,7 @@ class UserAddressController extends Controller
 
             $this->userAddressRepository->create($data);
 
-            return redirect()->back()->with('success', 'Address added successfully.');
+            return redirect()->back()->with('alert', 'Address added successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'Failed to add address. Please try again.']);
         }

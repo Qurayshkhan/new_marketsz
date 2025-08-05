@@ -8,7 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
             <NavLink
                 :href="route('customer.account.profile')"
                 :active="route().current('customer.account.profile')"
-                >Contact information</NavLink
+                >Profile information</NavLink
             >
             <NavLink
                 :href="route('customer.account.addressBook')"
@@ -18,7 +18,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
             <NavLink
                 :href="route('customer.payment.paymentMethods')"
                 :active="route().current('customer.payment.paymentMethods')"
-                >Payments</NavLink
+                >Payment Methods</NavLink
             >
             <NavLink
                 :href="route('customer.shippingPreferences.preference')"

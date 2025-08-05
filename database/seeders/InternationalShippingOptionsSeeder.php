@@ -13,7 +13,7 @@ class InternationalShippingOptionsSeeder extends Seeder
      */
     public function run(): void
     {
-        InternationalShippingOptions::truncate();
+        // InternationalShippingOptions::truncate();
         $option = [
             [
                 'title' => 'DHL Express',

@@ -22,4 +22,6 @@ interface PackageInterface
     public function changeStatus($data);
 
     public function packageCounts($userId);
+
+    public function getPackageByIds($ids);
 }

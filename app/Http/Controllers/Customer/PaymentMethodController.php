@@ -80,7 +80,7 @@ class PaymentMethodController extends Controller
             ];
             $this->paymentMethodRepository->storeUserCard($data);
             DB::commit();
-            return Redirect::route('customer.payment.paymentMethods')->with('alert', 'Card added successfully.');
+            return Redirect::back()->with('alert', 'Card added successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return Redirect::back()->withErrors(['message' => 'Failed to save card: ' . $e->getMessage()]);

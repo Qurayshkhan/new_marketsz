@@ -13,7 +13,7 @@ class ProformaInvoiceOptionsSeeder extends Seeder
      */
     public function run(): void
     {
-        ProformaInvoiceOptions::truncate();
+        // ProformaInvoiceOptions::truncate();
         $options = [
             [
                 'title' => 'Enter Tax I.D.',

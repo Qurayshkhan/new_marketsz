@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Customer\PaymentMethodController;
+use App\Http\Controllers\Customer\ShipController;
 use App\Http\Controllers\Customer\ShippingPreferenceController;
 use App\Http\Controllers\Customer\SuiteController;
 use App\Http\Controllers\PackageController;
@@ -71,6 +72,12 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
             Route::post('/preferences-save-changes', [ShippingPreferenceController::class, 'saveChangePreferences'])->name('customer.preferences.saveChange');
         });
     });
+
+    Route::prefix('shipment')->group(function () {
+        Route::get('/{ship}', [ShipController::class, 'index'])->name('customer.shipment.index');
+        Route::post('/create', [ShipController::class, 'createShipment'])->name('customer.shipment.create');
+    });
+
     Route::get('/checkout-page', function () {
         return Inertia::render('Customers/Checkout/Report');
     })->name('customers.checkoutPage');

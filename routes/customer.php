@@ -76,6 +76,10 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
     Route::prefix('shipment')->group(function () {
         Route::get('/{ship}', [ShipController::class, 'index'])->name('customer.shipment.index');
         Route::post('/create', [ShipController::class, 'createShipment'])->name('customer.shipment.create');
+
+        Route::delete('/packages/delete/{id}/{packageId}', [ShipController::class, 'deletePackageFromShip'])->name('customer.ship.packages.delete');
+
+        Route::post('calculate-shipping-cost', [ShipController::class, 'calculateShippingCost'])->name('customer.shipment.calculateShippingCost');
     });
 
     Route::get('/checkout-page', function () {

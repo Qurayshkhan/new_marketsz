@@ -24,4 +24,6 @@ interface PackageInterface
     public function packageCounts($userId);
 
     public function getPackageByIds($ids);
+
+    public function findById($id);
 }

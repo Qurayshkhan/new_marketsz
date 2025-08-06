@@ -23,6 +23,10 @@ class InternationalShippingOptionsSeeder extends Seeder
                 'title' => 'FedEx Economy',
                 'description' => '5 to 10 business days',
             ],
+            [
+                'title' => 'Sea freight',
+                'description' => '11 to 15 business days',
+            ],
         ];
         InternationalShippingOptions::insert($option);
     }

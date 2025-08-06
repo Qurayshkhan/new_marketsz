@@ -3,19 +3,77 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { reactive } from "vue";
 import CreditCard from "./partials/CreditCard.vue";
 import ShipAddress from "./partials/ShipAddress.vue";
+import Delete from "./Delete.vue";
+import Radiobox from "@/Components/Radiobox.vue";
+import { ref } from "vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import axios from "axios";
+import { useToast } from "vue-toastification";
 
 const props = defineProps({
     ship: Object,
     cards: Object,
     publishableKey: String,
     userAddresses: Object,
+    internationalShippingMethod: Object,
+    packingOptions: Object,
+    userPreferences: Object,
+    shippingPreferenceOptions: Object,
 });
-
+const toast = useToast();
 const openDetails = reactive({});
+const selectedShipMethod = ref(
+    Number(props?.userPreferences?.international_shipping_option ?? 0.0)
+);
+const selectedPackingOption = ref(
+    JSON.parse(props?.userPreferences?.packing_option) ?? []
+);
+const selectedShippingPreferenceOption = ref(
+    JSON.parse(props?.userPreferences?.shipping_preference_option) ?? []
+);
 
+// const isUpdatingRate = ref(false);
+
+const checkoutAmount = ref(props?.ship?.handling_fee || 0.0);
+const internationalShippingAmount = ref(0.0);
 function toggleDetails(id) {
     openDetails[id] = !openDetails[id];
 }
+
+const calculateShippingCost = () => {
+    checkoutAmount.value = props?.ship?.handling_fee || 0.0;
+    const data = {
+        shipMethod: selectedShipMethod.value,
+        packingOption: selectedPackingOption.value,
+        shippingPreferenceOption: selectedShippingPreferenceOption.value,
+        shipWeight: props.ship?.total_weight || 0,
+    };
+
+    axios
+        .post(route("customer.shipment.calculateShippingCost"), data)
+        .then((response) => {
+            console.log("Shipping cost calculated:", response.data);
+            const { data, success } = response.data;
+            if (success) {
+                if (data?.international_shipping_amount) {
+                    checkoutAmount.value += data?.international_shipping_amount;
+                    internationalShippingAmount.value =
+                        data?.international_shipping_amount;
+                }
+            } else {
+                toast.error(
+                    response.data.message || "Error calculating shipping cost"
+                );
+            }
+        })
+        .catch((error) => {
+            toast.error(
+                error.response?.data?.message ||
+                    "An error occurred while calculating shipping cost"
+            );
+        });
+};
 </script>
 
 <template>
@@ -23,8 +81,22 @@ function toggleDetails(id) {
         <Head title="Shipment" />
         <h1 class="text-2xl">Checkout</h1>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4">
-            <!-- Left Section (spans 2 columns on large screens) -->
             <div class="lg:col-span-2">
+                <div class="mb-4 text-end">
+                    <div class="w-60 ml-auto">
+                        <p
+                            class="flex flex-col items-center justify-between text-gray-700 mb-2"
+                        >
+                            Estimated shipping cost: ${{ checkoutAmount }}
+                        </p>
+                        <button
+                            class="w-full bg-primary-500 text-white py-2 px-4 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 rounded-lg"
+                            @click="calculateShippingCost"
+                        >
+                            Update Shipping Cost
+                        </button>
+                    </div>
+                </div>
                 <CreditCard
                     :cards="props?.cards"
                     :publishableKey="publishableKey"
@@ -123,13 +195,10 @@ function toggleDetails(id) {
                                         <td
                                             class="px-6 py-4 whitespace-nowrap border text-center"
                                         >
-                                            <button
-                                                class="text-red-500 hover:text-red-700 text-2xl"
-                                            >
-                                                <i
-                                                    class="fa-solid fa-xmark"
-                                                ></i>
-                                            </button>
+                                            <Delete
+                                                :id="props?.ship?.id"
+                                                :packageId="shipPackage?.id"
+                                            />
                                         </td>
                                     </tr>
 
@@ -207,9 +276,180 @@ function toggleDetails(id) {
                     <h2 class="text-xl font-semibold mb-2">
                         Shipment Details & Options
                     </h2>
-                    <div>
-                        <h3>Shipment Method</h3>
-                        <p class="text-gray-600">Coming Soon</p>
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3>Shipment Method</h3>
+                            <p class="text-gray-600">
+                                ${{ internationalShippingAmount }}
+                            </p>
+                        </div>
+                        <div>
+                            <ul>
+                                <li
+                                    v-for="method in props.internationalShippingMethod"
+                                    :key="method.id"
+                                >
+                                    <div>
+                                        <label
+                                            :for="`international_${method?.id}`"
+                                        >
+                                            <Radiobox
+                                                name="shipping_method"
+                                                v-model="selectedShipMethod"
+                                                :value="Number(method?.id)"
+                                                :id="`international_${method?.id}`"
+                                            />
+                                            <span class="ml-2">{{
+                                                method?.title
+                                            }}</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3>Packing Option</h3>
+                            <p class="text-gray-600">$0.00</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-2">
+                                (Based on 8lbs weight)
+                            </p>
+                        </div>
+                        <div>
+                            <ul>
+                                <li
+                                    v-for="packingOption in props?.packingOptions"
+                                    :key="packingOption?.id"
+                                >
+                                    <div>
+                                        <label
+                                            :for="`packing_option_${packingOption?.id}`"
+                                        >
+                                            <Checkbox
+                                                name="packing_option"
+                                                v-model="selectedPackingOption"
+                                                :value="
+                                                    Number(packingOption?.id)
+                                                "
+                                                :id="`packing_option_${packingOption?.id}`"
+                                            />
+                                            <span class="ml-2">{{
+                                                packingOption?.title
+                                            }}</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3>Shipping Preferences</h3>
+                            <p class="text-gray-600">$0.00</p>
+                        </div>
+
+                        <div>
+                            <ul>
+                                <li
+                                    v-for="shippingPreferenceOption in props?.shippingPreferenceOptions"
+                                    :key="shippingPreferenceOption?.id"
+                                >
+                                    <div>
+                                        <label
+                                            :for="`shipping_preference_options${shippingPreferenceOption?.id}`"
+                                        >
+                                            <Checkbox
+                                                name="shipping_preference_option"
+                                                v-model="
+                                                    selectedShippingPreferenceOption
+                                                "
+                                                :value="
+                                                    Number(
+                                                        shippingPreferenceOption?.id
+                                                    )
+                                                "
+                                                :id="`shipping_preference_option${shippingPreferenceOption?.id}`"
+                                            />
+                                            <span class="ml-2">{{
+                                                shippingPreferenceOption?.title
+                                            }}</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3>Export Documentation</h3>
+                            <p class="text-gray-600">$0.00</p>
+                        </div>
+                        <div>
+                            <ul>
+                                <li>
+                                    <div>
+                                        <p>
+                                            National ID:
+                                            <a href="#" class="text-primary-500"
+                                                >Add</a
+                                            >
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3>Handling Fee</h3>
+                            <p class="text-gray-600">$10.00</p>
+                        </div>
+                    </div>
+                    <hr />
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md mx-auto"
+                    >
+                        <div class="border-b pb-4 mb-4">
+                            <div
+                                class="flex items-center justify-between text-base font-semibold text-gray-700 mb-3"
+                            >
+                                <h3>Subtotal</h3>
+                                <p class="text-gray-800">
+                                    ${{ __to_fixed_number(checkoutAmount) }}
+                                </p>
+                            </div>
+                            <div
+                                class="flex items-center justify-between text-sm text-gray-600"
+                            >
+                                <p>Package Level Charges</p>
+                                <p>$0.00</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-800">
+                                Estimated Shipping Charges
+                            </h3>
+                            <p class="text-2xl font-bold text-primary-600">
+                                ${{ __to_fixed_number(checkoutAmount) }}
+                            </p>
+                        </div>
+
+                        <div class="text-sm text-gray-600 mb-4 text-center">
+                            Your selected card will be used for this
+                            transaction.
+                        </div>
+
+                        <div class="text-center">
+                            <button
+                                class="bg-primary-500 text-white w-full py-2 px-4 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
+                            >
+                                Ship Now
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,14 +4,16 @@ namespace App\Repositories;
 
 use App\Interfaces\ShipInterface;
 use App\Models\Ship;
+use App\Models\ShippingPricing;
 
 class ShipRepository implements ShipInterface
 {
-    protected $ship;
+    protected $ship, $shipPricing;
 
-    public function __construct(Ship $ship)
+    public function __construct(Ship $ship, ShippingPricing $shipPricing)
     {
         $this->ship = $ship;
+        $this->shipPricing = $shipPricing;
     }
 
     public function create(array $data)
@@ -68,5 +70,25 @@ class ShipRepository implements ShipInterface
         $ship = $this->findById($shipId);
         $ship->packages()->attach($packageId);
         return $ship;
+    }
+
+    public function getShipPriceByWightAndService($weight, $shippingMethodName)
+    {
+        return $this->shipPricing->where('type', 'Weight')->where('range_value', $weight)
+            ->where('service', $shippingMethodName)
+            ->first();
+    }
+    public function getShipPriceByVolumeAndService($volume, $shippingMethodName)
+    {
+        return $this->shipPricing
+            ->where('type', 'Volume')
+            ->where('service', $shippingMethodName)
+            ->where('range_value', '<=', $volume)
+            ->where(function ($query) use ($volume) {
+                $query->where('range_to', '>=', $volume)
+                    ->orWhereNull('range_to');
+            })
+            ->orderBy('range_value', 'desc')
+            ->first();
     }
 }

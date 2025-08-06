@@ -4,6 +4,12 @@ import AddCardModal from "@/Components/Payment/AddCardModal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Radiobox from "@/Components/Radiobox.vue";
 import { ref, watch } from "vue";
+import StripeIcon from "@/Components/Icons/StripeIcon.vue";
+import MasterCard from "@/Components/Icons/MasterCard.vue";
+import Paypal from "@/Components/Icons/Paypal.vue";
+import AmericaExpress from "@/Components/Icons/AmericaExpress.vue";
+import Visa from "@/Components/Icons/Visa.vue";
+import IdealPayment from "@/Components/Icons/IdealPayment.vue";
 
 const props = defineProps({
     cards: {
@@ -51,7 +57,26 @@ const submitForm = (stripeResponse) => {
             <p>Debit & Credit Cards</p>
             <p>Chose your card for checkout</p>
         </div>
-
+        <div class="flex gap-2 flex-wrap">
+            <div class="w-10 h-10">
+                <StripeIcon class="w-full h-full" />
+            </div>
+            <div class="w-10 h-10">
+                <MasterCard class="w-full h-full" />
+            </div>
+            <div class="w-10 h-10">
+                <Paypal class="w-full h-full" />
+            </div>
+            <div class="w-10 h-10">
+                <AmericaExpress class="w-full h-full" />
+            </div>
+            <div class="w-10 h-10">
+                <Visa class="w-full h-full" />
+            </div>
+            <div class="w-10 h-10">
+                <IdealPayment class="w-full h-full" />
+            </div>
+        </div>
         <PrimaryButton class="bg-primary-500" @click="showCardModal"
             >+Add Card</PrimaryButton
         >

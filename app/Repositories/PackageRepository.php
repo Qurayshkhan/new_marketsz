@@ -79,4 +79,9 @@ class PackageRepository implements PackageInterface
         return $this->package->whereIn('id', $ids)->get();
     }
 
+    public function findById($id)
+    {
+        return $this->package->findOrFail($id);
+    }
+
 }

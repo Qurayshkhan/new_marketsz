@@ -23,14 +23,9 @@ return new class extends Migration {
                 ->nullable()
                 ->constrained('user_addresses')
                 ->onDelete('cascade');
-            $table->foreignId('international_shipping_option_id')
-                ->nullable()
-                ->constrained('international_shipping_options')
-                ->onDelete('cascade');
-            $table->foreignId('packing_option_id')
-                ->nullable()
-                ->constrained('packing_options')->onDelete('cascade');
-            $table->foreignId('shipping_preference_option_id')->nullable()->constrained('shipping_preference_options')->onDelete('cascade');
+            $table->json('international_shipping_option_id')->nullable();
+            $table->json('packing_option_id')->nullable();
+            $table->json('shipping_preference_option_id')->nullable();
             $table->string('national_id')->nullable();
             $table->double('handling_fee')->default(10);
             $table->double('subtotal')->default(0);

@@ -27,12 +27,12 @@ const closeCardModal = () => {
     isShowCardModal.value = false;
 };
 
-const emit = defineEmits(["update:selected"]);
+const emit = defineEmits(["selectedCard"]);
 
 const selectedCard = ref(null);
 
 watch(selectedCard, (val) => {
-    emit("update:selected", val);
+    emit("selectedCard", val);
 });
 
 const submitForm = (stripeResponse) => {

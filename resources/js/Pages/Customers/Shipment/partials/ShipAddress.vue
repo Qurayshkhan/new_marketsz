@@ -6,17 +6,20 @@ import Radiobox from "@/Components/Radiobox.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps({
     userAddresses: Object,
 });
 const $page = usePage();
-
+const emit = defineEmits(["setSelectedAddress"]);
 const showModal = ref(false);
 const showDeleteModal = ref(false);
 const addressToDelete = ref(null);
 const selectedAddress = ref(null);
+watch(selectedAddress, (val) => {
+    emit("setSelectedAddress", val);
+});
 const form = useForm({
     id: null,
     address_name: "",

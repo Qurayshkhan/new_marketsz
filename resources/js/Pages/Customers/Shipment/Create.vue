@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { reactive } from "vue";
+import { onMounted, reactive, watch } from "vue";
 import CreditCard from "./partials/CreditCard.vue";
 import ShipAddress from "./partials/ShipAddress.vue";
 import Delete from "./Delete.vue";
@@ -10,6 +10,9 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
+import NationalId from "./NationalId.vue";
+import { Head } from "@inertiajs/vue3";
+import Checkout from "./Checkout.vue";
 
 const props = defineProps({
     ship: Object,
@@ -21,22 +24,49 @@ const props = defineProps({
     userPreferences: Object,
     shippingPreferenceOptions: Object,
 });
+let safeJsonParse = (json, fallback = []) => {
+    if (typeof json !== "string" || json.trim() === "") {
+        return fallback;
+    }
+
+    try {
+        return JSON.parse(json);
+    } catch {
+        return fallback;
+    }
+};
+
 const toast = useToast();
 const openDetails = reactive({});
 const selectedShipMethod = ref(
-    Number(props?.userPreferences?.international_shipping_option ?? 0.0)
+    props?.userPreferences
+        ? Number(props?.userPreferences?.international_shipping_option)
+        : 0.0
 );
 const selectedPackingOption = ref(
-    JSON.parse(props?.userPreferences?.packing_option) ?? []
+    safeJsonParse(
+        props?.userPreferences?.packing_option
+            ? props?.userPreferences?.packing_option
+            : []
+    )
 );
 const selectedShippingPreferenceOption = ref(
-    JSON.parse(props?.userPreferences?.shipping_preference_option) ?? []
+    safeJsonParse(
+        props?.userPreferences?.shipping_preference_option
+            ? props?.userPreferences?.shipping_preference_option
+            : []
+    )
 );
+
+const selectedCardId = ref(null);
+const setSelectedAddressId = ref(null);
 
 // const isUpdatingRate = ref(false);
 
 const checkoutAmount = ref(props?.ship?.handling_fee || 0.0);
 const internationalShippingAmount = ref(0.0);
+const packingOptionAmount = ref(0.0);
+const shippingPreferenceOptionAmount = ref(0.0);
 function toggleDetails(id) {
     openDetails[id] = !openDetails[id];
 }
@@ -61,6 +91,16 @@ const calculateShippingCost = () => {
                     internationalShippingAmount.value =
                         data?.international_shipping_amount;
                 }
+                if (data?.packing_option_amount) {
+                    checkoutAmount.value += data?.packing_option_amount;
+                    packingOptionAmount.value = data?.packing_option_amount;
+                }
+                if (data?.shipping_preference_option_amount) {
+                    checkoutAmount.value +=
+                        data?.shipping_preference_option_amount;
+                    shippingPreferenceOptionAmount.value =
+                        data?.shipping_preference_option_amount;
+                }
             } else {
                 toast.error(
                     response.data.message || "Error calculating shipping cost"
@@ -74,11 +114,33 @@ const calculateShippingCost = () => {
             );
         });
 };
+
+const selectedCard = (card) => {
+    selectedCardId.value = card;
+};
+const setSelectedAddress = (address) => {
+    setSelectedAddressId.value = address;
+};
+
+watch(
+    [
+        selectedShipMethod,
+        selectedPackingOption,
+        selectedShippingPreferenceOption,
+    ],
+    () => {
+        calculateShippingCost();
+    }
+);
+
+onMounted(() => {
+    calculateShippingCost();
+});
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <Head title="Shipment" />
+        <Head title="Shipment Checkout" />
         <h1 class="text-2xl">Checkout</h1>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4">
             <div class="lg:col-span-2">
@@ -89,19 +151,17 @@ const calculateShippingCost = () => {
                         >
                             Estimated shipping cost: ${{ checkoutAmount }}
                         </p>
-                        <button
-                            class="w-full bg-primary-500 text-white py-2 px-4 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 rounded-lg"
-                            @click="calculateShippingCost"
-                        >
-                            Update Shipping Cost
-                        </button>
                     </div>
                 </div>
                 <CreditCard
                     :cards="props?.cards"
                     :publishableKey="publishableKey"
+                    @selectedCard="selectedCard"
                 />
-                <ShipAddress :userAddresses="props?.userAddresses" />
+                <ShipAddress
+                    :userAddresses="props?.userAddresses"
+                    @setSelectedAddress="setSelectedAddress"
+                />
                 <div class="mt-4 overflow-x-auto">
                     <div class="min-w-full bg-white rounded-lg shadow">
                         <table
@@ -311,7 +371,9 @@ const calculateShippingCost = () => {
                     <div class="mb-4">
                         <div class="flex items-center justify-between mb-4">
                             <h3>Packing Option</h3>
-                            <p class="text-gray-600">$0.00</p>
+                            <p class="text-gray-600">
+                                ${{ packingOptionAmount }}
+                            </p>
                         </div>
                         <div>
                             <p class="text-gray-600 mb-2">
@@ -348,7 +410,9 @@ const calculateShippingCost = () => {
                     <div class="mb-4">
                         <div class="flex items-center justify-between mb-4">
                             <h3>Shipping Preferences</h3>
-                            <p class="text-gray-600">$0.00</p>
+                            <p class="text-gray-600">
+                                ${{ shippingPreferenceOptionAmount }}
+                            </p>
                         </div>
 
                         <div>
@@ -391,12 +455,7 @@ const calculateShippingCost = () => {
                             <ul>
                                 <li>
                                     <div>
-                                        <p>
-                                            National ID:
-                                            <a href="#" class="text-primary-500"
-                                                >Add</a
-                                            >
-                                        </p>
+                                        <NationalId :ship="props?.ship" />
                                     </div>
                                 </li>
                             </ul>
@@ -444,11 +503,17 @@ const calculateShippingCost = () => {
                         </div>
 
                         <div class="text-center">
-                            <button
-                                class="bg-primary-500 text-white w-full py-2 px-4 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
-                            >
-                                Ship Now
-                            </button>
+                            <Checkout
+                                :ship="props?.ship"
+                                :selectedShipMethod="selectedShipMethod"
+                                :selectedPackingOption="selectedPackingOption"
+                                :selectedShippingPreferenceOption="
+                                    selectedShippingPreferenceOption
+                                "
+                                :checkoutAmount="checkoutAmount"
+                                :selectedCardId="selectedCardId"
+                                :selectedAddressId="setSelectedAddressId"
+                            />
                         </div>
                     </div>
                 </div>

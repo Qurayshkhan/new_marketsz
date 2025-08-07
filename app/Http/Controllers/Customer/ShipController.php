@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternationalShippingOptions;
+use App\Payments\Stripe;
 use App\Repositories\PackageRepository;
 use App\Repositories\PaymentMethodRepository;
 use App\Repositories\ShippingPreferencesRepository;
 use App\Repositories\ShipRepository;
+use App\Repositories\TransactionRepository;
+use Auth;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -17,14 +21,16 @@ use Str;
 
 class ShipController extends Controller
 {
-    protected $shipRepository, $packageRepository, $paymentMethodRepository, $shippingPreferenceRepository;
+    protected $shipRepository, $packageRepository, $paymentMethodRepository, $shippingPreferenceRepository, $stripeClient, $transactionRepository;
 
-    public function __construct(ShipRepository $shipRepository, PackageRepository $packageRepository, PaymentMethodRepository $paymentMethodRepository, ShippingPreferencesRepository $shippingPreferenceRepository)
+    public function __construct(ShipRepository $shipRepository, PackageRepository $packageRepository, PaymentMethodRepository $paymentMethodRepository, ShippingPreferencesRepository $shippingPreferenceRepository, TransactionRepository $transactionRepository)
     {
         $this->packageRepository = $packageRepository;
         $this->shipRepository = $shipRepository;
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->shippingPreferenceRepository = $shippingPreferenceRepository;
+        $this->transactionRepository = $transactionRepository;
+        $this->stripeClient = new Stripe();
     }
 
 
@@ -123,7 +129,9 @@ class ShipController extends Controller
 
     public function calculateShippingCost(Request $request)
     {
-        $internationalShippingAmount = 0.00; // Placeholder for actual shipping cost calculation logic
+        $internationalShippingAmount = 0.00;
+        $packingOptionAmount = 0.00;
+        $shippingPreferenceOptionAmount = 0.00;
         if ($request->input('shipMethod') == InternationalShippingOptions::DHL_EXPRESS) {
             $shipPricing = $this->shipRepository->getShipPriceByWightAndService($request->input('shipWeight'), InternationalShippingOptions::DHL_NAME);
             $internationalShippingAmount += $shipPricing ? $shipPricing->price : 0.00;
@@ -135,6 +143,15 @@ class ShipController extends Controller
             $internationalShippingAmount += $shipPricing ? $shipPricing->price : 0.00;
         }
 
+        if ($request->input('packingOption')) {
+            $packingOptionAmount += $this->shippingPreferenceRepository->sumPackingOption($request->input('packingOption'));
+        }
+
+        if ($request->input('shippingPreferenceOption')) {
+            $shippingPreferenceOptionAmount += $this->shippingPreferenceRepository->sumShippingPreferenceOption($request->input('shippingPreferenceOption'));
+        }
+
+
         // Perform calculations based on the data
         // Example: $shippingCost = someCalculationFunction($data);
 
@@ -143,8 +160,99 @@ class ShipController extends Controller
             'message' => 'Shipping cost calculated successfully.',
             'data' => [
                 'international_shipping_amount' => $internationalShippingAmount ?? 0.00,
+                'packing_option_amount' => $packingOptionAmount ?? 0.00,
+                'shipping_preference_option_amount' => $shippingPreferenceOptionAmount ?? 0.00,
             ]
         ], 200);
-
     }
+
+    public function addNationalId(Request $request, $id)
+    {
+        $request->validate([
+            'national_id' => 'required|string|max:255',
+        ]);
+
+        try {
+            $ship = $this->shipRepository->findById($id);
+            if (!$ship) {
+                return Redirect::back()->withErrors(['message' => 'Shipment not found.']);
+            }
+            DB::beginTransaction();
+            $ship->national_id = $request->input('national_id');
+            $ship->save();
+
+            DB::commit();
+            return Redirect::back()->with('alert', 'National ID added successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => 'Error adding national ID: ' . $e->getMessage()]);
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $ship = $this->shipRepository->findById($request->input('id'));
+            if (!$ship) {
+                return Redirect::back()->withErrors(['message' => 'Shipment not found.']);
+            }
+            $this->shipRepository->update($ship, [
+                'international_shipping_option_id' => $request->input('international_shipping_option_id'),
+                'packing_option_id' => json_encode($request->input('packing_option_id')),
+                'shipping_preference_option_id' => json_encode($request->input('shipping_preference_option_id')),
+                'estimated_shipping_charges' => $request->input('estimated_shipping_charges'),
+                'subtotal' => $request->input('subtotal'),
+                'user_address_id' => $request->input('user_address_id'),
+            ]);
+
+            $user = Auth::user();
+            $stripeCharge = null;
+            $card = $this->paymentMethodRepository->findById($request->input('card_id'));
+            if ($card) {
+                $customerId = $user->stripe_id;
+                $stripeCharge = $this->stripeClient->createCharge([
+                    'customer' => $customerId,
+                    'source' => $card->card_id,
+                    'receipt_email' => $user->email,
+                    'amount' => $request->input('estimated_shipping_charges') * 100,
+                    'currency' => 'USD',
+                    'capture' => true,
+                    'description' => "Payment by {$user->name} to create shipment.",
+                    'metadata' => [],
+                ]);
+                $this->transactionRepository->create([
+                    'user_id' => $user->id,
+                    'status' => $stripeCharge->paid,
+                    'transaction_id' => $stripeCharge->id,
+                    'description' => $stripeCharge->description,
+                    'card' => $stripeCharge->source->last4,
+                    'transaction_date' => Carbon::createFromTimestamp($stripeCharge->created)->toDateTimeString(),
+                ]);
+            }
+            foreach ($ship->packages as $package) {
+                $package->status = \App\Helpers\PackageStatus::CONSOLIDATE;
+                $package->save();
+            }
+            $ship->invoice_status = 'paid';
+            $ship->save();
+            DB::commit();
+
+            return Redirect::route('customer.shipment.success', ['shipId' => $ship->id]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => 'Error during checkout: ' . $e->getMessage()]);
+        }
+    }
+
+    public function successPage($shipId)
+    {
+        $shipment = $this->shipRepository->findById($shipId);
+        $shipment->load('userAddress', 'user');
+        return Inertia::render('Customers/Shipment/SuccessPage', [
+            'shipment' => $shipment,
+        ]);
+    }
+
 }

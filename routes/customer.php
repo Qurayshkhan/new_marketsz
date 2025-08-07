@@ -74,12 +74,21 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
     });
 
     Route::prefix('shipment')->group(function () {
+
         Route::get('/{ship}', [ShipController::class, 'index'])->name('customer.shipment.index');
         Route::post('/create', [ShipController::class, 'createShipment'])->name('customer.shipment.create');
 
         Route::delete('/packages/delete/{id}/{packageId}', [ShipController::class, 'deletePackageFromShip'])->name('customer.ship.packages.delete');
 
         Route::post('calculate-shipping-cost', [ShipController::class, 'calculateShippingCost'])->name('customer.shipment.calculateShippingCost');
+
+
+        Route::post('/packages/add-national-id/{id}', [ShipController::class, 'addNationalId'])->name('customer.ship.packages.nationalId');
+
+        Route::post('checkout', [ShipController::class, 'checkout'])->name('customer.ship.checkout');
+
+        Route::get('ship-success/{shipId}', [ShipController::class, 'successPage'])->name('customer.shipment.success');
+
     });
 
     Route::get('/checkout-page', function () {

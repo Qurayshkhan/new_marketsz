@@ -45,6 +45,7 @@ class PaymentMethodController extends Controller
             }
             $card = $token['card'];
             $user = $this->userRepository->findById(Auth::id());
+            $stripeCard = null;
             if (!$user) {
                 throw new \Exception('Authenticated user not found.');
             }
@@ -59,11 +60,11 @@ class PaymentMethodController extends Controller
                 ]);
                 $update = $this->userRepository->updateUser($user->id, ['stripe_id' => $customer->id]);
             } else {
-                $this->stripe->createSource($user, $token['id']);
+                $stripeCard = $this->stripe->createSource($user, $token['id']);
             }
             $data = [
                 'user_id' => $user->id,
-                'card_id' => $token['id'],
+                'card_id' => $stripeCard->id,
                 'exp_month' => data_get($card, 'exp_month'),
                 'exp_year' => data_get($card, 'exp_year'),
                 'brand' => data_get($card, 'brand'),

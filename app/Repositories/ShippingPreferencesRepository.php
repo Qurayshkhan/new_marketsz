@@ -66,5 +66,15 @@ class ShippingPreferencesRepository implements ShippingPreferencesInterface
         return $this->shippingPreferences->updateOrCreate(['user_id' => Auth::id()], $data);
     }
 
+    public function sumPackingOption($packingOptionIds)
+    {
+        return $this->packingOption->whereIn('id', $packingOptionIds)->sum('price');
+    }
+
+    public function sumShippingPreferenceOption($shippingPreferenceOptionIds)
+    {
+        return $this->shippingPreferenceOption->whereIn('id', $shippingPreferenceOptionIds)->sum('price');
+    }
+
 
 }

@@ -23,4 +23,6 @@ interface ShipInterface
     public function getShipByTrackingNumber($trackingNumber);
 
     public function getShipsByStatus($status);
+
+    public function getShipDetails($ship);
 }

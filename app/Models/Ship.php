@@ -38,4 +38,9 @@ class Ship extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function internationalShipping()
+    {
+        return $this->belongsTo(InternationalShippingOptions::class, 'international_shipping_option_id', 'id');
+    }
 }

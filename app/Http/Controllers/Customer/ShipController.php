@@ -255,4 +255,22 @@ class ShipController extends Controller
         ]);
     }
 
+    public function myShipments()
+    {
+        $shipments = $this->shipRepository->getShipsByUserId(Auth::id());
+        return Inertia::render('Customers/Shipment/MyShipment', ['shipments' => $shipments]);
+    }
+
+    public function viewShipment($ship)
+    {
+        $details = $this->shipRepository->getShipDetails($ship);
+        $packingOptions = $this->shippingPreferenceRepository->getPackingOptionByIds(json_decode($details->packing_option_id));
+        $shippingPreferenceOption = $this->shippingPreferenceRepository->shippingPreferenceOptionByIds(json_decode($details->shipping_preference_option_id));
+        return Inertia::render('Customers/Shipment/Detail', [
+            'shipDetails' => $details,
+            'packingOptions' => $packingOptions,
+            'shippingPreferenceOption' => $shippingPreferenceOption,
+        ]);
+    }
+
 }

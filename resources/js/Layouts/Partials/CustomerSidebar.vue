@@ -34,8 +34,13 @@ const props = defineProps({
                         My Suite
                     </Link>
                     <Link
-                        href="#"
+                        :href="route('customer.shipment.myShipments')"
                         class="flex items-center p-3 rounded-md hover:bg-gray-700 transition-colors duration-200"
+                        :class="{
+                            'text-white bg-gray-700': $page.url.startsWith(
+                                '/customer/shipment/'
+                            ),
+                        }"
                     >
                         <i class="fa-solid fa-cart-shopping w-5 h-5 mr-3"></i>
                         My Shipments

@@ -87,7 +87,10 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
 
         Route::post('checkout', [ShipController::class, 'checkout'])->name('customer.ship.checkout');
 
-        Route::get('ship-success/{shipId}', [ShipController::class, 'successPage'])->name('customer.shipment.success');
+        Route::get('/ship-success/{shipId}', [ShipController::class, 'successPage'])->name('customer.shipment.success');
+
+        Route::get("/my/shipments", [ShipController::class, 'myShipments'])->name('customer.shipment.myShipments');
+        Route::get("/details/shipments/{ship}", [ShipController::class, 'viewShipment'])->name('customer.shipment.details');
 
     });
 

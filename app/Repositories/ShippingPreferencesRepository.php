@@ -76,5 +76,15 @@ class ShippingPreferencesRepository implements ShippingPreferencesInterface
         return $this->shippingPreferenceOption->whereIn('id', $shippingPreferenceOptionIds)->sum('price');
     }
 
+    public function getPackingOptionByIds($ids)
+    {
+        return $this->packingOption->whereIn('id', $ids)->get();
+    }
+
+
+    public function shippingPreferenceOptionByIds($ids)
+    {
+        return $this->shippingPreferenceOption->whereIn('id', $ids)->get();
+    }
 
 }

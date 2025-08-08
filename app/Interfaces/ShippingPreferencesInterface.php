@@ -14,4 +14,11 @@ interface ShippingPreferencesInterface
     public function getProformaInvoiceOptions();
 
     public function shippingPreferenceOptions();
+
+    public function getPackingOptionByIds($ids);
+
+    public function shippingPreferenceOptionByIds($ids);
+
+    public function sumPackingOption($packingOptionIds);
+    public function sumShippingPreferenceOption($shippingPreferenceOptionIds);
 }

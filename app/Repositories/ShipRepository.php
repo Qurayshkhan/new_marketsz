@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\ShipInterface;
 use App\Models\Ship;
 use App\Models\ShippingPricing;
+use Inertia\Inertia;
 
 class ShipRepository implements ShipInterface
 {
@@ -90,5 +91,10 @@ class ShipRepository implements ShipInterface
             })
             ->orderBy('range_value', 'desc')
             ->first();
+    }
+
+    public function getShipDetails($shipId)
+    {
+        return $this->ship->where('id', $shipId)->with('user', 'userAddress', 'packages', 'internationalShipping')->first();
     }
 }

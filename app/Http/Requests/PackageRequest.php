@@ -31,6 +31,7 @@ class PackageRequest extends FormRequest
             'weight' => 'required',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'items' => 'sometimes',
+            'status' => 'required|in:1,2,3,4'
         ];
     }
 }

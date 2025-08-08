@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Package extends Model
 {
-    protected $fillable = ['package_id', 'tracking_id', 'sender_id', 'special_request', 'date_received', 'from', 'total_value', 'weight', 'note'];
+    protected $fillable = ['package_id', 'tracking_id', 'sender_id', 'special_request', 'date_received', 'from', 'total_value', 'weight', 'note', 'status'];
     protected $appends = ['status_name'];
     public function items()
     {

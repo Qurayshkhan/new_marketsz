@@ -9,7 +9,7 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import SearchableSelect from "vue-select";
 import InputError from "@/Components/InputError.vue";
 import Delete from "../Delete.vue";
-
+import packageStatus from "@/Data/package_status.json";
 const props = defineProps({
     package: Object,
     customers: Object,
@@ -21,6 +21,7 @@ const form = useForm({
     from: editPackage?.from,
     date: new Date(editPackage?.date_received),
     sender_id: editPackage?.sender_id,
+    status: editPackage?.status,
     files: [],
     items: editPackage?.items ?? [
         {
@@ -95,6 +96,7 @@ const submitForm = () => {
         payload.append("total_value", data.totalPrice);
         payload.append("weight", data.totalWeight);
         payload.append("tracking_id", data.tracking_no);
+        payload.append("status", data.status);
 
         const mappedItems = data.items.map((item) => ({
             ...item,
@@ -152,6 +154,20 @@ onMounted(() => {
                             type="text"
                             v-model="form.tracking_no"
                             class="w-full"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.tracking_no"
+                        />
+                    </div>
+                    <div class="">
+                        <InputLabel id="packageStatus" value="Status" />
+                        <SearchableSelect
+                            id="packageStatus"
+                            :options="packageStatus"
+                            :reduce="(option) => option.id"
+                            label="name"
+                            v-model="form.status"
                         />
                         <InputError
                             class="mt-2"

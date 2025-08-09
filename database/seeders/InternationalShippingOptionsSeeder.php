@@ -25,11 +25,11 @@ class InternationalShippingOptionsSeeder extends Seeder
             ],
             [
                 'title' => 'Sea freight',
-                'description' => '11 to 15 business days',
+                'description' => '7 to 9 business days  business days',
             ],
             [
                 'title' => 'AirCargo',
-                'description' => '16 to 20 business days',
+                'description' => '3 to 5 business days',
             ],
         ];
         InternationalShippingOptions::insert($option);

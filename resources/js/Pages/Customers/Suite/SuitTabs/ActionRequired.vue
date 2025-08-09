@@ -282,7 +282,7 @@ const showPackagePhotos = async (packageId) => {
 
                                                         <div>
                                                             <button
-                                                                class="btn bg-white text-black"
+                                                                class="btn bg-primary-500 text-white"
                                                                 @click="
                                                                     showPackagePhotos(
                                                                         action.id

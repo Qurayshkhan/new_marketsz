@@ -16,6 +16,8 @@ const form = useForm({
     password: "",
     country: "",
     address: "",
+    state: "",
+    zip_code: "",
     tax_id: "",
     year: "",
     month: "",
@@ -69,9 +71,14 @@ const submit = () => {
                             alt="whale"
                             width="72%"
                         />
+                        <img
+                            src="/assets/image/home/ship.svg"
+                            alt="whale"
+                            width="72%"
+                        />
                     </div>
                     <h1 class="title-1 mb-1 text-black">
-                        Get Your FREE USA and EU Shipping Address
+                        Get Your FREE USA Shipping Address
                     </h1>
                     <p class="text-lg md:text-xl text-gray-600 mx-auto">
                         As soon as your register, you can instantly get your
@@ -100,16 +107,31 @@ const submit = () => {
                         </select>
                         <label>Country</label>
                     </div>
-                    <div class="label-input mb-2">
-                        <TextInput
-                            placeholder="Address"
-                            required="required"
-                            autocapitalize="sentences"
-                            class="rounded"
-                            type="text"
-                            v-model="form.address"
-                        />
-                        <label>Address</label>
+                    <div>
+                        <div class="d-flex">
+                            <div class="label-input mb-2">
+                                <TextInput
+                                    placeholder="State"
+                                    required="required"
+                                    autocapitalize="sentences"
+                                    class="rounded"
+                                    type="text"
+                                    v-model="form.state"
+                                />
+                                <label>State</label>
+                            </div>
+                            <div class="label-input mb-2">
+                                <TextInput
+                                    placeholder="Zip code"
+                                    required="required"
+                                    autocapitalize="sentences"
+                                    class="rounded"
+                                    type="text"
+                                    v-model="form.zip_code"
+                                />
+                                <label>Zipcode</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex mb-2 justify-between">
                         <div class="">

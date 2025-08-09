@@ -42,12 +42,8 @@ const submit = () => {
         >
             <header class="w-full md:w-1/2 text-center">
                 <div class="flex justify-center">
-                    <img src="assets/image/ballon.svg" alt="fish" />
+                    <img src="assets/image/home/ship.svg" alt="fish" />
                 </div>
-                <h1 class="title-1 mb-1 text-black">Welcome!</h1>
-                <p class="text-lg md:text-xl text-gray-600 mx-auto">
-                    Ready to Shop Some More? Your packages are waiting
-                </p>
             </header>
             <form
                 class="w-96 bg-rose-50 border-2 border-rose-200 py-4 px-3 sm:p-6 rounded-xl"
@@ -101,8 +97,14 @@ const submit = () => {
                 </div>
             </form>
         </div>
-        <div class="flex justify-center text-lg md:text-xl text-gray-600">
+        <div
+            class="flex justify-center text-lg md:text-xl text-gray-600 text-center"
+        >
             <div class="px-10">
+                <h1 class="title-1 mb-1 text-black">Welcome!</h1>
+                <p class="text-lg md:text-xl text-gray-600 mx-auto mb-2">
+                    Ready to Shop Some More? Your packages are waiting
+                </p>
                 <div>Forgot your password?</div>
                 <div>
                     Click below to reset your password and get back into your
@@ -111,9 +113,9 @@ const submit = () => {
                 <div>
                     Check your password a couple of times, before changing it.
                 </div>
-                <ul class="list-disc px-4">
+                <ul class="px-4">
                     <li class="py-2">
-                        Your suite number can be found in your MyUS address
+                        Your suite number can be found in your markets address
                     </li>
                     <li class="py-2">
                         Your password was selected by you during account

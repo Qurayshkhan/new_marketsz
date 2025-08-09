@@ -48,5 +48,13 @@ Route::get("/", [WebsiteController::class, "index"])->name('web.home');
 Route::get("/calculator", [WebsiteController::class, "calculator"])->name('web.calculator');
 Route::get("/contact", [WebsiteController::class, "contact"])->name('web.contact');
 Route::get('/about', [WebsiteController::class, 'about'])->name('web.about');
+Route::get('/faqs', [WebsiteController::class, 'faqs'])->name('web.faqs');
+Route::get('/term', [WebsiteController::class, 'terms'])->name('web.terms');
+Route::get('/privacy', [WebsiteController::class, 'privacy'])->name('web.privacy');
+
+// routes/web.php
+Route::post('/calculate-shipping', [WebsiteController::class, 'calculate']);
+
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/customer.php';

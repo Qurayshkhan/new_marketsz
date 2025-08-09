@@ -38,6 +38,8 @@ class User extends Authenticatable
         'stripe_id',
         'type',
         'avatar',
+        'state',
+        'zip_code',
         'stripe_id'
     ];
 

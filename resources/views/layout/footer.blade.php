@@ -12,29 +12,29 @@
                  <div><a href="/"><img class="logo" src="assets/image/logo.svg" alt="app-logo"></a></div>
                  <ul class="flex flex-col text-lg font-bold md:flex-row">
                      <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
-                             href="about.html">About</a></li>
+                             href="{{ route('web.about') }}">About</a></li>
                      <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
-                             href="contact.html">Contact US</a>
+                             href="{{ route('web.contact') }}">Contact US</a>
                      </li>
                      <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
-                             href="calculator.html">Cost
+                             href="{{ route('web.calculator') }}">Cost
                              Calculator</a></li>
                      <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
-                             href="FAQ.html">FAQ</a></li>
+                             href="{{ route('web.faqs') }}">FAQ</a></li>
                  </ul>
                  <div class="flex flex-col items-center sm:flex-row">
                      <ul class="flex">
-                         <li class="px-2"><a href="#" target="_blank" rel="noreferrer"
-                                 class="hover:scale-105"><i class="text-xl fab fa-facebook" aria-hidden="true"></i></a>
+                         <li class="px-2"><a href="https://www.facebook.com/Marketsz/" target="_blank"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-facebook"
+                                     aria-hidden="true"></i></a>
                          </li>
-                         <li class="px-2"><a href="#" target="_blank" rel="noreferrer"
-                                 class="hover:scale-105"><i class="text-xl fab fa-instagram" aria-hidden="true"></i></a>
+                         <li class="px-2"><a href="https://www.instagram.com/marketsz.official/" target="_blank"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-instagram"
+                                     aria-hidden="true"></i></a>
                          </li>
-                         <li class="px-2"><a href="#" target="_blank" rel="noreferrer"
-                                 class="hover:scale-105"><i class="text-xl fab fa-youtube" aria-hidden="true"></i></a>
-                         </li>
-                         <li class="px-2"><a href="#" target="_blank" rel="noreferrer"
-                                 class="hover:scale-105"><i class="text-xl fab fa-telegram" aria-hidden="true"></i></a>
+                         <li class="px-2"><a href="https://www.youtube.com/@marketsz.official" target="_blank"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-youtube"
+                                     aria-hidden="true"></i></a>
                          </li>
                      </ul>
                  </div>
@@ -43,10 +43,11 @@
              <div class="pt-6 pb-12 text-sm text-center text-white text-opacity-75">
                  <div class="max-w-lg mx-auto"><span class="">© All Rights Reserved - 2022</span>
                      <div class="mt-2 space-x-4">
-                         <a class="underline whitespace-nowrap hover:text-white" href="terms.html">Terms
+                         <a class="underline whitespace-nowrap hover:text-white" href="{{ route('web.terms') }}">Terms
                              of
                              Service</a>
-                         <a class="underline whitespace-nowrap hover:text-white" href="privacy.html">Privacy
+                         <a class="underline whitespace-nowrap hover:text-white"
+                             href="{{ route('web.privacy') }}">Privacy
                              Policy</a>
                      </div>
                  </div>

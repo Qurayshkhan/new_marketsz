@@ -26,6 +26,8 @@ return new class extends Migration {
             $table->string('date_of_birth')->nullable();
             $table->string('tax_id')->nullable();
             $table->longText('address')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('state')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_active')->default(false);
             $table->boolean('is_old')->default(false);

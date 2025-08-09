@@ -16,7 +16,7 @@ const props = defineProps({
             'w-0': !isSidebarOpen,
             'hidden md:block': !isSidebarOpen && !isMobile,
         }"
-        class="fixed top-16 left-0 h-[calc(100vh-4rem)] bg-primary-800 text-white shadow-lg z-20 overflow-y-auto transition-all duration-300 ease-in-out rounded-tr-lg rounded-br-lg md:relative md:top-0 md:h-full md:pt-0"
+        class="fixed top-16 left-0 h-[calc(100vh-4rem)] bg-primary-500 text-white shadow-lg z-20 overflow-y-auto transition-all duration-300 ease-in-out rounded-tr-lg rounded-br-lg md:relative md:top-0 md:h-full md:pt-0"
     >
         <nav class="p-4 text-gray-400">
             <ul>
@@ -24,9 +24,9 @@ const props = defineProps({
                 <li class="mb-2">
                     <Link
                         :href="route('customer.dashboard')"
-                        class="flex items-center p-3 rounded-md hover:bg-gray-700 transition-colors duration-200"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
                         :class="{
-                            'text-white bg-gray-700':
+                            'text-white bg-primary-700':
                                 $page.url.startsWith('/customer/suite'),
                         }"
                     >
@@ -35,21 +35,23 @@ const props = defineProps({
                     </Link>
                     <Link
                         :href="route('customer.shipment.myShipments')"
-                        class="flex items-center p-3 rounded-md hover:bg-gray-700 transition-colors duration-200"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
                         :class="{
-                            'text-white bg-gray-700': $page.url.startsWith(
+                            'text-white bg-primary-700': $page.url.startsWith(
                                 '/customer/shipment/'
                             ),
                         }"
                     >
-                        <i class="fa-solid fa-cart-shopping w-5 h-5 mr-3"></i>
+                        <i
+                            class="fa-solid fa-cart-shopping text-white w-5 h-5 mr-3"
+                        ></i>
                         My Shipments
                     </Link>
                     <Link
                         :href="route('customer.account.profile')"
-                        class="flex items-center p-3 rounded-md hover:bg-gray-700 transition-colors duration-200"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
                         :class="{
-                            'text-white bg-gray-700': $page.url.startsWith(
+                            'text-white bg-primary-700': $page.url.startsWith(
                                 '/customer/account-setting'
                             ),
                         }"
@@ -60,7 +62,7 @@ const props = defineProps({
                     <Link
                         :href="route('logout')"
                         method="post"
-                        class="flex items-center w-full p-3 rounded-md hover:bg-gray-700 transition-colors duration-200 text-white"
+                        class="flex items-center w-full p-3 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"
                     >
                         <i
                             class="fa-solid fa-arrow-right-from-bracket mr-3"

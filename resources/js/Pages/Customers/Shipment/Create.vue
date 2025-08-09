@@ -7,7 +7,6 @@ import Delete from "./Delete.vue";
 import Radiobox from "@/Components/Radiobox.vue";
 import { ref } from "vue";
 import Checkbox from "@/Components/Checkbox.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import NationalId from "./NationalId.vue";

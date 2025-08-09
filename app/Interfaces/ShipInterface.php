@@ -25,4 +25,6 @@ interface ShipInterface
     public function getShipsByStatus($status);
 
     public function getShipDetails($ship);
+
+    public function deletePendingShipment($userId);
 }

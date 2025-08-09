@@ -68,6 +68,9 @@ class ShipController extends Controller
             } else {
                 return Redirect::back()->withErrors(['message' => 'No packages selected for shipment.']);
             }
+
+            $this->shipRepository->deletePendingShipment(Auth::id());
+
             $ship = $this->shipRepository->create([
                 'user_id' => auth()->id(),
                 'tracking_number' => rand(00000000, 99999999),

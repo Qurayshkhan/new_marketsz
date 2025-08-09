@@ -43,7 +43,7 @@ class ShipRepository implements ShipInterface
     }
     public function getShipsByUserId($userId)
     {
-        return $this->ship->where('user_id', $userId)->get();
+        return $this->ship->where('user_id', $userId)->where('invoice_status', 'paid')->get();
     }
 
     public function getShipsWithPackages()
@@ -96,5 +96,10 @@ class ShipRepository implements ShipInterface
     public function getShipDetails($shipId)
     {
         return $this->ship->where('id', $shipId)->with('user', 'userAddress', 'packages', 'internationalShipping')->first();
+    }
+
+    public function deletePendingShipment($userId)
+    {
+        return $this->ship->where('user_id', $userId)->where('invoice_status', 'pending')->delete();
     }
 }

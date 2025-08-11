@@ -89,7 +89,11 @@ const props = defineProps({
                 <li class="mb-2">
                     <button
                         @click="toggleDropdown('users')"
-                        class="flex items-center justify-between w-full p-3 rounded-md hover:bg-primary-700 transition-colors duration-200 focus:outline-none"
+                        class="flex items-center justify-between w-full p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200 focus:outline-none"
+                        :class="{
+                            'bg-primary-700 text-white':
+                                isActiveDropdown('admin.users'),
+                        }"
                     >
                         <span class="flex items-center">
                             <i
@@ -121,16 +125,20 @@ const props = defineProps({
                         class="pl-8 mt-1 space-y-1"
                     >
                         <li>
-                            <a
-                                href="#"
-                                class="block p-2 rounded-md hover:bg-gray-600 transition-colors duration-200"
-                                >All Users</a
+                            <Link
+                                :href="route('admin.users')"
+                                class="block p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                                :class="{
+                                    'text-white bg-primary-700':
+                                        route().current('admin.users'),
+                                }"
+                                >All Users</Link
                             >
                         </li>
                         <li>
                             <a
                                 href="#"
-                                class="block p-2 rounded-md hover:bg-gray-600 transition-colors duration-200"
+                                class="block p-2 rounded-md hover:bg-primary-700 text-white transition-colors duration-200"
                                 >Roles & Permissions</a
                             >
                         </li>
@@ -141,7 +149,7 @@ const props = defineProps({
                 <li class="mb-2">
                     <a
                         href="#"
-                        class="flex items-center p-3 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 rounded-md hover:bg-primary-700 text-white transition-colors duration-200"
                     >
                         <i
                             class="fa fa-cog w-5 h-5 mr-3"
@@ -153,7 +161,7 @@ const props = defineProps({
                 <li class="mb-2">
                     <Link
                         :href="route('admin.import')"
-                        class="flex items-center p-3 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
                         :class="{
                             'text-white bg-primary-700':
                                 route().current('admin.import'),

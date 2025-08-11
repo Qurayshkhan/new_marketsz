@@ -7,7 +7,9 @@ interface UserInterface
 {
     public function customers();
     public function findById($userId);
-    public function updateUser($userId, $data);
+    public function update($userId, $data);
+
+    public function users();
 
 
 }

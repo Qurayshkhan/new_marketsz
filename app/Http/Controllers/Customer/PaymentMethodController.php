@@ -58,7 +58,7 @@ class PaymentMethodController extends Controller
                         'userId' => $user->id,
                     ]
                 ]);
-                $update = $this->userRepository->updateUser($user->id, ['stripe_id' => $customer->id]);
+                $update = $this->userRepository->update($user->id, ['stripe_id' => $customer->id]);
             } else {
                 $stripeCard = $this->stripe->createSource($user, $token['id']);
             }

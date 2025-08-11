@@ -5,6 +5,8 @@ namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
 use App\Models\User;
+use Carbon\Carbon;
+use Hash;
 
 class UserRepository implements UserInterface
 {
@@ -24,9 +26,22 @@ class UserRepository implements UserInterface
         return $this->user->find($userId);
     }
 
-    public function updateUser($userId, $data)
+    public function update($userId, $data)
     {
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+        if ($data['date_of_birth']) {
+            $data['date_of_birth'] = Carbon::parse($data['date_of_birth'])->format('Y-m-d');
+        }
         return $this->user->where('id', $userId)->update($data);
+    }
+
+    public function users()
+    {
+        return $this->user->customer()->paginate(25);
     }
 
 }

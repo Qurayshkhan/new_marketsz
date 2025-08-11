@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\WebsiteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -22,8 +23,6 @@ Route::get('/welcome', function () {
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -40,7 +39,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/edit/{package}', [PackageController::class, 'edit'])->name('admin.packages.edit');
         Route::delete('/delete/{package}', [PackageController::class, 'destroy'])->name('admin.packages.delete');
     });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('admin.users');
+        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('admin.users.userEdit');
+        Route::put('/update/{user}', [UserController::class, 'update'])->name('admin.users.userUpdate');
+    });
 });
+// Route::middleware(['auth', 'admin'])->group(function () {
+// });
 
 
 // website routes

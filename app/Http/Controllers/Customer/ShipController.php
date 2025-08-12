@@ -222,13 +222,17 @@ class ShipController extends Controller
                     'currency' => 'USD',
                     'capture' => true,
                     'description' => "Payment by {$user->name} to create shipment.",
-                    'metadata' => [],
+                    'metadata' => [
+                        'user_id' => $user->id,
+                        'order_ref' => uniqid('ship_'),
+                    ],
                 ]);
                 $this->transactionRepository->create([
                     'user_id' => $user->id,
                     'status' => $stripeCharge->paid,
                     'transaction_id' => $stripeCharge->id,
                     'description' => $stripeCharge->description,
+                    'amount' => $stripeCharge->amount / 100,
                     'card' => $stripeCharge->source->last4,
                     'transaction_date' => Carbon::createFromTimestamp($stripeCharge->created)->toDateTimeString(),
                 ]);

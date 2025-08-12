@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\WebsiteController;
 use Illuminate\Foundation\Application;
@@ -42,8 +43,15 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.users');
+        Route::get('/create', [UserController::class, 'create'])->name('admin.users.createUser');
+        Route::post('/store', [UserController::class, 'store'])->name('admin.users.storeUser');
         Route::get('/edit/{user}', [UserController::class, 'edit'])->name('admin.users.userEdit');
         Route::put('/update/{user}', [UserController::class, 'update'])->name('admin.users.userUpdate');
+
+        Route::prefix('transactions')->group(function () {
+            Route::get('/{user}', [TransactionController::class, 'index'])->name('admin.users.transactions');
+            Route::put('/refund/{transaction}', [TransactionController::class, 'refundTransaction'])->name('admin.users.refundTransaction');
+        });
     });
 });
 // Route::middleware(['auth', 'admin'])->group(function () {

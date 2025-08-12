@@ -17,7 +17,7 @@ const props = defineProps({
                     <div class="flex max-lg:flex-col justify-between gap-3">
                         <div class="card-title"></div>
                         <div>
-                            <Link href="#">
+                            <Link :href="route('admin.users.createUser')">
                                 <PrimaryButton>+ Create User</PrimaryButton>
                             </Link>
                         </div>

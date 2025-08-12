@@ -16,6 +16,11 @@ const props = defineProps({
         <!-- <NavLink :href="route('admin.leaguesEditFlights', props.league.id)" :active="route().current('admin.leaguesEditFlights')">
                 Flights
             </NavLink> -->
+        <NavLink
+            :href="route('admin.users.transactions', props?.user?.id)"
+            :active="route().current('admin.users.transactions')"
+            >Transactions</NavLink
+        >
     </div>
 
     <!-- Page Content -->

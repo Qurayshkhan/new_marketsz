@@ -41,7 +41,19 @@ class UserRepository implements UserInterface
 
     public function users()
     {
-        return $this->user->customer()->paginate(25);
+        return $this->user->customer()->orderByDesc('id')->paginate(25);
+    }
+
+    public function store($data)
+    {
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+        if ($data['date_of_birth']) {
+            $data['date_of_birth'] = Carbon::parse($data['date_of_birth'])->format('Y-m-d');
+        }
+        return $this->user->create($data);
+
     }
 
 }

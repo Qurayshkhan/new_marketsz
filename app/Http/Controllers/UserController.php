@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
+use App\Payments\Stripe;
 use App\Repositories\UserRepository;
 use DB;
 use Illuminate\Http\Request;
@@ -24,6 +26,24 @@ class UserController extends Controller
         return Inertia::render('Admin/Users/Report', ['users' => $users]);
     }
 
+    public function create()
+    {
+        return Inertia::render('Admin/Users/Create');
+    }
+
+    public function store(UserStoreRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+            $this->userRepository->store($request->all());
+            DB::commit();
+            return Redirect::route('admin.users')->with('alert', 'User created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => $e->getMessage()]);
+        }
+    }
+
     public function edit(User $user)
     {
         return Inertia::render('Admin/Users/EditTabs/Basic', ['user' => $user]);
@@ -41,4 +61,6 @@ class UserController extends Controller
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
+
+
 }

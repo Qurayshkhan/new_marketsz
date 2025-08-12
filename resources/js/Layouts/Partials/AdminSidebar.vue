@@ -127,9 +127,9 @@ const props = defineProps({
                         <li>
                             <Link
                                 :href="route('admin.users')"
-                                class="block p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                                class="block text-white p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
                                 :class="{
-                                    'text-white bg-primary-700':
+                                    ' bg-primary-700':
                                         route().current('admin.users'),
                                 }"
                                 >All Users</Link

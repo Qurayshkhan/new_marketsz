@@ -17,4 +17,19 @@ class TransactionRepository implements TransactionInterface
     {
         return $this->transaction->create($data);
     }
+
+    public function getTransactionById($userId)
+    {
+        return $this->transaction->where('user_id', $userId)->with('user')->paginate(25);
+    }
+
+    public function findById($transactionId)
+    {
+        return $this->transaction->findOrFail($transactionId);
+    }
+
+    public function update($id, $data)
+    {
+        return $this->transaction->where('id', $id)->update($data);
+    }
 }

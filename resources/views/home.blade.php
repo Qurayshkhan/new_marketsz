@@ -1,92 +1,113 @@
 @extends('layout.master')
 @section('title', 'Home')
 @section('content')
-    <header class="container-fluid text-white bg-[#9e1d22] space-y-12 pt-16 sm:pt-32" style="background: #9E1D22">
-        <div class="px-4 sm:px-0 max-w-7xl mx-auto text-center">
-            <h1 class="font-bold leading-snug text-4xl sm:text-10xl">Hassle-Free Shipping and Forwarding
-            </h1>
-            <div class="text-4xl font-bold block mx-auto">From the US to The Caribbean</div>
-            <p class="mx-auto mt-3 text-xl sm:text-2xl">
-                Shop at any online store using your unique and personal Marketsz USA Address and we quickly
-                ship your
-                orders to your home or business in the Caribbean.
-            </p>
-        </div>
-        <div class="relative flex flex-col items-center w-full px-4 mx-auto -mb-2 -top-2 sm:px-0">
-            <div
-                class="flex flex-col flex-wrap items-center justify-center space-y-2 text-lg font-bold text-center sm:flex-row sm:space-y-0 sm:space-x-5 mb-7">
-                <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                    <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                    </div>
-                    <span>1-3 Hassle Free Shipping</span>
-                </span>
-                <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                    <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                    </div>
-                    <span>Combine and Tracking</span>
-                </span>
-                <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                    <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                    </div>
-                    <span>24/7 Support</span>
-                </span>
+    <header class="relative w-full overflow-hidden text-white">
+        <img class="header-bg" src="assets/image/home/background.svg" alt="background" width="100%">
+        <header class="container space-y-12 pt-16 sm:pt-32">
+            <div class="px-4 sm:px-0 max-w-7xl mx-auto text-center">
+                <h1 class="font-bold leading-snug text-4xl sm:text-10xl">Hassle-Free Shipping and Forwarding</h1>
+                <div class="text-4xl font-bold block mx-auto">From the US to The Caribbean</div>
+                <p class="mx-auto mt-3 text-xl sm:text-2xl">
+                    Shop at any online store using your unique and personal Marketsz USA Address and we quickly ship your
+                    orders to your home or business in the Dutch Caribbean.
+                </p>
             </div>
-            <template>
-                <form action="register.html" method="get" class="relative w-full max-w-sm">
-                    <input type="hidden" name="country" value="">
-                    <input type="email" name="email" placeholder="someone@mail.com"
-                        class="w-full bg-white rounded-full h-14 pl-4 text-gray-900 focus:ring-2 placeholder-gray-500 text-base sm:text-lg border-none"
-                        aria-label="Enter your email address">
-                    <button
-                        class="absolute flex items-center h-10 px-4 font-bold text-white bg-primary rounded-full top-2 right-2 focus:ring-2 focus:ring-black">Get
-                        Started</button>
-                </form>
-            </template>
-            <form action="https://www.getrevue.co/profile/flowbite/add_subscriber" method="post" id="revue-form"
-                name="revue-form">
-                <div class="flex items-center mb-3">
-                    <div class="relative w-full mr-3 revue-form-group">
-                        <label for="member_email"
-                            class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
-                            address</label>
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <!-- <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                                                                                                                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                                                                                                                                                                                                                                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                                                                                                                                                                                                                                             </svg> -->
+            <div class="relative flex flex-col items-center w-full px-4 mx-auto -mb-2 -top-2 sm:px-0">
+                <div
+                    class="flex flex-col flex-wrap items-center justify-center space-y-2 text-lg font-bold text-center sm:flex-row sm:space-y-0 sm:space-x-5 mb-7">
+                    <span class="flex items-center space-x-1.5 whitespace-nowrap">
+                        <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
                         </div>
-                        <input
-                            class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
-                            placeholder="Your email address..." type="email" name="member[email]" id="member_email"
-                            required="">
-                    </div>
-                    <div class="revue-form-actions">
-                        <input type="submit" value="Subscribe"
-                            class="cursor-pointer bg-gray-50 focus:ring-2 focus:ring-black font-medium rounded-lg text-rose-900 text-sm px-5 py-2.5 text-center"
-                            name="member[subscribe]" id="member_submit">
-                    </div>
+                        <span>1-3 Hassle Free Shipping</span>
+                    </span>
+                    <span class="flex items-center space-x-1.5 whitespace-nowrap">
+                        <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+                        <span>Combine and Tracking</span>
+                    </span>
+                    <span class="flex items-center space-x-1.5 whitespace-nowrap">
+                        <div class="flex items-center justify-center w-5 h-5 rounded-full bg-white text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+                        <span>24/7 Support</span>
+                    </span>
                 </div>
-            </form>
-            <div class="flex items-center mt-2 text-sm text-center">Shop - Ship - Receive</div>
+                <template>
+                    <form action="register.html" method="get" class="relative w-full max-w-sm">
+                        <input type="hidden" name="country" value="">
+                        <input type="email" name="email" placeholder="someone@mail.com"
+                            class="w-full bg-white rounded-full h-14 pl-4 text-gray-900 focus:ring-2 placeholder-gray-500 text-base sm:text-lg border-none"
+                            aria-label="Enter your email address">
+                        <button
+                            class="absolute flex items-center h-10 px-4 font-bold text-white bg-primary rounded-full top-2 right-2 focus:ring-2 focus:ring-black">Get
+                            Started</button>
+                    </form>
+                </template>
+                <form action="https://www.getrevue.co/profile/flowbite/add_subscriber" method="post" id="revue-form"
+                    name="revue-form">
+                    <div class="flex items-center mb-3">
+                        <div class="relative w-full mr-3 revue-form-group">
+                            <label for="member_email"
+                                class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
+                                address</label>
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <!-- <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                                                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                                                                                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                                                                                            </svg> -->
+                            </div>
+                            <input
+                                class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
+                                placeholder="Your email address..." type="email" name="member[email]" id="member_email"
+                                required="">
+                        </div>
+                        <div class="revue-form-actions">
+                            <input type="submit" value="Subscribe"
+                                class="cursor-pointer bg-gray-50 focus:ring-2 focus:ring-black font-medium rounded-lg text-rose-900 text-sm px-5 py-2.5 text-center"
+                                name="member[subscribe]" id="member_submit">
+                        </div>
+                    </div>
+                </form>
+                <div class="flex items-center mt-2 text-sm text-center">Shop - Ship - Receive</div>
+            </div>
+        </header>
+        <div class="relative max-w-7xl mx-auto z-10 mt-12">
+            <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
+            <div class="flex justify-between items-end">
+                <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
+                <img src="assets/image/home/island.svg" alt="Island illustration" class="city hidden">
+                <img src="assets/image/home/svg/home2.svg" alt="EU illustration" class="city">
+            </div>
+        </div>
+        <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+            class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
+        <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+            class="absolute h-8 mt-2 ml-64 opacity-25 top-32 left-1/2">
+        <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+            class="absolute right-8 h-10 mr-8 opacity-50 top-64">
+        <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
+            class="absolute h-8 opacity-25 top-80 left-20">
+        <div class="w-40">
+            <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship" class="z-10 -mb-px xl:mx-0 ship w-full">
         </div>
     </header>
-    <div class="relative max-w-7xl mx-auto z-10 mt-12">
-        <img src="{{ asset('assets') }}/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
+    {{-- <div class="relative max-w-7xl mx-auto z-10 mt-12">
+        <img src="{{ asset('assets') }}/image/home/airplane.svg" alt="EU illustration"
+            class="z-10 -mb-px xl:mx-0 airplane">
         <div class="flex justify-between items-end">
             <img src="{{ asset('assets/image/home/us-with-plane.svg') }}" alt="U.S. illustration" class="city">
             <img src="{{ asset('assets/image/home/island.svg') }}" alt="Island illustration" class="city">
@@ -95,7 +116,7 @@
         <div class="w-40">
             <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship" class="z-10 -mb-px xl:mx-0 ship w-full">
         </div>
-    </div>
+    </div> --}}
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
         class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
@@ -830,12 +851,10 @@
     </section>
     <div class="mt-auto">
         <div class="relative pt-8 pb-40 mt-20 bg-rose-50 sm:pt-0 sm:mt-40">
-            <img alt="Seahorse illustration" src="{{ asset('assets') }}/image/ballon.svg"
+            <img alt="Seahorse illustration" src="{{ asset('assets') }}/image/home/ship.svg"
                 class="absolute hidden w-auto h-40 md:-left-36 lg:left-2 xl:left-24 top-48 animate-float md:block">
             <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/cartoon-plane.svg"
                 class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:-mr-0 md:right-2 md:top-1/2 md:-translate-y-1/2 lg:right-24 xl:right-32 animate-wiggle">
-            <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/ship.svg"
-                class="animate-wiggle h-20 absolute right-[50%] left-[50%]">
             <section class="container space-y-12 pt-12 sm:pt-20">
                 <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
                     <h2 class="text-3xl font-bold leading-snug sm:text-4xl">It’s time to shop till you drop

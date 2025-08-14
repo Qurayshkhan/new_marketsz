@@ -21,6 +21,11 @@ const props = defineProps({
             :active="route().current('admin.users.transactions')"
             >Transactions</NavLink
         >
+        <NavLink
+            :href="route('admin.users.getUserPackages', props?.user?.id)"
+            :active="route().current('admin.users.getUserPackages')"
+            >Packages</NavLink
+        >
     </div>
 
     <!-- Page Content -->

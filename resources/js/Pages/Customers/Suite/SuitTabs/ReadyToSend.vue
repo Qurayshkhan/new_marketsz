@@ -10,7 +10,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
     readyToSends: Object,
@@ -31,8 +31,10 @@ const selectedIds = ref([]);
 const bulkCheckbox = ref(false);
 const selectedService = ref(null);
 const dropdownOpen = ref(false);
+const estimatedAmount = ref(0);
 watch(selectedIds, () => {
     bulkCheckbox.value = selectedIds.value.length === readyToSends.length;
+    calculateEstimatedShipment();
 });
 
 const selectAll = (e) => {
@@ -99,10 +101,6 @@ const showPackagePhotos = async (packageId) => {
     }
 };
 
-onMounted(() => {
-    selectedIds.value = readyToSends.map((item) => item.id);
-});
-
 const selectService = (service, id) => {
     selectedService.value = service;
     try {
@@ -156,6 +154,24 @@ const handleCreateShipRequest = async () => {
         );
     }
 };
+
+const calculateEstimatedShipment = async () => {
+    const response = await axios.post(
+        route("admin.packages.calculateEstimatedShipment"),
+        {
+            package_id: selectedIds.value,
+        }
+    );
+    const { amount } = response.data;
+    console.log("🚀 ~ calculateEstimatedShipment ~ amount:", amount);
+    estimatedAmount.value = amount;
+};
+
+onMounted(() => {
+    selectedIds.value = readyToSends.map((item) => item.id);
+
+    calculateEstimatedShipment();
+});
 </script>
 
 <template>
@@ -604,7 +620,9 @@ const handleCreateShipRequest = async () => {
                         <h3 class="text-lg font-semibold mb-2">
                             Estimated Shipping:
                         </h3>
-                        <p class="text-red-600 font-medium mt-2">N/A</p>
+                        <p class="text-red-600 font-medium mt-2">
+                            {{ __currency_format(estimatedAmount) }}
+                        </p>
                     </div>
                     <p class="text-sm text-gray-700">How is this calculated?</p>
                     <p class="text-sm text-gray-700 mt-2">

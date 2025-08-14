@@ -13,6 +13,11 @@ class TransactionRepository implements TransactionInterface
         $this->transaction = $transaction;
     }
 
+    public function getAllTransaction()
+    {
+        return $this->transaction->with('user')->paginate(25);
+    }
+
     public function create($data)
     {
         return $this->transaction->create($data);
@@ -31,5 +36,10 @@ class TransactionRepository implements TransactionInterface
     public function update($id, $data)
     {
         return $this->transaction->where('id', $id)->update($data);
+    }
+
+    public function sumTotalTransaction()
+    {
+        return $this->transaction->sum('amount');
     }
 }

@@ -22,7 +22,15 @@ class TransactionController extends Controller
     }
 
 
-    public function index(User $user)
+    public function index()
+    {
+
+        return Inertia::render('Admin/Transaction/Report', [
+            'transactions' => $this->transactionRepository->getAllTransaction(),
+        ]);
+    }
+
+    public function userTransaction(User $user)
     {
         $transactions = $this->transactionRepository->getTransactionById($user->id);
         return Inertia::render('Admin/Users/EditTabs/Transaction', ['transactions' => $transactions, 'user' => $user]);

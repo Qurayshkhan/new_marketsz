@@ -18,6 +18,18 @@ export default {
             } else {
                 return "0.00";
             }
+        },
+        __currency_format(amount, currency = 'USD', locale = 'en-US') {
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currency
+            }).format(amount);
+        },
+        __number_format(amount, decimals = 2) {
+            return Number(amount).toLocaleString('en-US', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
         }
     },
 }

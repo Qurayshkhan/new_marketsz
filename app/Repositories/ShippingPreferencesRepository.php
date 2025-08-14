@@ -40,6 +40,11 @@ class ShippingPreferencesRepository implements ShippingPreferencesInterface
     {
         return $this->internationalShippingOptions->get();
     }
+    public function getInternationalShippingOptionById($id)
+    {
+        return $this->internationalShippingOptions->where('id', $id)->first();
+    }
+
 
     public function getPreferredShipMethod()
     {
@@ -65,6 +70,7 @@ class ShippingPreferencesRepository implements ShippingPreferencesInterface
     {
         return $this->shippingPreferences->updateOrCreate(['user_id' => Auth::id()], $data);
     }
+
 
     public function sumPackingOption($packingOptionIds)
     {

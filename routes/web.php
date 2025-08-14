@@ -49,9 +49,16 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::put('/update/{user}', [UserController::class, 'update'])->name('admin.users.userUpdate');
 
         Route::prefix('transactions')->group(function () {
-            Route::get('/{user}', [TransactionController::class, 'index'])->name('admin.users.transactions');
+            Route::get('/{user}', [TransactionController::class, 'userTransaction'])->name('admin.users.transactions');
             Route::put('/refund/{transaction}', [TransactionController::class, 'refundTransaction'])->name('admin.users.refundTransaction');
         });
+
+        Route::prefix('packages')->group(function () {
+            Route::get('/{user}', [PackageController::class, 'getUserPackages'])->name('admin.users.getUserPackages');
+        });
+    });
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('admin.transactions.allTransactions');
     });
 });
 // Route::middleware(['auth', 'admin'])->group(function () {

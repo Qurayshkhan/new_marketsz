@@ -144,7 +144,20 @@ const props = defineProps({
                         </li>
                     </ul>
                 </li>
-
+                <li class="mb-2">
+                    <Link
+                        :href="route('admin.transactions.allTransactions')"
+                        class="flex items-center p-3 rounded-md hover:bg-primary-700 text-white transition-colors duration-200"
+                        :class="{
+                            'text-white bg-primary-700': route().current(
+                                'admin.transactions.allTransactions'
+                            ),
+                        }"
+                    >
+                        <i class="fa-solid fa-dollar-sign w-5 h-5 mr-3"></i>
+                        Transaction
+                    </Link>
+                </li>
                 <!-- Settings Link -->
                 <li class="mb-2">
                     <a
@@ -158,6 +171,7 @@ const props = defineProps({
                         Settings
                     </a>
                 </li>
+
                 <li class="mb-2">
                     <Link
                         :href="route('admin.import')"

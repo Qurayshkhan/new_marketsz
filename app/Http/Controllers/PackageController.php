@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PackageStatus;
 use App\Http\Requests\PackageRequest;
 use App\Models\Package;
 use App\Models\User;
@@ -94,5 +95,11 @@ class PackageController extends Controller
             DB::rollBack();
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
+    }
+
+    public function getUserPackages(User $user)
+    {
+        $userPackages = $this->packageRepository->shipmentPackages($user->id, [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::READY_TO_SEND, PackageStatus::CONSOLIDATE]);
+        return Inertia::render('Admin/Users/EditTabs/Packages', ['user' => $user, 'userPackages' => $userPackages]);
     }
 }

@@ -42,7 +42,11 @@ class PackageRepository implements PackageInterface
         if ($status == null) {
             $query->whereIn('status', [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::READY_TO_SEND]);
         } else {
-            $query->where('status', $status);
+            if (is_array($status)) {
+                $query->whereIn('status', $status);
+            } else {
+                $query->where('status', $status);
+            }
         }
         return $query->with('files', 'items', 'customer', 'specialRequest')->get();
     }
@@ -77,6 +81,10 @@ class PackageRepository implements PackageInterface
     public function getPackageByIds($ids)
     {
         return $this->package->whereIn('id', $ids)->get();
+    }
+    public function sumWeightPackageByIds($ids)
+    {
+        return $this->package->whereIn('id', $ids)->sum('weight');
     }
 
     public function findById($id)

@@ -27,6 +27,8 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
         Route::post('/package/upload-invoices', [SuiteController::class, 'uploadInvoices'])->name('customers.packageUploadInvoices');
         Route::get('/package/photos', [SuiteController::class, 'getPackagePhotos'])->name('customers.packageGetPhotos');
         Route::post('/package/special-request', [SuiteController::class, 'setSpecialRequest'])->name('customer.packageSetSpecialRequest');
+
+        Route::post('/calculate-estimated-shipment', [SuiteController::class, 'calculateEstimatedShipment'])->name('admin.packages.calculateEstimatedShipment');
     });
 
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

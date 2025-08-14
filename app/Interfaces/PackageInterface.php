@@ -26,4 +26,6 @@ interface PackageInterface
     public function getPackageByIds($ids);
 
     public function findById($id);
+
+    public function sumWeightPackageByIds($ids);
 }

@@ -21,4 +21,6 @@ interface ShippingPreferencesInterface
 
     public function sumPackingOption($packingOptionIds);
     public function sumShippingPreferenceOption($shippingPreferenceOptionIds);
+
+    public function getInternationalShippingOptionById($id);
 }

@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Customer;
 
 use App\Helpers\PackageStatus;
 use App\Http\Controllers\Controller;
+use App\Models\InternationalShippingOptions;
 use App\Repositories\PackageFileRepository;
 use App\Repositories\PackageInvoiceRepository;
 use App\Repositories\PackageRepository;
+use App\Repositories\ShippingPreferencesRepository;
+use App\Repositories\ShipRepository;
 use App\Traits\CommonTrait;
 use Auth;
 use DB;
@@ -17,12 +20,14 @@ use Inertia\Inertia;
 class SuiteController extends Controller
 {
     use CommonTrait;
-    protected $packageRepository, $packageInvoiceRepository, $packageFileRepository;
-    public function __construct(PackageRepository $packageRepository, PackageInvoiceRepository $packageInvoiceRepository, PackageFileRepository $packageFileRepository)
+    protected $packageRepository, $packageInvoiceRepository, $packageFileRepository, $shipPreferencesRepository, $shipRepository;
+    public function __construct(PackageRepository $packageRepository, PackageInvoiceRepository $packageInvoiceRepository, PackageFileRepository $packageFileRepository, ShippingPreferencesRepository $shippingPreferencesRepository, ShipRepository $shipRepository)
     {
         $this->packageRepository = $packageRepository;
         $this->packageInvoiceRepository = $packageInvoiceRepository;
         $this->packageFileRepository = $packageFileRepository;
+        $this->shipPreferencesRepository = $shippingPreferencesRepository;
+        $this->shipRepository = $shipRepository;
     }
     public function index()
     {
@@ -121,6 +126,41 @@ class SuiteController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Photos fetched successfully'], 500);
+        }
+    }
+
+    public function calculateEstimatedShipment(Request $request)
+    {
+        try {
+            $estimatedAmount = 0;
+            if (count($request->package_id) > 0) {
+                $preference = $this->shipPreferencesRepository->getShippingPreference(Auth::id());
+                $shippingPreferenceOption = json_decode($preference->shipping_preference_option);
+                $shippingPackingOption = json_decode($preference->packing_option);
+                $weight = $this->packageRepository->sumWeightPackageByIds($request->package_id);
+                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::DHL_EXPRESS) {
+                    $estimatedAmount += $this->shipRepository->getShipPriceByWightAndService($weight, InternationalShippingOptions::DHL_NAME)->price;
+                }
+                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::FEDEX_ECONOMY) {
+                    $estimatedAmount += $this->shipRepository->getShipPriceByWightAndService($weight, InternationalShippingOptions::FEDEX_NAME)->price;
+                }
+                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::SEA_FREIGHT) {
+                    $estimatedAmount += $this->shipRepository->getShipPriceByVolumeAndService($weight, InternationalShippingOptions::SEA_FREIGHT_NAME);
+                }
+                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::AIR_CARGO) {
+                    $estimatedAmount += $this->shipRepository->getShipPriceByVolumeAndService($weight, InternationalShippingOptions::AIR_CARGO_NAME);
+                }
+                if ($preference && count($shippingPreferenceOption) > 0) {
+                    $estimatedAmount += $this->shipPreferencesRepository->sumShippingPreferenceOption($shippingPreferenceOption);
+                }
+                if ($preference && count($shippingPackingOption) > 0) {
+                    $estimatedAmount += $this->shipPreferencesRepository->sumPackingOption($shippingPackingOption);
+                }
+                $estimatedAmount += 10;
+            }
+            return response()->json(['message' => 'Estimated amount.', 'amount' => $estimatedAmount], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

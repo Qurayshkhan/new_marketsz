@@ -56,4 +56,9 @@ class UserRepository implements UserInterface
 
     }
 
+    public function userCount()
+    {
+        return $this->user->customer()->active()->count();
+    }
+
 }

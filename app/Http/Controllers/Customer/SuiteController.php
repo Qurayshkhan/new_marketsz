@@ -135,19 +135,19 @@ class SuiteController extends Controller
             $estimatedAmount = 0;
             if (count($request->package_id) > 0) {
                 $preference = $this->shipPreferencesRepository->getShippingPreference(Auth::id());
-                $shippingPreferenceOption = json_decode($preference->shipping_preference_option);
-                $shippingPackingOption = json_decode($preference->packing_option);
+                $shippingPreferenceOption = isset($preference->shipping_preference_option) ? json_decode($preference->shipping_preference_option) : [];
+                $shippingPackingOption = isset($preference->packing_option) ? json_decode($preference->packing_option) : [];
                 $weight = $this->packageRepository->sumWeightPackageByIds($request->package_id);
-                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::DHL_EXPRESS) {
+                if ($preference && $preference->international_shipping_option != null && $preference->international_shipping_option == InternationalShippingOptions::DHL_EXPRESS) {
                     $estimatedAmount += $this->shipRepository->getShipPriceByWightAndService($weight, InternationalShippingOptions::DHL_NAME)->price;
                 }
-                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::FEDEX_ECONOMY) {
+                if ($preference && $preference->international_shipping_option != null && $preference->international_shipping_option == InternationalShippingOptions::FEDEX_ECONOMY) {
                     $estimatedAmount += $this->shipRepository->getShipPriceByWightAndService($weight, InternationalShippingOptions::FEDEX_NAME)->price;
                 }
-                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::SEA_FREIGHT) {
+                if ($preference && $preference->international_shipping_option != null && $preference->international_shipping_option == InternationalShippingOptions::SEA_FREIGHT) {
                     $estimatedAmount += $this->shipRepository->getShipPriceByVolumeAndService($weight, InternationalShippingOptions::SEA_FREIGHT_NAME);
                 }
-                if ($preference && $preference->international_shipping_option == InternationalShippingOptions::AIR_CARGO) {
+                if ($preference && $preference->international_shipping_option != null && $preference->international_shipping_option == InternationalShippingOptions::AIR_CARGO) {
                     $estimatedAmount += $this->shipRepository->getShipPriceByVolumeAndService($weight, InternationalShippingOptions::AIR_CARGO_NAME);
                 }
                 if ($preference && count($shippingPreferenceOption) > 0) {

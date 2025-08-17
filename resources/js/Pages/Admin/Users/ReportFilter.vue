@@ -16,7 +16,9 @@ watch([search], ([searchValue], [oldSearchValue]) => {
 });
 </script>
 <template>
-    <div class="flex max-lg:flex-col justify-between gap-3 mt-2 p-5">
+    <div
+        class="flex max-lg:flex-col justify-between gap-3 mt-2 p-5 items-center"
+    >
         <form>
             <div>
                 <InputLabel value="Search" class="text-xl" />

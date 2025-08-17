@@ -19,7 +19,7 @@ class ShipRepository implements ShipInterface
 
     public function getShipments()
     {
-        return $this->ship->with('user')->paginate(25);
+        return $this->ship->with('user', 'packages', 'internationalShipping')->paginate(25);
     }
 
     public function create(array $data)

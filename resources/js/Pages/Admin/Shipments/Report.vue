@@ -7,6 +7,7 @@ import { Head, Link } from "@inertiajs/vue3";
 const props = defineProps({
     shipments: Object,
 });
+console.log("🚀 ~ props.shipments:", props.shipments);
 </script>
 <template>
     <AuthenticatedLayout>
@@ -18,16 +19,17 @@ const props = defineProps({
 
                     <div class="card-body">
                         <div class="overflow-x-auto">
-                            <table class="table border">
+                            <table class="table border text-center">
                                 <!-- head -->
                                 <thead class="text-black">
                                     <tr>
                                         <th class="border">Tracking Number</th>
                                         <th class="border">Customer</th>
                                         <th class="border">Total weight</th>
-                                        <th class="border">total Price</th>
+                                        <th class="border">Total Price</th>
                                         <th class="border">Status</th>
                                         <th class="border">Invoice Status</th>
+                                        <td class="border">Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,6 +57,21 @@ const props = defineProps({
                                         </td>
                                         <td class="border">
                                             {{ shipment?.invoice_status ?? "" }}
+                                        </td>
+                                        <td class="text-center">
+                                            <Link
+                                                :href="
+                                                    route(
+                                                        'admin.shipments.edit',
+                                                        { ship: shipment?.id }
+                                                    )
+                                                "
+                                            >
+                                                <i
+                                                    class="fa fa-angle-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </Link>
                                         </td>
                                     </tr>
                                 </tbody>

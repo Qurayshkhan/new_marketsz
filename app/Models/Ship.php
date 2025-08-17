@@ -22,6 +22,7 @@ class Ship extends Model
         'subtotal',
         'package_level_charges',
         'estimated_shipping_charges',
+        'invoice_status'
     ];
 
     public function packages()

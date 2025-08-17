@@ -17,6 +17,11 @@ class ShipRepository implements ShipInterface
         $this->shipPricing = $shipPricing;
     }
 
+    public function getShipments()
+    {
+        return $this->ship->with('user')->paginate(25);
+    }
+
     public function create(array $data)
     {
         return $this->ship->create($data);

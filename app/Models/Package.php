@@ -45,4 +45,9 @@ class Package extends Model
     {
         return $this->belongsTo(SpecialRequest::class, 'special_request', 'id');
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(PackageInvoice::class);
+    }
 }

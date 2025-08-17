@@ -6,6 +6,8 @@ use App\Models\Ship;
 
 interface ShipInterface
 {
+
+    public function getShipments();
     public function create(array $data);
 
     public function update(Ship $ship, array $data);
@@ -27,4 +29,6 @@ interface ShipInterface
     public function getShipDetails($ship);
 
     public function deletePendingShipment($userId);
+
+
 }

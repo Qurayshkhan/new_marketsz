@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\WebsiteController;
@@ -60,11 +61,10 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionController::class, 'index'])->name('admin.transactions.allTransactions');
     });
+    Route::prefix('shipments')->group(function () {
+        Route::get('/', [ShipmentController::class, 'index'])->name('admin.shipments');
+    });
 });
-// Route::middleware(['auth', 'admin'])->group(function () {
-// });
-
-
 // website routes
 Route::get("/", [WebsiteController::class, "index"])->name('web.home');
 Route::get("/calculator", [WebsiteController::class, "calculator"])->name('web.calculator');

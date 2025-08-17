@@ -73,7 +73,7 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        $package->load('files', 'items');
+        $package->load('files', 'items', 'invoices');
         return Inertia::render('Package/EditTabs/Basic', [
             'package' => $package,
             'customers' => $this->userRepository->customers(),

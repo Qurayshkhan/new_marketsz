@@ -14,6 +14,7 @@ const props = defineProps({
     package: Object,
     customers: Object,
 });
+console.log("🚀 ~ props.package:", props.package);
 
 const editPackage = props.package;
 
@@ -213,6 +214,26 @@ onMounted(() => {
                                 :key="file?.id"
                             >
                                 <img :src="file.file_with_url" width="100%" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-2">
+                        <h1 class="text-2xl">Invoices</h1>
+                        <div
+                            class="py-4 grid sm:text-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5"
+                        >
+                            <div
+                                class="w-40 mt-2"
+                                v-for="invoice in editPackage.invoices"
+                                :key="invoice?.id"
+                            >
+                                <img
+                                    :src="invoice.invoice_path_url"
+                                    width="100%"
+                                    height="100%"
+                                    class="object-cover"
+                                />
                             </div>
                         </div>
                     </div>

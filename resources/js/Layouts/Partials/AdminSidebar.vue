@@ -34,6 +34,19 @@ const props = defineProps({
                         Dashboard
                     </Link>
                 </li>
+                <li class="mb-2">
+                    <Link
+                        :href="route('admin.shipments')"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        :class="{
+                            'text-white bg-primary-700':
+                                route().current('admin.shipments'),
+                        }"
+                    >
+                        <i class="fa-solid fa-ship w-5 h-5 mr-3"></i>
+                        Shipment
+                    </Link>
+                </li>
 
                 <!-- Dropdown Menu 1 -->
                 <li class="mb-2">

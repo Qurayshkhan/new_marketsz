@@ -20,10 +20,10 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userRepository->users();
-        return Inertia::render('Admin/Users/Report', ['users' => $users]);
+        $users = $this->userRepository->users($request);
+        return Inertia::render('Admin/Users/Report', ['users' => $users, 'filters' => ['search' => $request->input('search', '')]]);
     }
 
     public function create()

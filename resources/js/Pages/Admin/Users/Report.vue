@@ -3,9 +3,11 @@ import Pagination from "@/Components/Pagination.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+import ReportFilter from "./ReportFilter.vue";
 
 const props = defineProps({
     users: Object,
+    filters: Object,
 });
 </script>
 <template>
@@ -14,14 +16,8 @@ const props = defineProps({
         <div class="grid grid-cols-1">
             <div class="w-full">
                 <div class="card">
-                    <div class="flex max-lg:flex-col justify-between gap-3">
-                        <div class="card-title"></div>
-                        <div>
-                            <Link :href="route('admin.users.createUser')">
-                                <PrimaryButton>+ Create User</PrimaryButton>
-                            </Link>
-                        </div>
-                    </div>
+                    <h1 class="text-2xl">Users</h1>
+                    <ReportFilter :filters="props?.filters" />
                     <div class="card-body">
                         <div class="overflow-x-auto">
                             <table class="table border">

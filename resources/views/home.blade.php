@@ -9,7 +9,7 @@
                 <div class="text-4xl font-bold block mx-auto">From the US to The Caribbean</div>
                 <p class="mx-auto mt-3 text-xl sm:text-2xl">
                     Shop at any online store using your unique and personal Marketsz USA Address and we quickly ship your
-                    orders to your home or business in the Dutch Caribbean.
+                    orders to your home or business in the Caribbean.
                 </p>
             </div>
             <div class="relative flex flex-col items-center w-full px-4 mx-auto -mb-2 -top-2 sm:px-0">

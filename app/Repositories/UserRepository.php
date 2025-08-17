@@ -7,6 +7,7 @@ use App\Interfaces\UserInterface;
 use App\Models\User;
 use Carbon\Carbon;
 use Hash;
+use Request;
 
 class UserRepository implements UserInterface
 {
@@ -39,9 +40,13 @@ class UserRepository implements UserInterface
         return $this->user->where('id', $userId)->update($data);
     }
 
-    public function users()
+    public function users($request)
     {
-        return $this->user->customer()->orderByDesc('id')->paginate(25);
+        $query = $this->user->query();
+        if ($request->search) {
+            $query->whereLike('first_name', '%' . $request->search . '%')->orWhereLike('last_name', '%' . $request->search . '%')->orWhereLike('email', '%' . $request->search . '%')->orWhereLike('suite', '%' . $request->search . '%');
+        }
+        return $query->customer()->orderByDesc('id')->paginate(25);
     }
 
     public function store($data)

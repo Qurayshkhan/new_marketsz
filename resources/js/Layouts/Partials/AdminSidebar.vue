@@ -152,7 +152,7 @@ const authUser = usePage().props.auth.user;
                         </li>
                     </ul>
                 </li>
-                <li class="mb-2">
+                <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.transactions.allTransactions')"
                         class="flex items-center p-3 rounded-md hover:bg-primary-700 text-white transition-colors duration-200"

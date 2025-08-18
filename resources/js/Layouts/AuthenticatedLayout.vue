@@ -159,7 +159,12 @@ const isActiveDropdown = (prefix) => {
                     tabindex="0"
                     class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm bg-white"
                 >
-                    <li v-if="$page.props.auth.user.type == 1">
+                    <li
+                        v-if="
+                            $page.props.auth.user.type == 1 ||
+                            $page.props.auth.user.type == 3
+                        "
+                    >
                         <Link :href="route('profile.edit')">Profile</Link>
                     </li>
                     <li v-if="$page.props.auth.user.type == 2">
@@ -188,7 +193,7 @@ const isActiveDropdown = (prefix) => {
             :isActiveDropdown="isActiveDropdown"
         />
         <AdminSidebar
-            v-if="props?.auth.user?.type == 1"
+            v-if="props?.auth.user?.type == 1 || props?.auth?.user?.type == 3"
             :isSidebarOpen="isSidebarOpen"
             :isMobile="isMobile"
             :activeDropdown="activeDropdown"

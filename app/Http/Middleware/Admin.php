@@ -21,7 +21,7 @@ class Admin
         if (empty($user)) {
             return redirect()->route('login');
         }
-        if ($user->type != User::USER_TYPE_ADMIN) {
+        if ($user->type != User::USER_TYPE_ADMIN && $user->type != User::USER_TYPE_WAREHOUSE) {
             return redirect()->route('login');
         }
         return $next($request);

@@ -19,7 +19,15 @@ class UserSeeder extends Seeder
             'last_name' => 'admin',
             'email' => 'admin@marketz.com',
             'password' => Hash::make('password'),
-            'type' => 1,
+            'type' => User::USER_TYPE_ADMIN,
+        ]);
+
+        User::create([
+            'first_name' => 'Test',
+            'last_name' => 'warehouse',
+            'email' => 'warehouse@marketz.com',
+            'password' => Hash::make('password'),
+            'type' => User::USER_TYPE_WAREHOUSE,
         ]);
     }
 }

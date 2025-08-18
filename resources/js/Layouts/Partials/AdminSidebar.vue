@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     isSidebarOpen: Number,
@@ -8,6 +8,8 @@ const props = defineProps({
     toggleDropdown: Function,
     isActiveDropdown: Function,
 });
+
+const authUser = usePage().props.auth.user;
 </script>
 <template>
     <aside
@@ -166,7 +168,7 @@ const props = defineProps({
                 </li>
                 <!-- Settings Link -->
 
-                <li class="mb-2">
+                <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.import')"
                         class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"

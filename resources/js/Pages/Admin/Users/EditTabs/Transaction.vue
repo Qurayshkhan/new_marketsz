@@ -2,7 +2,7 @@
 import Pagination from "@/Components/Pagination.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Edit from "../Edit.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Refund from "../components/Refund.vue";
 
@@ -10,6 +10,8 @@ const props = defineProps({
     transactions: Object,
     user: Object,
 });
+
+const authUser = usePage().props.auth.user;
 </script>
 <template>
     <AuthenticatedLayout>
@@ -34,7 +36,12 @@ const props = defineProps({
                                             <th class="border">
                                                 Transaction Date
                                             </th>
-                                            <th class="border">Action</th>
+                                            <th
+                                                class="border"
+                                                v-if="authUser.type == 1"
+                                            >
+                                                Action
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -111,7 +118,10 @@ const props = defineProps({
                                                     ) ?? ""
                                                 }}
                                             </td>
-                                            <td class="border">
+                                            <td
+                                                class="border"
+                                                v-if="authUser.type == 1"
+                                            >
                                                 <template
                                                     v-if="
                                                         transaction?.status == 1

@@ -3,15 +3,19 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Edit from "../Edit.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import SearchableSelect from "vue-select";
 import Status from "@/Data/status.json";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
+
 const props = defineProps({
     user: Object,
 });
+
+const authUser = usePage().props.auth.user;
+
 const form = useForm({
     first_name: props?.user?.first_name ?? "",
     last_name: props?.user?.last_name ?? "",
@@ -130,7 +134,7 @@ const handleUpdate = () => {
                                 />
                             </div>
                         </div>
-                        <div class="float-right mt-4">
+                        <div class="float-right mt-4" v-if="authUser.type == 1">
                             <PrimaryButton :processing="form.processing"
                                 >Submit</PrimaryButton
                             >

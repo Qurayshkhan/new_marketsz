@@ -13,6 +13,7 @@ class User extends Authenticatable
 {
     const USER_TYPE_ADMIN = 1;
     const USER_TYPE_CUSTOMER = 2;
+    const USER_TYPE_WAREHOUSE = 3;
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 

@@ -16,4 +16,9 @@ class PackageItem extends Model
         'total_line_value',
         'total_line_weight',
     ];
+
+    public function packageFiles()
+    {
+        return $this->hasMany(PackageFile::class, 'package_item_id', 'id');
+    }
 }

@@ -10,10 +10,12 @@ import SearchableSelect from "vue-select";
 import InputError from "@/Components/InputError.vue";
 import Delete from "../Delete.vue";
 import packageStatus from "@/Data/package_status.json";
+
 const props = defineProps({
     package: Object,
     customers: Object,
 });
+
 console.log("🚀 ~ props.package:", props.package);
 
 const editPackage = props.package;
@@ -24,7 +26,20 @@ const form = useForm({
     sender_id: editPackage?.sender_id,
     status: editPackage?.status,
     files: [],
-    items: editPackage?.items ?? [
+    items: editPackage?.items?.map((item) => ({
+        id: item.id,
+        title: item.title || "",
+        description: item.description || "",
+        item_note: item.item_note || "",
+        quantity: item.quantity || 1,
+        value_per_unit: item.value_per_unit || 0,
+        total_line_value: item.total_line_value || 0,
+        total_line_weight: item.total_line_weight || 0,
+        files: [], // New files to upload
+        new_files: [], // New files for existing items
+        delete_file_ids: [], // IDs of files to delete
+        package_files: item.package_files || [], // Existing files from DB
+    })) ?? [
         {
             title: "",
             description: "",
@@ -33,6 +48,10 @@ const form = useForm({
             value_per_unit: 0,
             total_line_value: 0,
             total_line_weight: 0,
+            files: [],
+            new_files: [],
+            delete_file_ids: [],
+            package_files: [],
         },
     ],
     totalPrice: 0,
@@ -59,6 +78,7 @@ const calculateTotals = () => {
             .toFixed(2)
     );
 };
+
 watch(
     () => form.items,
     () => {
@@ -66,6 +86,7 @@ watch(
     },
     { deep: true }
 );
+
 const addItem = () => {
     form.items.push({
         title: "",
@@ -75,6 +96,10 @@ const addItem = () => {
         value_per_unit: 0,
         total_line_value: 0,
         total_line_weight: 0,
+        files: [],
+        new_files: [],
+        delete_file_ids: [],
+        package_files: [],
     });
 };
 
@@ -84,6 +109,40 @@ const removeItem = (index) => {
 
 const handleFileChange = (e) => {
     form.files = Array.from(e.target.files);
+};
+
+const handleItemFileChange = (e, index) => {
+    const files = Array.from(e.target.files);
+    if (form.items[index].id) {
+        // Existing item - add to new_files
+        if (!form.items[index].new_files) form.items[index].new_files = [];
+        form.items[index].new_files.push(...files);
+    } else {
+        // New item - add to files
+        if (!form.items[index].files) form.items[index].files = [];
+        form.items[index].files.push(...files);
+    }
+};
+
+const removeItemFile = (itemIndex, fileIndex, isExisting = false) => {
+    if (isExisting) {
+        // Remove existing file from DB
+        const file = form.items[itemIndex].package_files[fileIndex];
+        if (file.id) {
+            if (!form.items[itemIndex].delete_file_ids) {
+                form.items[itemIndex].delete_file_ids = [];
+            }
+            form.items[itemIndex].delete_file_ids.push(file.id);
+        }
+        form.items[itemIndex].package_files.splice(fileIndex, 1);
+    } else {
+        // Remove new file
+        if (form.items[itemIndex].id) {
+            form.items[itemIndex].new_files.splice(fileIndex, 1);
+        } else {
+            form.items[itemIndex].files.splice(fileIndex, 1);
+        }
+    }
 };
 
 const submitForm = () => {
@@ -108,15 +167,76 @@ const submitForm = () => {
 
         payload.append("items", JSON.stringify(mappedItems));
 
+        // Add package-level files
         data.files.forEach((file, index) => {
             payload.append(`files[${index}]`, file);
         });
 
+        // Add item files
+        data.items.forEach((item, itemIndex) => {
+            if (item.files && item.files.length > 0) {
+                item.files.forEach((file, fileIndex) => {
+                    payload.append(
+                        `items[${itemIndex}][files][${fileIndex}]`,
+                        file
+                    );
+                });
+            }
+
+            if (item.new_files && item.new_files.length > 0) {
+                item.new_files.forEach((file, fileIndex) => {
+                    payload.append(
+                        `items[${itemIndex}][new_files][${fileIndex}]`,
+                        file
+                    );
+                });
+            }
+        });
+
         return payload;
-    }).post(route("admin.packages.store"), {
+    }).post(route("admin.packages.update", editPackage.id), {
         preserveScroll: true,
-        onSuccess: () => console.log("OK"),
+        onSuccess: () => {
+            console.log("Package updated successfully!");
+            // Optionally refresh the page to show updated data
+            window.location.reload();
+        },
+        onError: (errors) => {
+            console.error("Update failed:", errors);
+        },
     });
+};
+
+// Test function for individual item operations (optional)
+const testItemImageUpload = async (itemId) => {
+    const formData = new FormData();
+    formData.append("package_id", editPackage.id);
+    formData.append("title", "Test Item");
+    formData.append("description", "Test Description");
+    formData.append("quantity", 1);
+    formData.append("value_per_unit", 10);
+    formData.append("total_line_weight", 1);
+
+    // Add a test image if available
+    const testFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    formData.append("images[]", testFile);
+
+    try {
+        const response = await fetch(route("admin.package-items.store"), {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        });
+
+        const result = await response.json();
+        console.log("Test upload result:", result);
+    } catch (error) {
+        console.error("Test upload failed:", error);
+    }
 };
 
 onMounted(() => {
@@ -197,8 +317,8 @@ onMounted(() => {
                         />
                     </div>
 
-                    <div class="col-span-2">
-                        <InputLabel for="files" value="Upload Files" />
+                    <div class="col-span-2" hidden>
+                        <InputLabel for="files" value="Upload Package Files" />
                         <TextInput
                             type="file"
                             @change="handleFileChange"
@@ -266,6 +386,7 @@ onMounted(() => {
                                 </button>
                             </div>
 
+                            <!-- Existing fields -->
                             <div>
                                 <InputLabel
                                     :for="'title' + index"
@@ -345,6 +466,164 @@ onMounted(() => {
                                     class="w-full"
                                     step="any"
                                 />
+                            </div>
+
+                            <!-- 📂 Item Images Section -->
+                            <div class="col-span-full">
+                                <InputLabel
+                                    :for="'itemImages' + index"
+                                    value="Item Images"
+                                />
+                                <div class="mb-4">
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/jpeg,image/png,image/webp"
+                                        @change="
+                                            (e) =>
+                                                handleItemFileChange(e, index)
+                                        "
+                                        class="w-full border rounded p-2"
+                                    />
+                                    <p class="text-sm text-gray-600 mt-1">
+                                        Accepted formats: JPEG, PNG, WebP (max
+                                        2MB each)
+                                    </p>
+                                </div>
+
+                                <!-- Image Previews -->
+                                <div
+                                    class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+                                >
+                                    <!-- Existing Images from DB -->
+                                    <div
+                                        v-for="(
+                                            file, fIndex
+                                        ) in item.package_files"
+                                        :key="`existing-${fIndex}`"
+                                        class="relative group"
+                                    >
+                                        <div
+                                            class="w-full h-32 border rounded-lg overflow-hidden bg-gray-100"
+                                        >
+                                            <img
+                                                :src="file.file_with_url"
+                                                :alt="file.name"
+                                                class="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            @click="
+                                                removeItemFile(
+                                                    index,
+                                                    fIndex,
+                                                    true
+                                                )
+                                            "
+                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Delete image"
+                                        >
+                                            ✕
+                                        </button>
+                                        <p
+                                            class="text-xs text-gray-600 mt-1 truncate"
+                                            :title="file.name"
+                                        >
+                                            {{ file.name }}
+                                        </p>
+                                    </div>
+
+                                    <!-- New Images (not yet saved) -->
+                                    <div
+                                        v-for="(file, fIndex) in item.id
+                                            ? item.new_files
+                                            : item.files"
+                                        :key="`new-${fIndex}`"
+                                        class="relative group"
+                                    >
+                                        <div
+                                            class="w-full h-32 border rounded-lg overflow-hidden bg-gray-100"
+                                        >
+                                            <img
+                                                :src="URL.createObjectURL(file)"
+                                                :alt="file.name"
+                                                class="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            @click="
+                                                removeItemFile(
+                                                    index,
+                                                    fIndex,
+                                                    false
+                                                )
+                                            "
+                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Remove image"
+                                        >
+                                            ✕
+                                        </button>
+                                        <p
+                                            class="text-xs text-gray-600 mt-1 truncate"
+                                            :title="file.name"
+                                        >
+                                            {{ file.name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Image Count Summary -->
+                                <div class="mt-2 text-sm text-gray-600">
+                                    <span v-if="item.package_files.length > 0">
+                                        {{ item.package_files.length }} existing
+                                        image{{
+                                            item.package_files.length !== 1
+                                                ? "s"
+                                                : ""
+                                        }}
+                                    </span>
+                                    <span
+                                        v-if="
+                                            (item.id
+                                                ? item.new_files
+                                                : item.files
+                                            ).length > 0
+                                        "
+                                    >
+                                        <span
+                                            v-if="item.package_files.length > 0"
+                                        >
+                                            +
+                                        </span>
+                                        {{
+                                            (item.id
+                                                ? item.new_files
+                                                : item.files
+                                            ).length
+                                        }}
+                                        new image{{
+                                            (item.id
+                                                ? item.new_files
+                                                : item.files
+                                            ).length !== 1
+                                                ? "s"
+                                                : ""
+                                        }}
+                                    </span>
+                                    <span
+                                        v-if="
+                                            item.package_files.length === 0 &&
+                                            (item.id
+                                                ? item.new_files
+                                                : item.files
+                                            ).length === 0
+                                        "
+                                    >
+                                        No images uploaded
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

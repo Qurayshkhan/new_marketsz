@@ -17,12 +17,12 @@ const props = defineProps({
         type: String,
     },
 });
+console.log("🚀 ~ props.users:", props.users);
 
 const form = useForm({
     from: "",
     date: null,
     sender_id: null,
-    files: [],
     items: [
         {
             title: "",
@@ -32,6 +32,7 @@ const form = useForm({
             value_per_unit: 0,
             total_line_value: 0,
             total_line_weight: 0,
+            files: [],
         },
     ],
     totalPrice: 0,
@@ -48,6 +49,7 @@ const addItem = () => {
         value_per_unit: 0,
         total_line_value: 0,
         total_line_weight: 0,
+        files: [],
     });
 };
 
@@ -79,14 +81,16 @@ const totalWeight = computed(() =>
     )
 );
 
-const handleFileChange = (e) => {
-    form.files = Array.from(e.target.files);
+const handleFileChange = (e, index) => {
+    form.items[index].files = Array.from(e.target.files);
 };
 
 const submitForm = () => {
     form.date = new Date(form.date).toLocaleString("en-US");
+
     form.transform((data) => {
         const payload = new FormData();
+
         payload.append("from", data.from);
         payload.append("date_received", data.date);
         payload.append("sender_id", data.sender_id);
@@ -94,20 +98,41 @@ const submitForm = () => {
         payload.append("weight", data.totalWeight);
         payload.append("tracking_id", data.tracking_no);
 
-        const mappedItems = data.items.map((item) => ({
-            ...item,
-            total_line_value: item.quantity * item.value_per_unit,
-        }));
-        payload.append("items", JSON.stringify(mappedItems));
+        data.items.forEach((item, itemIndex) => {
+            payload.append(`items[${itemIndex}][title]`, item.title);
+            payload.append(
+                `items[${itemIndex}][description]`,
+                item.description
+            );
+            payload.append(`items[${itemIndex}][item_note]`, item.item_note);
+            payload.append(`items[${itemIndex}][quantity]`, item.quantity);
+            payload.append(
+                `items[${itemIndex}][value_per_unit]`,
+                item.value_per_unit
+            );
+            payload.append(
+                `items[${itemIndex}][total_line_value]`,
+                item.quantity * item.value_per_unit
+            );
+            payload.append(
+                `items[${itemIndex}][total_line_weight]`,
+                item.total_line_weight
+            );
 
-        data.files.forEach((file, index) => {
-            payload.append(`files[${index}]`, file);
+            if (item.files && item.files.length > 0) {
+                Array.from(item.files).forEach((file, fileIndex) => {
+                    payload.append(
+                        `items[${itemIndex}][files][${fileIndex}]`,
+                        file
+                    );
+                });
+            }
         });
 
         return payload;
     }).post(route("admin.packages.store"), {
         preserveScroll: true,
-        onSuccess: () => console.log("OK"),
+        onSuccess: () => console.log("Package created successfully 🚀"),
     });
 };
 </script>
@@ -152,7 +177,7 @@ const submitForm = () => {
                                 :message="form.errors.date"
                             />
                         </div>
-                        <div class="">
+                        <div class="" hidden>
                             <InputLabel value="Tracking No" />
                             <TextInput
                                 type="text"
@@ -175,7 +200,7 @@ const submitForm = () => {
                             <SearchableSelect
                                 id="sender_id"
                                 class="mt-1 w-full"
-                                label="name"
+                                label="suite"
                                 :options="props.users"
                                 :reduce="(option) => option.id"
                                 v-model="form.sender_id"
@@ -186,7 +211,7 @@ const submitForm = () => {
                             />
                         </div>
 
-                        <div class="col-span-2">
+                        <div class="col-span-2" hidden>
                             <InputLabel for="files" value="Upload Files" />
                             <TextInput
                                 type="file"
@@ -306,6 +331,19 @@ const submitForm = () => {
                                         type="number"
                                         class="w-full"
                                         step="any"
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel
+                                        :for="'files' + index"
+                                        value="Upload Files"
+                                    />
+                                    <TextInput
+                                        type="file"
+                                        multiple
+                                        @change="
+                                            handleFileChange($event, index)
+                                        "
                                     />
                                 </div>
                             </div>

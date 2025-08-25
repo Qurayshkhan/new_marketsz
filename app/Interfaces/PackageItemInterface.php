@@ -10,4 +10,6 @@ interface PackageItemInterface
     public function getPackageById($packageId);
 
     public function itemsDeleteByPackageId($packageId);
+
+    public function insertOne($item, $package);
 }

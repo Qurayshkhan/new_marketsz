@@ -54,4 +54,19 @@ class PackageItemRepository implements PackageItemInterface
     {
         return $this->packageItem->where('package_id', $packageId)->delete();
     }
+
+    public function insertOne($item, $package)
+    {
+        return $this->packageItem->create([
+            'package_id' => $package->id,
+            'title' => $item['title'],
+            'description' => $item['description'],
+            'item_note' => $item['item_note'],
+            'quantity' => $item['quantity'],
+            'value_per_unit' => $item['value_per_unit'],
+            'total_line_value' => $item['total_line_value'],
+            'total_line_weight' => $item['total_line_weight'],
+        ]);
+    }
+
 }

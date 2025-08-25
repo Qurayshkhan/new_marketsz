@@ -15,19 +15,30 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'first_name' => 'Test',
-            'last_name' => 'admin',
+            'first_name' => 'Admin',
+            'last_name' => 'user',
             'email' => 'admin@marketz.com',
             'password' => Hash::make('password'),
             'type' => User::USER_TYPE_ADMIN,
+            'is_active' => User::STATUS_ACTIVE,
         ]);
 
         User::create([
-            'first_name' => 'Test',
-            'last_name' => 'warehouse',
+            'first_name' => 'warehouse',
+            'last_name' => 'user',
             'email' => 'warehouse@marketz.com',
             'password' => Hash::make('password'),
             'type' => User::USER_TYPE_WAREHOUSE,
+            'is_active' => User::STATUS_ACTIVE,
+        ]);
+        User::create([
+            'first_name' => 'Customer',
+            'last_name' => 'user',
+            'email' => 'customer@marketz.com',
+            'password' => Hash::make('password'),
+            'type' => User::USER_TYPE_CUSTOMER,
+            'is_active' => User::STATUS_ACTIVE,
+            'suite' => 'XC34311',
         ]);
     }
 }

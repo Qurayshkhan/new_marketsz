@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\PackageStatus;
 use App\Http\Requests\PackageRequest;
 use App\Models\Package;
+use App\Models\PackageItem;
+use App\Models\PackageFile;
 use App\Models\User;
 use App\Repositories\PackageFileRepository;
 use App\Repositories\PackageInvoiceRepository;
@@ -14,6 +16,7 @@ use App\Repositories\UserRepository;
 use App\Traits\CommonTrait;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Redirect;
 use Response;
@@ -31,6 +34,7 @@ class PackageController extends Controller
         $this->userRepository = $userRepository;
         $this->packageInvoiceRepository = $packageInvoiceRepository;
     }
+
     public function index()
     {
         $packages = $this->packageRepository->packages();
@@ -39,7 +43,7 @@ class PackageController extends Controller
 
     public function create()
     {
-        $users = User::where('is_active', 1)->where('type', User::USER_TYPE_CUSTOMER)->get();
+        $users = User::where('is_active', User::STATUS_ACTIVE)->where('type', User::USER_TYPE_CUSTOMER)->get();
         return Inertia::render('Package/Create', ['users' => $users]);
     }
 
@@ -53,11 +57,26 @@ class PackageController extends Controller
             $package = $this->packageRepository->store($request->all());
             if ($package) {
                 if ($request->items) {
-                    $items = $this->stringifyToArray($request->items);
-                    if (count($items) > 0) {
-                        $this->packageItemRepository->insert($items, $package);
+                    $items = $request->items;
+
+                    foreach ($items as $item) {
+                        // Save item
+                        $packageItem = $this->packageItemRepository->insertOne($item, $package);
+
+                        if (isset($item['files']) && is_array($item['files'])) {
+                            foreach ($item['files'] as $file) {
+                                $path = $this->addFile($file, 'storage/app/public/package_items/');
+                                $this->packageFileRepository->insertOne([
+                                    'package_id' => $package->id,
+                                    'package_item_id' => $packageItem->id,
+                                    'name' => $file->getClientOriginalName(),
+                                    'file' => $path,
+                                ]);
+                            }
+                        }
                     }
                 }
+
                 if ($request->hasFile('files')) {
                     $files = $request->file('files');
                     $this->packageFileRepository->insert($files, $package);
@@ -74,10 +93,128 @@ class PackageController extends Controller
     public function edit(Package $package)
     {
         $package->load('files', 'items', 'invoices');
+        $package->items->load('packageFiles');
+
         return Inertia::render('Package/EditTabs/Basic', [
             'package' => $package,
             'customers' => $this->userRepository->customers(),
         ]);
+    }
+
+    public function update(PackageRequest $request, Package $package)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Update package basic info
+            $package->update([
+                'from' => $request->from,
+                'date_received' => $request->date_received,
+                'sender_id' => $request->sender_id,
+                'tracking_id' => $request->tracking_id,
+                'total_value' => $request->total_value,
+                'weight' => $request->weight,
+                'status' => $request->status,
+            ]);
+
+            // Handle package-level files
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+                $this->packageFileRepository->insert($files, $package);
+            }
+
+            // Handle items update
+            if ($request->has('items')) {
+                $items = json_decode($request->items, true);
+
+                // Get existing item IDs
+                $existingItemIds = $package->items->pluck('id')->toArray();
+                $updatedItemIds = [];
+
+                foreach ($items as $itemData) {
+                    if (isset($itemData['id']) && $itemData['id']) {
+                        // Update existing item
+                        $item = PackageItem::find($itemData['id']);
+                        if ($item) {
+                            $item->update([
+                                'title' => $itemData['title'],
+                                'description' => $itemData['description'],
+                                'item_note' => $itemData['item_note'],
+                                'quantity' => $itemData['quantity'],
+                                'value_per_unit' => $itemData['value_per_unit'],
+                                'total_line_value' => $itemData['total_line_value'],
+                                'total_line_weight' => $itemData['total_line_weight'],
+                            ]);
+                            $updatedItemIds[] = $item->id;
+
+                            // Handle item images
+                            if (isset($itemData['new_files']) && is_array($itemData['new_files'])) {
+                                foreach ($itemData['new_files'] as $file) {
+                                    $path = $this->addFile($file, 'storage/app/public/package_items/');
+                                    $this->packageFileRepository->insertOne([
+                                        'package_id' => $package->id,
+                                        'package_item_id' => $item->id,
+                                        'name' => $file->getClientOriginalName(),
+                                        'file' => $path,
+                                    ]);
+                                }
+                            }
+
+                            // Handle image deletions
+                            if (isset($itemData['delete_file_ids']) && is_array($itemData['delete_file_ids'])) {
+                                foreach ($itemData['delete_file_ids'] as $fileId) {
+                                    $file = PackageFile::find($fileId);
+                                    if ($file && $file->package_item_id == $item->id) {
+                                        if (Storage::exists($file->file)) {
+                                            Storage::delete($file->file);
+                                        }
+                                        $file->delete();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // Create new item
+                        $packageItem = $this->packageItemRepository->insertOne($itemData, $package);
+                        $updatedItemIds[] = $packageItem->id;
+
+                        // Handle new item images
+                        if (isset($itemData['files']) && is_array($itemData['files'])) {
+                            foreach ($itemData['files'] as $file) {
+                                $path = $this->addFile($file, 'storage/app/public/package_items/');
+                                $this->packageFileRepository->insertOne([
+                                    'package_id' => $package->id,
+                                    'package_item_id' => $packageItem->id,
+                                    'name' => $file->getClientOriginalName(),
+                                    'file' => $path,
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                // Delete items that are no longer in the list
+                $itemsToDelete = array_diff($existingItemIds, $updatedItemIds);
+                foreach ($itemsToDelete as $itemId) {
+                    $item = PackageItem::find($itemId);
+                    if ($item) {
+                        // Delete associated files
+                        foreach ($item->packageFiles as $file) {
+                            if (Storage::exists($file->file)) {
+                                Storage::delete($file->file);
+                            }
+                        }
+                        $item->delete();
+                    }
+                }
+            }
+
+            DB::commit();
+            return Redirect::route('admin.packages')->with('alert', 'Package updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => $e->getMessage()]);
+        }
     }
 
     public function destroy(Package $package)

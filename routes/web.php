@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PackageItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TransactionController;
@@ -39,7 +40,16 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/create', [PackageController::class, 'create'])->name('admin.packages.create');
         Route::post('/store', [PackageController::class, 'store'])->name('admin.packages.store');
         Route::get('/edit/{package}', [PackageController::class, 'edit'])->name('admin.packages.edit');
+        Route::post('/update/{package}', [PackageController::class, 'update'])->name('admin.packages.update');
         Route::delete('/delete/{package}', [PackageController::class, 'destroy'])->name('admin.packages.delete');
+    });
+
+    // Package Item routes for individual item management
+    Route::prefix('package-items')->group(function () {
+        Route::post('/', [PackageItemController::class, 'store'])->name('admin.package-items.store');
+        Route::get('/{packageItem}', [PackageItemController::class, 'show'])->name('admin.package-items.show');
+        Route::put('/{packageItem}', [PackageItemController::class, 'update'])->name('admin.package-items.update');
+        Route::delete('/{packageItem}', [PackageItemController::class, 'destroy'])->name('admin.package-items.destroy');
     });
 
     Route::prefix('users')->group(function () {

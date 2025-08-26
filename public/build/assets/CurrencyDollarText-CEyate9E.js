@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as r,o}from"./app-uTKTb7_e.js";const t={};function c(n,a){return o(),r("p",null,"All values are in United States dollars (USD).")}const _=e(t,[["render",c]]);export{_ as C};

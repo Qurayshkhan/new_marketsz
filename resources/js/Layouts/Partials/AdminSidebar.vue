@@ -97,6 +97,20 @@ const authUser = usePage().props.auth.user;
                                 >All Packages</Link
                             >
                         </li>
+                        <li>
+                            <Link
+                                :href="route('admin.packages.kanban')"
+                                class="block p-2 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"
+                                :class="{
+                                    'text-white bg-primary-700':
+                                        route().current(
+                                            'admin.packages.kanban'
+                                        ),
+                                }"
+                            >
+                                Status Management</Link
+                            >
+                        </li>
                     </ul>
                 </li>
 

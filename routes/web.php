@@ -37,11 +37,13 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::prefix('package')->group(function () {
         Route::get('/', [PackageController::class, 'index'])->name('admin.packages');
+        Route::get('/status-management', [PackageController::class, 'kanban'])->name('admin.packages.kanban');
         Route::get('/create', [PackageController::class, 'create'])->name('admin.packages.create');
         Route::post('/store', [PackageController::class, 'store'])->name('admin.packages.store');
         Route::get('/edit/{package}', [PackageController::class, 'edit'])->name('admin.packages.edit');
         Route::post('/update/{package}', [PackageController::class, 'update'])->name('admin.packages.update');
         Route::delete('/delete/{package}', [PackageController::class, 'destroy'])->name('admin.packages.delete');
+        Route::put('/{package}/status', [PackageController::class, 'updateStatus'])->name('admin.packages.updateStatus');
     });
 
     // Package Item routes for individual item management

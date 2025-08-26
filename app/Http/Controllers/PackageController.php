@@ -35,10 +35,36 @@ class PackageController extends Controller
         $this->packageInvoiceRepository = $packageInvoiceRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $packages = $this->packageRepository->packages();
-        return Inertia::render('Package/Report', ['packages' => $packages]);
+        // Validate filter parameters
+        $validated = $request->validate([
+            'status' => 'nullable|integer|in:1,2,3,4',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'sender_id' => 'nullable|exists:users,id',
+            'tracking_id' => 'nullable|string|max:255',
+            'total_value_min' => 'nullable|numeric|min:0',
+            'total_value_max' => 'nullable|numeric|min:0|gte:total_value_min',
+        ]);
+
+        // Get customers for sender dropdown
+        $customers = $this->userRepository->customers();
+
+        // Get packages with filters
+        $packages = $this->packageRepository->packages($validated);
+
+        return Inertia::render('Package/Report', [
+            'packages' => $packages,
+            'customers' => $customers,
+            'filters' => $validated
+        ]);
+    }
+
+    public function kanban()
+    {
+        $packages = $this->packageRepository->allPackages();
+        return Inertia::render('Package/Kanban', ['packages' => $packages]);
     }
 
     public function create()
@@ -238,5 +264,39 @@ class PackageController extends Controller
     {
         $userPackages = $this->packageRepository->shipmentPackages($user->id, [PackageStatus::ACTION_REQUIRED, PackageStatus::IN_REVIEW, PackageStatus::READY_TO_SEND, PackageStatus::CONSOLIDATE]);
         return Inertia::render('Admin/Users/EditTabs/Packages', ['user' => $user, 'userPackages' => $userPackages]);
+    }
+
+    /**
+     * Update package status via AJAX for Kanban board
+     */
+    public function updateStatus(Request $request, Package $package)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Validate the request
+            $request->validate([
+                'status' => 'required|integer|in:1,2,3,4',
+            ]);
+
+            // Update the package status
+            $package->update(['status' => $request->status]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Package status updated successfully',
+                'package' => $package->fresh()->load('customer', 'items', 'files'),
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update package status: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

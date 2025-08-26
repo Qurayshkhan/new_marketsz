@@ -8,7 +8,7 @@ use App\Helpers\PackageStatus;
 interface PackageInterface
 {
 
-    public function packages();
+    public function packages($filters = []);
     public function store($data);
 
     public function deletePackage($packageId);
@@ -28,4 +28,6 @@ interface PackageInterface
     public function findById($id);
 
     public function sumWeightPackageByIds($ids);
+
+    public function allPackages();
 }

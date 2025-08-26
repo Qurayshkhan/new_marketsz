@@ -18,9 +18,46 @@ class PackageRepository implements PackageInterface
         $this->specialRequest = $specialRequest;
     }
 
-    public function packages()
+    public function packages($filters = [])
     {
-        return $this->package->paginate(25);
+        $query = $this->package->query();
+
+        // Apply status filter
+        if (!empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        // Apply date range filter
+        if (!empty($filters['date_from'])) {
+            $query->where('date_received', '>=', $filters['date_from']);
+        }
+        if (!empty($filters['date_to'])) {
+            $query->where('date_received', '<=', $filters['date_to']);
+        }
+
+        // Apply sender filter
+        if (!empty($filters['sender_id'])) {
+            $query->where('sender_id', $filters['sender_id']);
+        }
+
+        // Apply tracking ID filter
+        if (!empty($filters['tracking_id'])) {
+            $query->where('tracking_id', 'LIKE', '%' . $filters['tracking_id'] . '%');
+        }
+
+        // Apply total value range filter
+        if (!empty($filters['total_value_min'])) {
+            $query->where('total_value', '>=', $filters['total_value_min']);
+        }
+        if (!empty($filters['total_value_max'])) {
+            $query->where('total_value', '<=', $filters['total_value_max']);
+        }
+
+        return $query->with('customer')->orderBy('created_at', 'desc')->paginate(25);
+    }
+    public function allPackages()
+    {
+        return $this->package->get();
     }
     public function store($data)
     {

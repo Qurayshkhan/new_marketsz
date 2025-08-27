@@ -68,7 +68,7 @@ const saveAddress = () => {
         ? route("customer.addresses.update", { address: form.id })
         : route("customer.addresses.store");
 
-    const method = isEdit ? form.put : form.post;
+    const method = isEdit ? form.put.bind(form) : form.post.bind(form);
     method(routeName, {
         preserveScroll: true,
         onSuccess: () => {

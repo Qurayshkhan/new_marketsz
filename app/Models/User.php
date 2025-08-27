@@ -44,7 +44,8 @@ class User extends Authenticatable
         'avatar',
         'state',
         'zip_code',
-        'stripe_id'
+        'stripe_id',
+        'loyalty_points'
     ];
 
     /**
@@ -122,5 +123,49 @@ class User extends Authenticatable
                 $query->where('is_default_us', true)
                     ->orWhere('is_default_uk', true);
             });
+    }
+
+    /**
+     * Get loyalty transactions for the user
+     */
+    public function loyaltyTransactions()
+    {
+        return $this->hasMany(LoyaltyTransaction::class);
+    }
+
+    /**
+     * Get coupon usages for the user
+     */
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    /**
+     * Add loyalty points to user
+     */
+    public function addLoyaltyPoints(int $points): void
+    {
+        $this->increment('loyalty_points', $points);
+    }
+
+    /**
+     * Deduct loyalty points from user
+     */
+    public function deductLoyaltyPoints(int $points): bool
+    {
+        if ($this->loyalty_points >= $points) {
+            $this->decrement('loyalty_points', $points);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if user has enough loyalty points
+     */
+    public function hasEnoughLoyaltyPoints(int $points): bool
+    {
+        return $this->loyalty_points >= $points;
     }
 }

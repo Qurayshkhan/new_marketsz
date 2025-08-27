@@ -70,7 +70,9 @@ class Stripe
     public function createCustomer(array $attributes): Customer|array
     {
         try {
-            return $this->stripe->customers->create($attributes);
+            return $this->stripe->customers->create($attributes, [
+                'expand' => ['sources']
+            ]);
         } catch (\Exception $e) {
             return [
                 'error' => $e->getMessage()
@@ -271,4 +273,66 @@ class Stripe
             ['source' => $cardId]
         );
     }
+
+    public function retrieveSource(string $customerId, string $sourceId)
+    {
+        return $this->stripe->customers->retrieveSource($customerId, $sourceId);
+    }
+
+    /**
+     * Retrieve a payment method by ID
+     *
+     * @param string $paymentMethodId
+     * @return PaymentMethod|array
+     */
+    public function retrievePaymentMethod(string $paymentMethodId): PaymentMethod|array
+    {
+        try {
+            return $this->stripe->paymentMethods->retrieve($paymentMethodId);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Create a customer with a payment method attached
+     *
+     * @param array $attributes
+     * @return Customer|array
+     */
+    public function createCustomerWithPaymentMethod(array $attributes): Customer|array
+    {
+        try {
+            return $this->stripe->customers->create($attributes);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Set a payment method as the default for a customer
+     *
+     * @param string $customerId
+     * @param string $paymentMethodId
+     * @return Customer|array
+     */
+    public function setDefaultPaymentMethod(string $customerId, string $paymentMethodId): Customer|array
+    {
+        try {
+            return $this->stripe->customers->update($customerId, [
+                'invoice_settings' => [
+                    'default_payment_method' => $paymentMethodId
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
 }

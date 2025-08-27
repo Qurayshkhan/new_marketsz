@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternationalShippingOptions;
+use App\Models\Transaction;
 use App\Payments\Stripe;
 use App\Repositories\PackageRepository;
 use App\Repositories\PaymentMethodRepository;
@@ -196,9 +197,23 @@ class ShipController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            // Validate required fields
+            $request->validate([
+                'id' => 'required|integer',
+                'card_id' => 'required|integer',
+                'estimated_shipping_charges' => 'required|numeric|min:0.01|max:999999.99',
+                'user_address_id' => 'required|integer',
+            ]);
+
             $ship = $this->shipRepository->findById($request->input('id'));
             if (!$ship) {
                 return Redirect::back()->withErrors(['message' => 'Shipment not found.']);
+            }
+
+            // Verify the shipment belongs to the authenticated user
+            if ($ship->user_id !== Auth::id()) {
+                return Redirect::back()->withErrors(['message' => 'Unauthorized access to shipment.']);
             }
             $this->shipRepository->update($ship, [
                 'international_shipping_option_id' => $request->input('international_shipping_option_id'),
@@ -212,13 +227,40 @@ class ShipController extends Controller
             $user = Auth::user();
             $stripeCharge = null;
             $card = $this->paymentMethodRepository->findById($request->input('card_id'));
+
+            // Verify the card belongs to the authenticated user
+            if (!$card || $card->user_id !== $user->id) {
+                throw new \Exception('Invalid payment method selected.');
+            }
+
+            // Verify user has a Stripe customer ID
+            if (empty($user->stripe_id)) {
+                throw new \Exception('Payment method not properly configured. Please add a payment method first.');
+            }
+
             if ($card) {
                 $customerId = $user->stripe_id;
+                // Convert amount to cents and ensure it's an integer
+                $originalAmount = $request->input('estimated_shipping_charges');
+                $amountInCents = (int) round($originalAmount * 100);
+
+                \Log::info('Payment amount conversion', [
+                    'original_amount' => $originalAmount,
+                    'amount_in_cents' => $amountInCents,
+                    'user_id' => $user->id,
+                    'ship_id' => $ship->id
+                ]);
+
+                // Validate the converted amount
+                if ($amountInCents <= 0) {
+                    throw new \Exception('Invalid payment amount. Amount must be greater than zero.');
+                }
+
                 $stripeCharge = $this->stripeClient->createCharge([
                     'customer' => $customerId,
                     'source' => $card->card_id,
                     'receipt_email' => $user->email,
-                    'amount' => $request->input('estimated_shipping_charges') * 100,
+                    'amount' => $amountInCents,
                     'currency' => 'USD',
                     'capture' => true,
                     'description' => "Payment by {$user->name} to create shipment.",
@@ -227,9 +269,27 @@ class ShipController extends Controller
                         'order_ref' => uniqid('ship_'),
                     ],
                 ]);
+
+                // Check if the charge creation was successful
+                if (isset($stripeCharge['error'])) {
+                    \Log::error('Stripe charge creation failed', [
+                        'error' => $stripeCharge['error'],
+                        'amount_in_cents' => $amountInCents,
+                        'original_amount' => $originalAmount,
+                        'user_id' => $user->id,
+                        'ship_id' => $ship->id
+                    ]);
+                    throw new \Exception('Payment failed: ' . $stripeCharge['error']);
+                }
+
+                // Verify the charge was successful
+                if (!$stripeCharge->paid) {
+                    throw new \Exception('Payment was not successful. Please try again.');
+                }
+
                 $this->transactionRepository->create([
                     'user_id' => $user->id,
-                    'status' => $stripeCharge->paid,
+                    'status' => $stripeCharge->paid ? Transaction::STATUS_SUCCESS : Transaction::STATUS_CANCELED,
                     'transaction_id' => $stripeCharge->id,
                     'description' => $stripeCharge->description,
                     'amount' => $stripeCharge->amount / 100,
@@ -249,6 +309,12 @@ class ShipController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Checkout failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'ship_id' => $request->input('id'),
+                'card_id' => $request->input('card_id'),
+                'trace' => $e->getTraceAsString()
+            ]);
             return Redirect::back()->withErrors(['message' => 'Error during checkout: ' . $e->getMessage()]);
         }
     }

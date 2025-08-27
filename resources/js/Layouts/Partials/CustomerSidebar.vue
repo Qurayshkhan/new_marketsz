@@ -60,6 +60,17 @@ const props = defineProps({
                         Account Setting
                     </Link>
                     <Link
+                        :href="route('customer.loyalty.dashboard')"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        :class="{
+                            'text-white bg-primary-700':
+                                $page.url.startsWith('/customer/loyalty'),
+                        }"
+                    >
+                        <i class="fa-solid fa-star w-5 h-5 mr-3"></i>
+                        Loyalty Points
+                    </Link>
+                    <Link
                         :href="route('logout')"
                         method="post"
                         class="flex items-center w-full p-3 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"

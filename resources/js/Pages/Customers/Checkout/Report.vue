@@ -259,6 +259,20 @@
                             </div>
                         </div>
 
+                        <!-- Coupon Section -->
+                        <CouponSection
+                            :order-amount="grandTotal"
+                            @coupon-applied="handleCouponApplied"
+                            @coupon-removed="handleCouponRemoved"
+                        />
+
+                        <!-- Loyalty Section -->
+                        <LoyaltySection
+                            :order-amount="grandTotal"
+                            @loyalty-applied="handleLoyaltyApplied"
+                            @loyalty-removed="handleLoyaltyRemoved"
+                        />
+
                         <div
                             class="bg-white border border-gray-200 rounded-lg shadow-sm p-6"
                         >
@@ -298,6 +312,26 @@
                                     <span>Handling Fee:</span>
                                     <span>${{ handlingFee.toFixed(2) }}</span>
                                 </div>
+                                <div
+                                    v-if="couponDiscount > 0"
+                                    class="flex justify-between text-green-600"
+                                >
+                                    <span>Coupon Discount:</span>
+                                    <span
+                                        >-${{ couponDiscount.toFixed(2) }}</span
+                                    >
+                                </div>
+                                <div
+                                    v-if="loyaltyDiscount > 0"
+                                    class="flex justify-between text-green-600"
+                                >
+                                    <span>Loyalty Points Discount:</span>
+                                    <span
+                                        >-${{
+                                            loyaltyDiscount.toFixed(2)
+                                        }}</span
+                                    >
+                                </div>
                                 <hr class="my-2" />
                                 <div
                                     class="flex justify-between font-bold text-gray-800 text-base"
@@ -317,7 +351,7 @@
                                 class="flex justify-between text-xl font-bold text-red-700"
                             >
                                 <span>Order total:</span>
-                                <span>${{ grandTotal.toFixed(2) }}</span>
+                                <span>${{ finalTotal.toFixed(2) }}</span>
                             </div>
                             <div class="mt-6">
                                 <PrimaryButton
@@ -421,6 +455,8 @@
 <script setup>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import CouponSection from "@/Components/Checkout/CouponSection.vue";
+import LoyaltySection from "@/Components/Checkout/LoyaltySection.vue";
 import { ref, computed } from "vue";
 
 // --- DATA REFS ---
@@ -540,6 +576,14 @@ const estimatedTax = computed(() => totalBeforeTax.value * 0.08); // Example tax
 
 const grandTotal = computed(() => totalBeforeTax.value + estimatedTax.value);
 
+// Coupon and Loyalty refs
+const couponDiscount = ref(0);
+const loyaltyDiscount = ref(0);
+
+const finalTotal = computed(
+    () => grandTotal.value - couponDiscount.value - loyaltyDiscount.value
+);
+
 // --- METHODS ---
 
 const addCard = () => {
@@ -558,6 +602,23 @@ const deleteCard = (id) => {
                 addressCards.value.length > 0 ? addressCards.value[0].id : null;
         }
     }
+};
+
+// Coupon and Loyalty event handlers
+const handleCouponApplied = (discount) => {
+    couponDiscount.value = discount;
+};
+
+const handleCouponRemoved = () => {
+    couponDiscount.value = 0;
+};
+
+const handleLoyaltyApplied = (discount) => {
+    loyaltyDiscount.value = discount;
+};
+
+const handleLoyaltyRemoved = () => {
+    loyaltyDiscount.value = 0;
 };
 </script>
 ```

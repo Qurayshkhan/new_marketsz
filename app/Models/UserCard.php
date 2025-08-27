@@ -22,5 +22,6 @@ class UserCard extends Model
         'postal_code',
         'country_code',
         'phone_number',
+        'is_default',
     ];
 }

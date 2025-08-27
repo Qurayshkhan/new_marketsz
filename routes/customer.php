@@ -99,4 +99,19 @@ Route::prefix('customer')->middleware(['auth', 'customer'])->group(function () {
     Route::get('/checkout-page', function () {
         return Inertia::render('Customers/Checkout/Report');
     })->name('customers.checkoutPage');
+
+    // Coupon routes
+    Route::prefix('coupons')->group(function () {
+        Route::post('/validate', [\App\Http\Controllers\Customer\CouponController::class, 'validate'])->name('customer.coupons.validate');
+        Route::get('/history', [\App\Http\Controllers\Customer\CouponController::class, 'history'])->name('customer.coupons.history');
+    });
+
+    // Loyalty routes
+    Route::prefix('loyalty')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Customer\LoyaltyController::class, 'dashboard'])->name('customer.loyalty.dashboard');
+        Route::post('/calculate-discount', [\App\Http\Controllers\Customer\LoyaltyController::class, 'calculateDiscount'])->name('customer.loyalty.calculate-discount');
+        Route::get('/summary', [\App\Http\Controllers\Customer\LoyaltyController::class, 'summary'])->name('customer.loyalty.summary');
+        Route::get('/transactions', [\App\Http\Controllers\Customer\LoyaltyController::class, 'transactions'])->name('customer.loyalty.transactions');
+        Route::post('/max-redeemable', [\App\Http\Controllers\Customer\LoyaltyController::class, 'maxRedeemable'])->name('customer.loyalty.max-redeemable');
+    });
 });

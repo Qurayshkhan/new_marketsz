@@ -79,6 +79,31 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::post('/update/{ship}', [ShipmentController::class, 'update'])->name('admin.shipments.update');
         Route::get('/packages/{ship}', [ShipmentController::class, 'shipPackages'])->name('admin.shipments.packages');
     });
+
+    // Coupon Management Routes
+    Route::prefix('coupons')->group(function () {
+        Route::get('/', [\App\Http\Controllers\CouponController::class, 'index'])->name('admin.coupons.index');
+        Route::get('/create', [\App\Http\Controllers\CouponController::class, 'create'])->name('admin.coupons.create');
+        Route::post('/store', [\App\Http\Controllers\CouponController::class, 'store'])->name('admin.coupons.store');
+        Route::get('/edit/{coupon}', [\App\Http\Controllers\CouponController::class, 'edit'])->name('admin.coupons.edit');
+        Route::post('/update/{coupon}', [\App\Http\Controllers\CouponController::class, 'update'])->name('admin.coupons.update');
+        Route::delete('/delete/{coupon}', [\App\Http\Controllers\CouponController::class, 'destroy'])->name('admin.coupons.destroy');
+        Route::put('/{coupon}/toggle-status', [\App\Http\Controllers\CouponController::class, 'toggleStatus'])->name('admin.coupons.toggle-status');
+        Route::get('/stats', [\App\Http\Controllers\CouponController::class, 'usageStats'])->name('admin.coupons.stats');
+        Route::post('/generate-code', [\App\Http\Controllers\CouponController::class, 'generateCode'])->name('admin.coupons.generate-code');
+    });
+
+    // Loyalty Program Management Routes
+    Route::prefix('loyalty')->group(function () {
+        Route::get('/', [\App\Http\Controllers\LoyaltyController::class, 'index'])->name('admin.loyalty.index');
+        Route::get('/rules', [\App\Http\Controllers\LoyaltyController::class, 'rules'])->name('admin.loyalty.rules');
+        Route::post('/rules/store', [\App\Http\Controllers\LoyaltyController::class, 'storeRule'])->name('admin.loyalty.rules.store');
+        Route::post('/rules/{rule}/update', [\App\Http\Controllers\LoyaltyController::class, 'updateRule'])->name('admin.loyalty.rules.update');
+        Route::delete('/rules/{rule}/delete', [\App\Http\Controllers\LoyaltyController::class, 'destroyRule'])->name('admin.loyalty.rules.destroy');
+        Route::put('/rules/{rule}/toggle-status', [\App\Http\Controllers\LoyaltyController::class, 'toggleRuleStatus'])->name('admin.loyalty.rules.toggle-status');
+        Route::get('/transactions', [\App\Http\Controllers\LoyaltyController::class, 'transactions'])->name('admin.loyalty.transactions');
+        Route::get('/users', [\App\Http\Controllers\LoyaltyController::class, 'users'])->name('admin.loyalty.users');
+    });
 });
 // website routes
 Route::get("/", [WebsiteController::class, "index"])->name('web.home');

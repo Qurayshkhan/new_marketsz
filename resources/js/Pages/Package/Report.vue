@@ -33,6 +33,10 @@ const clearAllFilters = () => {
         }
     );
 };
+
+const handleNavigate = (id) => {
+    router.visit(route("admin.packages.edit", id));
+};
 </script>
 <template>
     <AuthenticatedLayout>
@@ -93,6 +97,8 @@ const clearAllFilters = () => {
                                         <tr
                                             v-for="list in props.packages.data"
                                             :key="list?.id"
+                                            class="cursor-pointer"
+                                            @click="handleNavigate(list?.id)"
                                         >
                                             <td class="border">
                                                 {{ list?.from }}

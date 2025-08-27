@@ -34,7 +34,7 @@ class UserRepository implements UserInterface
         } else {
             unset($data['password']);
         }
-        if ($data['date_of_birth']) {
+        if (isset($data['date_of_birth'])) {
             $data['date_of_birth'] = Carbon::parse($data['date_of_birth'])->format('Y-m-d');
         }
         return $this->user->where('id', $userId)->update($data);

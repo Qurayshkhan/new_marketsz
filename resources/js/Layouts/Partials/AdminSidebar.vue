@@ -198,6 +198,36 @@ const authUser = usePage().props.auth.user;
                         Imports
                     </Link>
                 </li>
+
+                <!-- Coupon Management -->
+                <li class="mb-2" v-if="authUser.type == 1">
+                    <Link
+                        :href="route('admin.coupons.index')"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        :class="{
+                            'text-white bg-primary-700':
+                                route().current('admin.coupons'),
+                        }"
+                    >
+                        <i class="fa-solid fa-ticket w-5 h-5 mr-3"></i>
+                        Coupons
+                    </Link>
+                </li>
+
+                <!-- Loyalty Program -->
+                <li class="mb-2" v-if="authUser.type == 1">
+                    <Link
+                        :href="route('admin.loyalty.index')"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        :class="{
+                            'text-white bg-primary-700':
+                                route().current('admin.loyalty'),
+                        }"
+                    >
+                        <i class="fa-solid fa-star w-5 h-5 mr-3"></i>
+                        Loyalty Program
+                    </Link>
+                </li>
             </ul>
         </nav>
     </aside>

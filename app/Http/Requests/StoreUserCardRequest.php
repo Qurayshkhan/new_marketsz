@@ -22,7 +22,10 @@ class StoreUserCardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token' => 'required',
+            'payment_method_id' => 'nullable|string',
+            'token' => 'nullable|array',
+            'token.id' => 'required_with:token|string',
+            'token.card' => 'required_with:token|array',
             'card_holder_name' => 'required|string|max:255',
             'address_line1' => 'required|string|max:255',
             'address_line2' => 'nullable|string|max:255',
@@ -32,6 +35,22 @@ class StoreUserCardRequest extends FormRequest
             'postal_code' => 'nullable|string|max:20',
             'country_code' => 'required|string|max:5',
             'phone_number' => 'required|string|max:20',
+            'set_as_default' => 'nullable|boolean',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->input('payment_method_id') && !$this->input('token')) {
+                $validator->errors()->add('payment_method', 'Either payment_method_id or token is required.');
+            }
+        });
     }
 }

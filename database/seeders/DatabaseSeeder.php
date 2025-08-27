@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             ShippingPreferenceOptionSeeder::class,
             ProformaInvoiceOptionsSeeder::class,
             LoginOptionSeeder::class,
+            LoyaltyRuleSeeder::class,
+            CouponSeeder::class,
         ]);
     }
 }

@@ -2,8 +2,10 @@
 import DangerButton from "@js/Components/DangerButton.vue";
 import SecondaryButton from "@js/Components/SecondaryButton.vue";
 import Modal from "@js/Components/Modal.vue";
+import CouponSection from "@/Components/Checkout/CouponSection.vue";
+import LoyaltySection from "@/Components/Checkout/LoyaltySection.vue";
 
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { router, useForm, usePage } from "@inertiajs/vue3";
 import { useToast } from "vue-toastification";
 const toast = useToast();
@@ -38,6 +40,17 @@ const form = useForm({
     card_id: props.selectedCardId || null,
     user_address_id: props.selectedAddressId || null,
 });
+
+// Coupon and Loyalty refs
+const couponDiscount = ref(0);
+const loyaltyDiscount = ref(0);
+
+const finalAmount = computed(() => {
+    const baseAmount = Number(props.checkoutAmount) || 0.0;
+    const coupon = Number(couponDiscount.value) || 0.0;
+    const loyalty = Number(loyaltyDiscount.value) || 0.0;
+    return baseAmount - coupon - loyalty;
+});
 const checkout = (event) => {
     event.preventDefault();
     console.log(form.card_id);
@@ -51,11 +64,42 @@ const checkout = (event) => {
         return;
     }
 
+    // Update form with final amount including discounts
+    form.estimated_shipping_charges = finalAmount.value;
+    form.subtotal = finalAmount.value;
+
     form.post(route("customer.ship.checkout"), {
         onFinish: () => {
             closeModal();
         },
     });
+};
+
+const handleCouponApplied = (discount) => {
+    // Handle both numeric or object payloads
+    const amount = typeof discount === "object" ? discount.discount : discount;
+
+    couponDiscount.value = Number(amount) || 0;
+    toast.success(
+        `Coupon applied! You saved $${couponDiscount.value.toFixed(2)}`
+    );
+};
+
+const handleCouponRemoved = () => {
+    couponDiscount.value = 0;
+    toast.info("Coupon removed");
+};
+
+const handleLoyaltyApplied = (discount) => {
+    loyaltyDiscount.value = Number(discount) || 0;
+    toast.success(
+        `Loyalty points applied! You saved $${loyaltyDiscount.value.toFixed(2)}`
+    );
+};
+
+const handleLoyaltyRemoved = () => {
+    loyaltyDiscount.value = 0;
+    toast.info("Loyalty points removed");
 };
 
 watch(
@@ -80,6 +124,12 @@ watch(
     },
     { deep: true, immediate: true }
 );
+
+// Watch for discount changes and update form
+watch([couponDiscount, loyaltyDiscount], () => {
+    form.estimated_shipping_charges = finalAmount.value;
+    form.subtotal = finalAmount.value;
+});
 </script>
 
 <template>
@@ -93,10 +143,68 @@ watch(
 
         <Modal :show="confirmingRecordDeletion" @close="closeModal">
             <div class="p-6">
-                <h2 class="text-center text-lg font-medium text-gray-900">
-                    Your credit card will be charged ${{ checkoutAmount }} for
-                    this transaction.
+                <h2 class="text-center text-lg font-medium text-gray-900 mb-4">
+                    Shipment Checkout
                 </h2>
+
+                <!-- Coupon Section -->
+                <div class="mb-4">
+                    <CouponSection
+                        :order-amount="checkoutAmount"
+                        @coupon-applied="handleCouponApplied"
+                        @coupon-removed="handleCouponRemoved"
+                    />
+                </div>
+
+                <!-- Loyalty Section -->
+                <div class="mb-4">
+                    <LoyaltySection
+                        :order-amount="checkoutAmount"
+                        @loyalty-applied="handleLoyaltyApplied"
+                        @loyalty-removed="handleLoyaltyRemoved"
+                    />
+                </div>
+
+                <!-- Order Summary -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="font-medium text-gray-900 mb-2">
+                        Order Summary
+                    </h3>
+                    <div class="space-y-1 text-sm">
+                        <div class="flex justify-between">
+                            <span>Base Amount:</span>
+                            <span>${{ checkoutAmount.toFixed(2) }}</span>
+                        </div>
+                        <div
+                            v-if="couponDiscount > 0"
+                            class="flex justify-between text-green-600"
+                        >
+                            <span>Coupon Discount:</span>
+                            <span>-${{ couponDiscount.toFixed(2) }}</span>
+                        </div>
+                        <div
+                            v-if="loyaltyDiscount > 0"
+                            class="flex justify-between text-green-600"
+                        >
+                            <span>Loyalty Points Discount:</span>
+                            <span>-${{ loyaltyDiscount.toFixed(2) }}</span>
+                        </div>
+                        <hr class="my-2" />
+                        <div class="flex justify-between font-medium">
+                            <span>Final Amount:</span>
+                            {{ finalAmount }}
+                            <span>${{ finalAmount.toFixed(2) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center text-sm text-gray-600 mb-4">
+                    Your credit card will be charged ${{
+                        finalAmount.toFixed(2)
+                    }}
+                    for this transaction.
+                </p>
+
                 <div class="flex mt-6 gap-4 justify-end">
                     <SecondaryButton @click="closeModal"
                         >Cancel</SecondaryButton

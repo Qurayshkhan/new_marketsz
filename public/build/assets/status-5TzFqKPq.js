@@ -1,1 +1,0 @@
-const i=[{id:1,name:"Active",is_active:1},{id:2,name:"Inactive",is_active:0}];export{i as S};

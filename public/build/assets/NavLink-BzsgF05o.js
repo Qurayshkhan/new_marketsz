@@ -1,0 +1,1 @@
+import{z as r,c as n,o as l,w as c,s as o,n as i,g as u,l as f}from"./app-DHrR_3Ac.js";const d={__name:"NavLink",props:{href:{type:String,required:!0},active:{type:Boolean}},setup(e){const a=e,s=r(()=>a.active?"nav-link-active":"nav-link");return(t,p)=>(l(),n(u(f),{href:e.href,class:i(s.value)},{default:c(()=>[o(t.$slots,"default")]),_:3},8,["href","class"]))}};export{d as _};

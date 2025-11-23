@@ -217,7 +217,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
                                         d="M5 13l4 4L19 7"></path>
                                 </svg>
-                            </div><span>1-3 Day Shipping</span>
+                            </div><span>2-4 Days Shipping</span>
                         </span>
                         <span class="flex items-center space-x-1.5 whitespace-nowrap">
                             <div class="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">

@@ -41,7 +41,7 @@
              </nav>
              <hr>
              <div class="pt-6 pb-12 text-sm text-center text-white text-opacity-75">
-                 <div class="max-w-lg mx-auto"><span class="">© All Rights Reserved - {{ new date('Y') }}</span>
+                 <div class="max-w-lg mx-auto"><span class="">© All Rights Reserved - {{ date('Y') }}</span>
                      <div class="mt-2 space-x-4">
                          <a class="underline whitespace-nowrap hover:text-white" href="{{ route('web.terms') }}">Terms
                              of

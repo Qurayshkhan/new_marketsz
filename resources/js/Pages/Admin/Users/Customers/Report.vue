@@ -3,7 +3,6 @@ import Pagination from "@/Components/Pagination.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
-import ReportFilter from "./ReportFilter.vue";
 
 const props = defineProps({
     users: Object,
@@ -17,7 +16,7 @@ const props = defineProps({
             <div class="w-full">
                 <div class="card">
                     <h1 class="text-2xl">Users</h1>
-                    <ReportFilter :filters="props?.filters" />
+                    <!-- <ReportFilter :filters="props?.filters" /> -->
                     <div class="card-body">
                         <div class="overflow-x-auto">
                             <table class="table border">

@@ -58,12 +58,10 @@ class UserRepository implements UserInterface
             $data['date_of_birth'] = Carbon::parse($data['date_of_birth'])->format('Y-m-d');
         }
         return $this->user->create($data);
-
     }
 
     public function userCount()
     {
         return $this->user->customer()->active()->count();
     }
-
 }

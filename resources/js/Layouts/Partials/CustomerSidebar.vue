@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
     <aside
         :class="{
-            'w-64': isSidebarOpen,
+            'w-96': isSidebarOpen,
             'w-0': !isSidebarOpen,
             'hidden md:block': !isSidebarOpen && !isMobile,
         }"
@@ -20,7 +20,6 @@ const props = defineProps({
     >
         <nav class="p-4 text-gray-400">
             <ul>
-                <!-- Dashboard Link -->
                 <li class="mb-2">
                     <Link
                         :href="route('customer.dashboard')"

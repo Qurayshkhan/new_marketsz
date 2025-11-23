@@ -46,7 +46,7 @@ const isActiveDropdown = (prefix) => {
     <header
         class="fixed top-0 left-0 right-0 bg-white shadow-md z-30 flex items-center justify-between px-4 py-3 rounded-b-lg"
     >
-        <!-- Logo and Sidebar Toggle -->
+        <!-- Left: Logo + Sidebar Toggle -->
         <div class="flex items-center">
             <!-- Sidebar Toggle Button -->
             <button
@@ -68,6 +68,7 @@ const isActiveDropdown = (prefix) => {
                     ></path>
                 </svg>
             </button>
+
             <!-- Logo -->
             <div class="w-40">
                 <a href="/">
@@ -77,113 +78,126 @@ const isActiveDropdown = (prefix) => {
                         width="100%"
                     />
                 </a>
-                <!-- <Link :href="route('dashboard')" class="h-8">
-                </Link> -->
             </div>
         </div>
-        <div>
-            <ul class="menu bg-base-200 lg:menu-horizontal rounded-box">
-                <li>
-                    <a>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                            />
-                        </svg>
-                        Help
-                    </a>
-                </li>
-                <li>
-                    <a>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        Updates
-                        <span class="badge badge-xs badge-warning">NEW</span>
-                    </a>
-                </li>
-                <li>
-                    <a>
-                        Contact us
-                        <span class="badge badge-xs badge-info"></span>
-                    </a>
-                </li>
-                <li>
-                    <a>
-                        Notifications
-                        <span class="badge badge-xs">99+</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <!-- User/Right-side content can go here -->
-        <div class="flex items-center space-x-4">
-            <!-- <span class="text-primary-700"
-                >Welcome,
-                {{
-                    $page.props.auth.user.first_name +
-                    " " +
-                    $page.props.auth.user.last_name
-                }}!</span
-            > -->
 
-            <div class="dropdown dropdown-end">
+        <div class="flex items-center space-x-4">
+            <div class="flex-1 flex justify-center">
+                <div class="relative">
+                    <button
+                        @click="toggleDropdown('notifications')"
+                        class="flex items-center border-none outline-none rounded-full transition-colors"
+                    >
+                        <i class="fa-solid fa-bell text-primary-500"></i>
+                        <span
+                            v-if="props?.notifications?.length > 0"
+                            class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium leading-none text-white bg-red-500 rounded-full"
+                        >
+                            {{ props.notifications.length }}
+                        </span>
+                    </button>
+
+                    <ul
+                        v-if="activeDropdown === 'notifications'"
+                        class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md overflow-hidden z-50"
+                    >
+                        <li
+                            v-for="(note, index) in props?.notifications"
+                            :key="index"
+                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                            {{ note?.message }}
+                        </li>
+                        <li
+                            v-if="
+                                !props?.notifications ||
+                                props.notifications.length === 0
+                            "
+                            class="px-4 py-2 text-gray-400 cursor-default"
+                        >
+                            No notifications
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="dropdown dropdown-end relative">
                 <div tabindex="0" role="button" class="m-1">
                     <img
                         src="https://placehold.co/40x40/cbd5e1/4a5568?text=U"
                         alt="User Avatar"
-                        class="w-10 h-10 rounded-full border-2 border-primary-300"
+                        class="w-10 h-10 rounded-full border-2 border-primary-400 shadow-sm hover:shadow-md transition-all"
                     />
                 </div>
+
                 <ul
                     tabindex="0"
-                    class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm bg-white"
+                    class="dropdown-content menu bg-white rounded-xl z-50 w-60 p-3 shadow-lg border border-gray-100"
                 >
+                    <li class="px-2 py-3 border-b border-gray-200 mb-1">
+                        <div class="flex items-center gap-3">
+                            <img
+                                src="https://placehold.co/40x40/cbd5e1/4a5568?text=U"
+                                class="w-11 h-11 rounded-full border border-gray-300 shadow-sm"
+                            />
+                            <div class="flex flex-col">
+                                <span
+                                    class="font-semibold text-gray-900 text-sm"
+                                >
+                                    {{ $page.props.auth.user.name }}
+                                </span>
+                                <span class="text-xs text-gray-500 truncate">
+                                    {{ $page.props.auth.user.email }}
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+
                     <li
                         v-if="
                             $page.props.auth.user.type == 1 ||
                             $page.props.auth.user.type == 3
                         "
                     >
-                        <Link :href="route('profile.edit')">Profile</Link>
+                        <Link
+                            :href="route('profile.edit')"
+                            class="hover:bg-gray-100 rounded-lg px-3 py-2 text-sm text-gray-700"
+                        >
+                            <i
+                                class="fa-solid fa-user mr-2 text-primary-600"
+                            ></i>
+                            Profile
+                        </Link>
                     </li>
+
                     <li v-if="$page.props.auth.user.type == 2">
-                        <Link :href="route('customer.account.profile')"
-                            >Account Setting</Link
+                        <Link
+                            :href="route('customer.account.profile')"
+                            class="hover:bg-gray-100 rounded-lg px-3 py-2 text-sm text-gray-700"
                         >
+                            <i
+                                class="fa-solid fa-gear mr-2 text-primary-600"
+                            ></i>
+                            Account Setting
+                        </Link>
                     </li>
+
                     <li>
-                        <Link :href="route('logout')" method="post" as="button"
-                            >Log Out</Link
+                        <Link
+                            :href="route('logout')"
+                            method="post"
+                            as="button"
+                            class="hover:bg-red-50 rounded-lg px-3 py-2 text-sm text-red-600 font-medium"
                         >
+                            <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                            Log Out
+                        </Link>
                     </li>
                 </ul>
             </div>
         </div>
     </header>
+
     <div class="flex pt-16 h-screen overflow-hidden">
-        <!-- pt-16 to offset fixed header height -->
-        <!-- Fixed Sidebar -->
         <CustomerSidebar
             v-if="props?.auth.user?.type == 2"
             :isSidebarOpen="isSidebarOpen"
@@ -200,7 +214,6 @@ const isActiveDropdown = (prefix) => {
             :toggleDropdown="toggleDropdown"
             :isActiveDropdown="isActiveDropdown"
         />
-        <!-- Content Area -->
         <main
             :class="{ 'ml-0': isSidebarOpen, 'ml-0 md:ml-0': !isSidebarOpen }"
             class="flex-1 p-6 transition-all duration-300 ease-in-out overflow-y-auto scrollable-content h-[calc(100vh-4rem)] bg-white"

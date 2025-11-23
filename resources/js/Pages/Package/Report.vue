@@ -6,6 +6,8 @@ import PackageFilter from "@/Components/PackageFilter.vue";
 import NoResults from "@/Components/NoResults.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
     status: {
@@ -65,7 +67,6 @@ const handleNavigate = (id) => {
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- No Results Message -->
                             <NoResults
                                 v-if="packages.data.length === 0"
                                 icon="fas fa-box-open"
@@ -76,12 +77,11 @@ const handleNavigate = (id) => {
                                 @action="clearAllFilters"
                             />
 
-                            <!-- Packages Table -->
                             <div v-else class="overflow-x-auto">
                                 <table class="table border">
-                                    <!-- head -->
                                     <thead class="text-black">
                                         <tr>
+                                            <th class="border">Suite</th>
                                             <th class="border">From</th>
                                             <th class="border">Package Id</th>
                                             <th class="border">Tracking Id</th>
@@ -101,6 +101,9 @@ const handleNavigate = (id) => {
                                             @click="handleNavigate(list?.id)"
                                         >
                                             <td class="border">
+                                                {{ list?.customer.suite }}
+                                            </td>
+                                            <td class="border">
                                                 {{ list?.from }}
                                             </td>
                                             <td class="border">
@@ -115,7 +118,9 @@ const handleNavigate = (id) => {
                                             <td class="border">
                                                 {{ list?.status_name }}
                                             </td>
-                                            <td class="border text-center">
+                                            <td
+                                                class="border text-center flex items-center justify-center space-x-2"
+                                            >
                                                 <Link
                                                     :href="
                                                         route(
@@ -146,4 +151,5 @@ const handleNavigate = (id) => {
             </div>
         </div>
     </AuthenticatedLayout>
+    <Modal></Modal>
 </template>

@@ -3,71 +3,62 @@ import Pagination from "@/Components/Pagination.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+import ReportFilter from "./ReportFilter.vue";
 
 const props = defineProps({
-    shipments: Object,
+    users: Object,
+    filters: Object,
 });
-console.log("🚀 ~ props.shipments:", props.shipments);
 </script>
 <template>
     <AuthenticatedLayout>
-        <Head title="Shipments" />
+        <Head title="Users" />
         <div class="grid grid-cols-1">
             <div class="w-full">
                 <div class="card">
-                    <h1 class="text-2xl">Shipments</h1>
-
+                    <h1 class="text-2xl">Users</h1>
+                    <ReportFilter :filters="props?.filters" />
                     <div class="card-body">
                         <div class="overflow-x-auto">
-                            <table class="table border text-center">
+                            <table class="table border">
                                 <!-- head -->
                                 <thead class="text-black">
                                     <tr>
-                                        <th class="border">Tracking Number</th>
-                                        <th class="border">Customer</th>
-                                        <th class="border">Total weight</th>
-                                        <th class="border">Total Price</th>
-                                        <th class="border">Status</th>
-                                        <th class="border">Invoice Status</th>
-                                        <td class="border">Action</td>
+                                        <th class="border">Name</th>
+                                        <th class="border">Email</th>
+                                        <th class="border">Phone</th>
+                                        <th class="border">Suite</th>
+                                        <th class="border">Country</th>
+                                        <th class="border">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- row 1 -->
                                     <tr
-                                        v-for="shipment in props.shipments.data"
-                                        :key="shipment?.id"
+                                        v-for="user in props.users.data"
+                                        :key="user?.id"
                                     >
                                         <td class="border">
-                                            {{
-                                                shipment?.tracking_number ?? ""
-                                            }}
+                                            {{ user?.name ?? "" }}
                                         </td>
                                         <td class="border">
-                                            {{ shipment?.user?.name ?? "" }}
+                                            {{ user?.email ?? "" }}
                                         </td>
                                         <td class="border">
-                                            {{ shipment?.total_weight ?? "" }}
+                                            {{ user?.phone ?? "" }}
                                         </td>
                                         <td class="border">
-                                            ${{
-                                                shipment?.total_price.toFixed(
-                                                    2
-                                                ) ?? ""
-                                            }}
+                                            {{ user?.suite ?? "" }}
                                         </td>
                                         <td class="border">
-                                            {{ shipment?.status ?? "" }}
-                                        </td>
-                                        <td class="border">
-                                            {{ shipment?.invoice_status ?? "" }}
+                                            {{ user?.country ?? "" }}
                                         </td>
                                         <td class="text-center">
                                             <Link
                                                 :href="
                                                     route(
-                                                        'admin.shipments.edit',
-                                                        { ship: shipment?.id }
+                                                        'admin.users.userEdit',
+                                                        { user: user?.id }
                                                     )
                                                 "
                                             >
@@ -82,10 +73,10 @@ console.log("🚀 ~ props.shipments:", props.shipments);
                             </table>
                         </div>
                         <Pagination
-                            :links="props.shipments.links"
-                            :from="props.shipments.from"
-                            :to="props.shipments.to"
-                            :total="props.shipments.total"
+                            :links="props.users.links"
+                            :from="props.users.from"
+                            :to="props.users.to"
+                            :total="props.users.total"
                         />
                     </div>
                 </div>

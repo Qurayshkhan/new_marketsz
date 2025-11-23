@@ -47,8 +47,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
-
-        $suite = $this->generateRandomSuiteNumber();
+        $suite = $this->generateRandomSuiteNumber($request->input('country'));
         $monthNumber = date_parse($request->month)['month'];
         $dateOfBirth = sprintf('%04d-%02d-%02d', $request->year, $monthNumber, $request->day);
 
@@ -73,11 +72,16 @@ class RegisteredUserController extends Controller
         return redirect(route('dashboard', absolute: false));
     }
 
-    public function generateRandomSuiteNumber()
+    public function generateRandomSuiteNumber($country)
     {
         $prefixes = ['XA', 'XB', 'XC', 'XM'];
         $prefix = $prefixes[array_rand($prefixes)];
-
+        if ($country == "Aruba") {
+            $prefix = "XA";
+        }
+        if ($country == "Saba") {
+            $prefix = "XSA";
+        }
         $random = strtoupper(bin2hex(random_bytes(3)));
         $final = $prefix . $random;
 

@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\PackageItem;
 use App\Models\PackageFile;
 use App\Models\User;
+use App\Notifications\UpdateStatusWithNoteNotification;
 use App\Repositories\PackageFileRepository;
 use App\Repositories\PackageInvoiceRepository;
 use App\Repositories\PackageItemRepository;
@@ -129,10 +130,9 @@ class PackageController extends Controller
 
     public function update(PackageRequest $request, Package $package)
     {
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            // Update package basic info
+        try {
             $package->update([
                 'from' => $request->from,
                 'date_received' => $request->date_received,
@@ -143,105 +143,104 @@ class PackageController extends Controller
                 'status' => $request->status,
             ]);
 
-            // Handle package-level files
             if ($request->hasFile('files')) {
-                $files = $request->file('files');
-                $this->packageFileRepository->insert($files, $package);
+                foreach ($request->file('files') as $file) {
+                    $path = $file->store('package_files', 'public');
+                    $package->files()->create([
+                        'name' => $file->getClientOriginalName(),
+                        'file' => $path,
+                    ]);
+                }
             }
 
-            // Handle items update
-            if ($request->has('items')) {
-                $items = json_decode($request->items, true);
+            $items = $request->input('items', []);
+            $updatedItemIds = [];
 
-                // Get existing item IDs
-                $existingItemIds = $package->items->pluck('id')->toArray();
-                $updatedItemIds = [];
+            foreach ($items as $index => $itemData) {
+                // Existing item
+                if (!empty($itemData['id'])) {
+                    $item = PackageItem::find($itemData['id']);
+                    if (!$item) continue;
 
-                foreach ($items as $itemData) {
-                    if (isset($itemData['id']) && $itemData['id']) {
-                        // Update existing item
-                        $item = PackageItem::find($itemData['id']);
-                        if ($item) {
-                            $item->update([
-                                'title' => $itemData['title'],
-                                'description' => $itemData['description'],
-                                'item_note' => $itemData['item_note'],
-                                'quantity' => $itemData['quantity'],
-                                'value_per_unit' => $itemData['value_per_unit'],
-                                'total_line_value' => $itemData['total_line_value'],
-                                'total_line_weight' => $itemData['total_line_weight'],
-                            ]);
-                            $updatedItemIds[] = $item->id;
+                    $item->update([
+                        'title' => $itemData['title'],
+                        'description' => $itemData['description'],
+                        'item_note' => $itemData['item_note'],
+                        'quantity' => $itemData['quantity'],
+                        'value_per_unit' => $itemData['value_per_unit'],
+                        'total_line_value' => $itemData['total_line_value'],
+                        'total_line_weight' => $itemData['total_line_weight'],
+                    ]);
 
-                            // Handle item images
-                            if (isset($itemData['new_files']) && is_array($itemData['new_files'])) {
-                                foreach ($itemData['new_files'] as $file) {
-                                    $path = $this->addFile($file, 'storage/app/public/package_items/');
-                                    $this->packageFileRepository->insertOne([
-                                        'package_id' => $package->id,
-                                        'package_item_id' => $item->id,
-                                        'name' => $file->getClientOriginalName(),
-                                        'file' => $path,
-                                    ]);
-                                }
-                            }
+                    $updatedItemIds[] = $item->id;
 
-                            // Handle image deletions
-                            if (isset($itemData['delete_file_ids']) && is_array($itemData['delete_file_ids'])) {
-                                foreach ($itemData['delete_file_ids'] as $fileId) {
-                                    $file = PackageFile::find($fileId);
-                                    if ($file && $file->package_item_id == $item->id) {
-                                        if (Storage::exists($file->file)) {
-                                            Storage::delete($file->file);
-                                        }
-                                        $file->delete();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        // Create new item
-                        $packageItem = $this->packageItemRepository->insertOne($itemData, $package);
-                        $updatedItemIds[] = $packageItem->id;
-
-                        // Handle new item images
-                        if (isset($itemData['files']) && is_array($itemData['files'])) {
-                            foreach ($itemData['files'] as $file) {
-                                $path = $this->addFile($file, 'storage/app/public/package_items/');
-                                $this->packageFileRepository->insertOne([
-                                    'package_id' => $package->id,
-                                    'package_item_id' => $packageItem->id,
-                                    'name' => $file->getClientOriginalName(),
-                                    'file' => $path,
-                                ]);
-                            }
-                        }
-                    }
-                }
-
-                // Delete items that are no longer in the list
-                $itemsToDelete = array_diff($existingItemIds, $updatedItemIds);
-                foreach ($itemsToDelete as $itemId) {
-                    $item = PackageItem::find($itemId);
-                    if ($item) {
-                        // Delete associated files
-                        foreach ($item->packageFiles as $file) {
-                            if (Storage::exists($file->file)) {
+                    if (!empty($itemData['delete_file_ids'])) {
+                        foreach ($itemData['delete_file_ids'] as $fileId) {
+                            $file = PackageFile::find($fileId);
+                            if ($file && Storage::exists($file->file)) {
                                 Storage::delete($file->file);
+                                $file->delete();
                             }
                         }
-                        $item->delete();
+                    }
+
+                    if ($request->hasFile("items.$index.new_files")) {
+                        foreach ($request->file("items.$index.new_files") as $file) {
+                            $path = $this->addFile($file, 'storage/app/public/package_items/');
+                            $item->packageFiles()->create([
+                                'name' => $file->getClientOriginalName(),
+                                'file' => $path,
+                            ]);
+                        }
+                    }
+                } else {
+                    $newItem = $package->items()->create([
+                        'title' => $itemData['title'],
+                        'description' => $itemData['description'],
+                        'item_note' => $itemData['item_note'],
+                        'quantity' => $itemData['quantity'],
+                        'value_per_unit' => $itemData['value_per_unit'],
+                        'total_line_value' => $itemData['total_line_value'],
+                        'total_line_weight' => $itemData['total_line_weight'],
+                    ]);
+
+                    $updatedItemIds[] = $newItem->id;
+
+                    if (!empty($itemData['new_files']) && is_array($itemData['new_files'])) {
+                        foreach ($itemData['new_files'] as $file) {
+                            $path = $this->addFile($file, 'storage/app/public/package_items/');
+                            $newItem->packageFiles()->create([
+                                'name' => $file->getClientOriginalName(),
+                                'file' => $path,
+                            ]);
+                        }
                     }
                 }
             }
+
+            if (!empty($itemData['delete_file_ids']) && is_array($itemData['delete_file_ids'])) {
+                foreach ($itemData['delete_file_ids'] as $fileId) {
+                    $file = PackageFile::find($fileId);
+                    if ($file) {
+                        if (Storage::disk('public')->exists($file->file)) {
+                            Storage::disk('public')->delete($file->file);
+                        }
+                        $file->delete();
+                    }
+                }
+            }
+
 
             DB::commit();
-            return Redirect::route('admin.packages')->with('alert', 'Package updated successfully.');
+
+            return redirect()->route('admin.packages')->with('alert', 'Package updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return Redirect::back()->withErrors(['message' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['message' => $e->getMessage()]);
         }
     }
+
+
 
     public function destroy(Package $package)
     {
@@ -289,7 +288,6 @@ class PackageController extends Controller
                 'message' => 'Package status updated successfully',
                 'package' => $package->fresh()->load('customer', 'items', 'files'),
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -297,6 +295,24 @@ class PackageController extends Controller
                 'success' => false,
                 'message' => 'Failed to update package status: ' . $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function updateNote(Request $request, Package $package)
+    {
+        try {
+            DB::beginTransaction();
+            $request->validate([
+                'note' => 'required|string|max:1000',
+            ]);
+            $package->update(['note' => $request->note]);
+            $user = $package->customer;
+            $user->notify(new UpdateStatusWithNoteNotification($request->input('note'), $package));
+            DB::commit();
+            return Redirect::back()->with('alert', 'Package note updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
 }

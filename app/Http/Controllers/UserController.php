@@ -61,6 +61,4 @@ class UserController extends Controller
             return Redirect::back()->withErrors(['message' => $e->getMessage()]);
         }
     }
-
-
 }

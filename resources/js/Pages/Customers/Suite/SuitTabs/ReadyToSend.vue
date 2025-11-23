@@ -137,7 +137,7 @@ const handleCreateShipRequest = async () => {
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success("Ship request created successfully.");
+                    // toast.success("Ship request created successfully.");
                     resetSelection();
                 },
                 onError: (error) => {

@@ -57,7 +57,7 @@ class PackageRepository implements PackageInterface
     }
     public function allPackages()
     {
-        return $this->package->get();
+        return $this->package->with('customer')->get();
     }
     public function store($data)
     {
@@ -128,5 +128,4 @@ class PackageRepository implements PackageInterface
     {
         return $this->package->findOrFail($id);
     }
-
 }

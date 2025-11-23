@@ -14,7 +14,7 @@ const authUser = usePage().props.auth.user;
 <template>
     <aside
         :class="{
-            'w-64': isSidebarOpen,
+            'w-80': isSidebarOpen,
             'w-0': !isSidebarOpen,
             'hidden md:block': !isSidebarOpen && !isMobile,
         }"
@@ -22,7 +22,6 @@ const authUser = usePage().props.auth.user;
     >
         <nav class="p-4 text-gray-400">
             <ul>
-                <!-- Dashboard Link -->
                 <li class="mb-2">
                     <Link
                         :href="route('dashboard')"
@@ -50,7 +49,6 @@ const authUser = usePage().props.auth.user;
                     </Link>
                 </li>
 
-                <!-- Dropdown Menu 1 -->
                 <li class="mb-2">
                     <button
                         @click="toggleDropdown('products')"
@@ -114,7 +112,6 @@ const authUser = usePage().props.auth.user;
                     </ul>
                 </li>
 
-                <!-- Dropdown Menu 2 -->
                 <li class="mb-2">
                     <button
                         @click="toggleDropdown('users')"
@@ -164,6 +161,17 @@ const authUser = usePage().props.auth.user;
                                 >All Users</Link
                             >
                         </li>
+                        <!-- <li>
+                            <Link
+                                :href="route('admin.customers')"
+                                class="block text-white p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                                :class="{
+                                    ' bg-primary-700':
+                                        route().current('admin.customers'),
+                                }"
+                                >Customers</Link
+                            >
+                        </li> -->
                     </ul>
                 </li>
                 <li class="mb-2" v-if="authUser.type == 1">
@@ -180,7 +188,6 @@ const authUser = usePage().props.auth.user;
                         Transaction
                     </Link>
                 </li>
-                <!-- Settings Link -->
 
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
@@ -198,8 +205,6 @@ const authUser = usePage().props.auth.user;
                         Imports
                     </Link>
                 </li>
-
-                <!-- Coupon Management -->
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.coupons.index')"
@@ -214,7 +219,6 @@ const authUser = usePage().props.auth.user;
                     </Link>
                 </li>
 
-                <!-- Loyalty Program -->
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.loyalty.index')"
@@ -226,6 +230,18 @@ const authUser = usePage().props.auth.user;
                     >
                         <i class="fa-solid fa-star w-5 h-5 mr-3"></i>
                         Loyalty Program
+                    </Link>
+                </li>
+                <li class="mb-2">
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200 hover:w-full"
+                    >
+                        <i
+                            class="fa-solid fa-right-from-bracket w-5 h-5 mr-3"
+                        ></i>
+                        Logout
                     </Link>
                 </li>
             </ul>

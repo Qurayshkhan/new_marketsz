@@ -66,9 +66,9 @@
                                 address</label>
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <!-- <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                                                                                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                                                                                                </svg> -->
+                                                                                                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                                                                                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                                                                                                        </svg> -->
                             </div>
                             <input
                                 class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
@@ -162,7 +162,7 @@
                     </div>
                     <div class="text-xl leading-tight"><strong>Marketsz ships your orders</strong> to you in
                         the
-                        Caribbean within 1-3 days</div>
+                        Caribbean within 2-4 days</div>
                 </div>
             </div>
         </div>
@@ -215,7 +215,7 @@
                 <div class="max-w-6xl px-5 mx-auto leading-relaxed text-xl text-center">
                     <p>Don’t wait in line at a pickup store! Get your orders delivered right at your door.</p>
                     <p>
-                        Experience Marketsz! Receive all of your packages within 1-3 days. Track your order, get
+                        Experience Marketsz! Receive all of your packages within 2-4 days. Track your order, get
                         high quality
                         support throughout the whole process. Zero Headache, fun shopping and shipping
                         experience!
@@ -229,7 +229,7 @@
                         <div class="mt-5 text-2xl font-bold leading-tight">Quick and Guaranteed Shopping and
                             Shipping</div>
                         <div class="pt-2 text-lg text-gray-600">Shop from any online store and get your order
-                            within 1-3 days</div>
+                            within 2-4 days</div>
                     </div>
                     <div class="text-center bg-gray-50 p-4 rounded-xl">
                         <div class="flex items-center justify-center"><img
@@ -278,7 +278,7 @@
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                     </div>
-                                    Up to 120 days
+                                    Up to 90 days
                                 </td>
                                 <td class="w-1/2 px-3 py-4 leading-snug text-center sm:w-auto">
                                     <div
@@ -338,7 +338,7 @@
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                     </div>
-                                    Get Your package within 1-3 days
+                                    Get Your package within 2-4 days
                                 </td>
                                 <td class="w-1/2 px-3 py-4 leading-snug text-center sm:w-auto">
                                     <div
@@ -828,7 +828,7 @@
                 <div class="pt-1 pl-4 leading-snug text-center">
                     Get your packages straight at your door of your home or business. You shop and we ship so
                     that you get
-                    your packages in 1-3 days!</div>
+                    your packages in 2-4 days!</div>
             </div>
             <div class="flex flex-col items-center">
                 <div class="text-4xl p-4"><i class="fas fa-search-location    "></i></div>

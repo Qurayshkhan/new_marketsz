@@ -1,22 +1,21 @@
 <script setup>
-import EditLayout from "../Edit.vue";
 import { ref, watch, computed, onMounted } from "vue";
-import { Head, router, useForm } from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import SearchableSelect from "vue-select";
 import InputError from "@/Components/InputError.vue";
+import EditLayout from "../Edit.vue";
 import Delete from "../Delete.vue";
 import packageStatus from "@/Data/package_status.json";
+import CameraCapture from "@/Components/CameraCapture.vue";
 
 const props = defineProps({
     package: Object,
-    customers: Object,
+    customers: Array,
 });
-
-console.log("🚀 ~ props.package:", props.package);
 
 const editPackage = props.package;
 
@@ -25,7 +24,7 @@ const form = useForm({
     date: new Date(editPackage?.date_received),
     sender_id: editPackage?.sender_id,
     status: editPackage?.status,
-    files: [],
+    files: [], // package-level new files
     items: editPackage?.items?.map((item) => ({
         id: item.id,
         title: item.title || "",
@@ -35,10 +34,9 @@ const form = useForm({
         value_per_unit: item.value_per_unit || 0,
         total_line_value: item.total_line_value || 0,
         total_line_weight: item.total_line_weight || 0,
-        files: [], // New files to upload
-        new_files: [], // New files for existing items
-        delete_file_ids: [], // IDs of files to delete
-        package_files: item.package_files || [], // Existing files from DB
+        package_files: item.package_files || [], // existing DB files
+        new_files: [], // new uploaded files
+        delete_file_ids: [], // files to delete
     })) ?? [
         {
             title: "",
@@ -48,10 +46,9 @@ const form = useForm({
             value_per_unit: 0,
             total_line_value: 0,
             total_line_weight: 0,
-            files: [],
+            package_files: [],
             new_files: [],
             delete_file_ids: [],
-            package_files: [],
         },
     ],
     totalPrice: 0,
@@ -59,19 +56,18 @@ const form = useForm({
     tracking_no: editPackage?.tracking_id,
 });
 
+// ----- Calculate totals -----
 const calculateTotals = () => {
     form.items.forEach((item) => {
         item.total_line_value = parseFloat(
             (item.quantity * item.value_per_unit).toFixed(2)
         );
     });
-
     form.totalPrice = parseFloat(
         form.items
             .reduce((sum, item) => sum + (item.total_line_value || 0), 0)
             .toFixed(2)
     );
-
     form.totalWeight = parseFloat(
         form.items
             .reduce((sum, item) => sum + (item.total_line_weight || 0), 0)
@@ -79,14 +75,10 @@ const calculateTotals = () => {
     );
 };
 
-watch(
-    () => form.items,
-    () => {
-        calculateTotals();
-    },
-    { deep: true }
-);
+watch(() => form.items, calculateTotals, { deep: true });
+onMounted(calculateTotals);
 
+// ----- Add / Remove Item -----
 const addItem = () => {
     form.items.push({
         title: "",
@@ -96,152 +88,89 @@ const addItem = () => {
         value_per_unit: 0,
         total_line_value: 0,
         total_line_weight: 0,
-        files: [],
+        package_files: [],
         new_files: [],
         delete_file_ids: [],
-        package_files: [],
     });
 };
-
 const removeItem = (index) => {
     if (form.items.length > 1) form.items.splice(index, 1);
 };
 
-const handleFileChange = (e) => {
-    form.files = Array.from(e.target.files);
+const handlePackageFileChange = (e) => {
+    form.files.push(...e.target.files);
 };
-
 const handleItemFileChange = (e, index) => {
     const files = Array.from(e.target.files);
-    if (form.items[index].id) {
-        // Existing item - add to new_files
-        if (!form.items[index].new_files) form.items[index].new_files = [];
-        form.items[index].new_files.push(...files);
-    } else {
-        // New item - add to files
-        if (!form.items[index].files) form.items[index].files = [];
-        form.items[index].files.push(...files);
-    }
+    form.items[index].new_files.push(...files);
 };
-
 const removeItemFile = (itemIndex, fileIndex, isExisting = false) => {
+    const item = form.items[itemIndex];
     if (isExisting) {
-        // Remove existing file from DB
-        const file = form.items[itemIndex].package_files[fileIndex];
-        if (file.id) {
-            if (!form.items[itemIndex].delete_file_ids) {
-                form.items[itemIndex].delete_file_ids = [];
-            }
-            form.items[itemIndex].delete_file_ids.push(file.id);
-        }
-        form.items[itemIndex].package_files.splice(fileIndex, 1);
+        const file = item.package_files[fileIndex];
+        if (file?.id) item.delete_file_ids.push(file.id);
+        item.package_files.splice(fileIndex, 1);
     } else {
-        // Remove new file
-        if (form.items[itemIndex].id) {
-            form.items[itemIndex].new_files.splice(fileIndex, 1);
-        } else {
-            form.items[itemIndex].files.splice(fileIndex, 1);
-        }
+        item.new_files.splice(fileIndex, 1);
     }
 };
 
 const submitForm = () => {
-    form.date = new Date(form.date).toLocaleString("en-US");
+    form.date = new Date(form.date).toISOString();
     form.transform((data) => {
         const payload = new FormData();
-        payload.append("id", editPackage.id);
         payload.append("from", data.from);
         payload.append("date_received", data.date);
         payload.append("sender_id", data.sender_id);
+        payload.append("status", data.status);
+        payload.append("tracking_id", data.tracking_no);
         payload.append("total_value", data.totalPrice);
         payload.append("weight", data.totalWeight);
-        payload.append("tracking_id", data.tracking_no);
-        payload.append("status", data.status);
 
-        const mappedItems = data.items.map((item) => ({
-            ...item,
-            total_line_value: parseFloat(
-                (item.quantity * item.value_per_unit).toFixed(2)
-            ),
-        }));
+        data.files.forEach((file, index) =>
+            payload.append(`files[${index}]`, file)
+        );
 
-        payload.append("items", JSON.stringify(mappedItems));
+        data.items.forEach((item, i) => {
+            payload.append(`items[${i}][id]`, item.id || "");
+            payload.append(`items[${i}][title]`, item.title);
+            payload.append(`items[${i}][description]`, item.description);
+            payload.append(`items[${i}][item_note]`, item.item_note);
+            payload.append(`items[${i}][quantity]`, item.quantity);
+            payload.append(`items[${i}][value_per_unit]`, item.value_per_unit);
+            payload.append(
+                `items[${i}][total_line_value]`,
+                item.total_line_value
+            );
+            payload.append(
+                `items[${i}][total_line_weight]`,
+                item.total_line_weight
+            );
 
-        // Add package-level files
-        data.files.forEach((file, index) => {
-            payload.append(`files[${index}]`, file);
-        });
+            item.new_files.forEach((file, j) => {
+                payload.append(`items[${i}][new_files][${j}]`, file);
+            });
 
-        // Add item files
-        data.items.forEach((item, itemIndex) => {
-            if (item.files && item.files.length > 0) {
-                item.files.forEach((file, fileIndex) => {
-                    payload.append(
-                        `items[${itemIndex}][files][${fileIndex}]`,
-                        file
-                    );
-                });
-            }
-
-            if (item.new_files && item.new_files.length > 0) {
-                item.new_files.forEach((file, fileIndex) => {
-                    payload.append(
-                        `items[${itemIndex}][new_files][${fileIndex}]`,
-                        file
-                    );
-                });
-            }
+            item.delete_file_ids.forEach((fileId, j) => {
+                payload.append(`items[${i}][delete_file_ids][${j}]`, fileId);
+            });
         });
 
         return payload;
     }).post(route("admin.packages.update", editPackage.id), {
         preserveScroll: true,
-        onSuccess: () => {
-            console.log("Package updated successfully!");
-            // Optionally refresh the page to show updated data
-            window.location.reload();
-        },
-        onError: (errors) => {
-            console.error("Update failed:", errors);
-        },
+        onSuccess: () => window.location.reload(),
+        onError: (errors) => console.error(errors),
     });
 };
 
-// Test function for individual item operations (optional)
-const testItemImageUpload = async (itemId) => {
-    const formData = new FormData();
-    formData.append("package_id", editPackage.id);
-    formData.append("title", "Test Item");
-    formData.append("description", "Test Description");
-    formData.append("quantity", 1);
-    formData.append("value_per_unit", 10);
-    formData.append("total_line_weight", 1);
-
-    // Add a test image if available
-    const testFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
-    formData.append("images[]", testFile);
-
-    try {
-        const response = await fetch(route("admin.package-items.store"), {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
-        });
-
-        const result = await response.json();
-        console.log("Test upload result:", result);
-    } catch (error) {
-        console.error("Test upload failed:", error);
+const addCameraPhoto = (index, file) => {
+    if (file instanceof File) {
+        form.items[index].new_files.push(file);
+    } else {
+        console.warn("Captured file is not a valid File object:", file);
     }
 };
-
-onMounted(() => {
-    calculateTotals();
-});
 </script>
 
 <template>
@@ -534,7 +463,6 @@ onMounted(() => {
                                         </p>
                                     </div>
 
-                                    <!-- New Images (not yet saved) -->
                                     <div
                                         v-for="(file, fIndex) in item.id
                                             ? item.new_files
@@ -545,6 +473,7 @@ onMounted(() => {
                                         <div
                                             class="w-full h-32 border rounded-lg overflow-hidden bg-gray-100"
                                         >
+                                            {{ file }}
                                             <img
                                                 :src="URL.createObjectURL(file)"
                                                 :alt="file.name"
@@ -624,6 +553,14 @@ onMounted(() => {
                                         No images uploaded
                                     </span>
                                 </div>
+                            </div>
+
+                            <div class="col-span-full">
+                                <CameraCapture
+                                    @add-photo="
+                                        (file) => addCameraPhoto(index, file)
+                                    "
+                                />
                             </div>
                         </div>
                     </div>

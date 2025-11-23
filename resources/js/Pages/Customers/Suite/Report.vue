@@ -26,13 +26,16 @@ const copyText = (text) => {
 
 <template>
     <AuthenticatedLayout>
-        <div class="grid grid-cols-4 gap-4 items-start">
+        <div class="grid grid-cols-7 gap-4 items-start">
             <!-- Left Side -->
             <div class="">
                 <p class="text-lg font-semibold">
-                    Packages in Suite {{ $page?.props?.auth?.user?.suite }}
+                    Suite: {{ $page?.props?.auth?.user?.suite }}
                 </p>
             </div>
+            <div></div>
+            <div></div>
+            <div></div>
             <div></div>
             <div></div>
             <!-- Right Side -->

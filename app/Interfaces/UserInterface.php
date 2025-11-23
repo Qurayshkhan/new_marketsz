@@ -12,5 +12,4 @@ interface UserInterface
     public function store($data);
 
     public function userCount();
-
 }

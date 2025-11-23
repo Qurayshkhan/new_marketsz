@@ -10,6 +10,7 @@ import SearchableSelect from "vue-select";
 
 import { computed } from "vue";
 import InputError from "@/Components/InputError.vue";
+import CameraCapture from "@/Components/CameraCapture.vue";
 
 const props = defineProps({
     users: Array,
@@ -18,7 +19,7 @@ const props = defineProps({
     },
 });
 console.log("🚀 ~ props.users:", props.users);
-
+const photos = ref([]);
 const form = useForm({
     from: "",
     date: null,
@@ -134,6 +135,10 @@ const submitForm = () => {
         preserveScroll: true,
         onSuccess: () => console.log("Package created successfully 🚀"),
     });
+};
+
+const addCameraPhoto = (index, file) => {
+    form.items[index].files.push(file);
 };
 </script>
 
@@ -341,8 +346,17 @@ const submitForm = () => {
                                     <TextInput
                                         type="file"
                                         multiple
+                                        capture="environment"
                                         @change="
                                             handleFileChange($event, index)
+                                        "
+                                    />
+                                </div>
+                                <div class="col-span-full">
+                                    <CameraCapture
+                                        @add-photo="
+                                            (file) =>
+                                                addCameraPhoto(index, file)
                                         "
                                     />
                                 </div>

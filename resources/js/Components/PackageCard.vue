@@ -1,3 +1,72 @@
+<script setup>
+import { ref } from "vue";
+import { Link, router } from "@inertiajs/vue3";
+import Modal from "./Modal.vue";
+import DangerButton from "./DangerButton.vue";
+import PrimaryButton from "./PrimaryButton.vue";
+import SecondaryButton from "./SecondaryButton.vue";
+
+const props = defineProps({
+    packageData: {
+        type: Object,
+        required: true,
+    },
+    status: {
+        type: Number,
+        required: true,
+    },
+});
+
+const emit = defineEmits(["status-updated"]);
+
+const showItems = ref(false);
+const showFiles = ref(false);
+
+const showFileModal = ref(false);
+
+const noteText = ref(props.packageData.note || "");
+const isNoting = ref(false);
+
+// Get status badge class based on status
+const getStatusBadgeClass = (status) => {
+    const statusClasses = {
+        1: "bg-red-100 text-red-800", // Action Required
+        2: "bg-yellow-100 text-yellow-800", // In Review
+        3: "bg-blue-100 text-blue-800", // Ready to Send
+        4: "bg-green-100 text-green-800", // Consolidate
+    };
+    return statusClasses[status] || "bg-gray-100 text-gray-800";
+};
+
+// Format date
+const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString();
+};
+
+const handleAddNote = () => {
+    showFileModal.value = !showFileModal.value;
+};
+
+const saveNote = async () => {
+    try {
+        isNoting.value = true;
+        await router.put(
+            route("admin.packages.updateNote", props.packageData.id),
+            { note: noteText.value },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    isNoting.value = false;
+                    showFileModal.value = false;
+                },
+            }
+        );
+    } catch (error) {
+        console.error(error);
+    }
+};
+</script>
 <template>
     <div
         class="package-card bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-move"
@@ -25,6 +94,14 @@
 
             <!-- Package Details -->
             <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Suite:</span>
+                    <span
+                        class="text-gray-900 font-medium truncate max-w-[120px]"
+                    >
+                        {{ packageData?.customer?.suite || "N/A" }}
+                    </span>
+                </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">From:</span>
                     <span
@@ -67,13 +144,23 @@
             <!-- Action Buttons -->
             <div class="mt-4 pt-3 border-t border-gray-100">
                 <div class="flex justify-between items-center">
-                    <Link
-                        :href="route('admin.packages.edit', packageData.id)"
-                        class="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center"
-                    >
-                        <i class="fas fa-edit mr-1"></i>
-                        Edit
-                    </Link>
+                    <div class="flex items-center gap-2">
+                        <Link
+                            :href="route('admin.packages.edit', packageData.id)"
+                            class="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center"
+                        >
+                            <i class="fas fa-edit mr-1"></i>
+                            Edit
+                        </Link>
+                        <button
+                            @click="handleAddNote"
+                            as="button"
+                            class="text-primary-500 text-xs flex items-center font-medium hover:text-primary-700"
+                        >
+                            <i class="fa-solid fa-file-pen mr-1"></i>
+                            Add Note
+                        </button>
+                    </div>
 
                     <div class="flex space-x-1">
                         <button
@@ -165,45 +252,44 @@
             </div>
         </div>
     </div>
+
+    <Modal :show="showFileModal" @close="handleAddNote">
+        <div class="p-5">
+            <div class="flex justify-between items-center border-b pb-2 mb-2">
+                <h3 class="text-lg font-semibold text-gray-900">Add Note</h3>
+                <button
+                    @click="handleAddNote"
+                    class="text-gray-400 hover:text-gray-600 transition"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 text-gray-700 text-sm">
+                <p>
+                    Add a note for package
+                    <strong>{{ packageData.package_id }}</strong
+                    >.
+                </p>
+                <textarea
+                    v-model="noteText"
+                    rows="4"
+                    class="w-full border border-primary-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 focus:outline-primary-500 focus:border-primary-500"
+                    placeholder="Type your note here..."
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-2 mt-4 border-t pt-2">
+                <SecondaryButton @click="handleAddNote">Cancel</SecondaryButton>
+                <PrimaryButton
+                    @click="saveNote"
+                    :processing="isNoting"
+                    :disabled="isNoting"
+                    >Save Note</PrimaryButton
+                >
+            </div>
+        </div>
+    </Modal>
 </template>
-
-<script setup>
-import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
-
-const props = defineProps({
-    packageData: {
-        type: Object,
-        required: true,
-    },
-    status: {
-        type: Number,
-        required: true,
-    },
-});
-
-const emit = defineEmits(["status-updated"]);
-
-const showItems = ref(false);
-const showFiles = ref(false);
-
-// Get status badge class based on status
-const getStatusBadgeClass = (status) => {
-    const statusClasses = {
-        1: "bg-red-100 text-red-800", // Action Required
-        2: "bg-yellow-100 text-yellow-800", // In Review
-        3: "bg-blue-100 text-blue-800", // Ready to Send
-        4: "bg-green-100 text-green-800", // Consolidate
-    };
-    return statusClasses[status] || "bg-gray-100 text-gray-800";
-};
-
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString();
-};
-</script>
 
 <style scoped>
 .package-card {

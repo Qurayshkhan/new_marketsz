@@ -1,3 +1,96 @@
+<script setup>
+import { ref, watch } from "vue";
+import draggable from "vuedraggable";
+import PackageCard from "./PackageCard.vue";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
+
+const props = defineProps({
+    packages: { type: Array, required: true },
+});
+console.log("🚀 ~ packages:", props?.packages);
+
+const emit = defineEmits(["status-updated"]);
+
+const actionRequiredPackages = ref([]);
+const inReviewPackages = ref([]);
+const readyToSendPackages = ref([]);
+const consolidatePackages = ref([]);
+
+const initializePackages = () => {
+    actionRequiredPackages.value = props.packages.filter((p) => p.status === 1);
+    inReviewPackages.value = props.packages.filter((p) => p.status === 2);
+    readyToSendPackages.value = props.packages.filter((p) => p.status === 3);
+    consolidatePackages.value = props.packages.filter((p) => p.status === 4);
+};
+watch(() => props.packages, initializePackages, { immediate: true });
+
+const onDragChange = async (event) => {
+    if (!event.added || !event.added.element) return;
+    const { added } = event;
+    if (!added || !added.element) return;
+
+    const packageId =
+        added.element.id ?? added.element.package_id ?? added.element._id;
+
+    let newStatus = null;
+    const packageItem = added.element;
+
+    if (actionRequiredPackages.value.some((p) => p.id === packageItem.id)) {
+        newStatus = 1;
+    } else if (inReviewPackages.value.some((p) => p.id === packageItem.id)) {
+        newStatus = 2;
+    } else if (readyToSendPackages.value.some((p) => p.id === packageItem.id)) {
+        newStatus = 3;
+    } else if (consolidatePackages.value.some((p) => p.id === packageItem.id)) {
+        newStatus = 4;
+    }
+
+    console.log("Package ID:", packageId, "→ New Status:", newStatus);
+
+    if (!packageId || !newStatus) {
+        toast.error("Could not identify package or status. Please try again.");
+        initializePackages();
+        return;
+    }
+
+    try {
+        const result = await updatePackageStatus(packageId, newStatus);
+        console.log("API response:", result);
+        toast.success("Package status updated successfully!");
+        emit("status-updated", { packageId, newStatus });
+    } catch (error) {
+        console.error("Error updating package status:", error);
+        toast.error("Failed to update package status. Reverting changes...");
+        initializePackages();
+    }
+};
+
+const updatePackageStatus = async (packageId, newStatus) => {
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
+    if (!csrfToken) throw new Error("CSRF token not found");
+
+    const response = await fetch(`/package/${packageId}/status`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+            Accept: "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+    }
+    return response.json();
+};
+</script>
+
 <template>
     <div class="kanban-board">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -127,97 +220,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { ref, watch } from "vue";
-import draggable from "vuedraggable";
-import PackageCard from "./PackageCard.vue";
-import { useToast } from "vue-toastification";
-
-const toast = useToast();
-
-const props = defineProps({
-    packages: { type: Array, required: true },
-});
-
-const emit = defineEmits(["status-updated"]);
-
-const actionRequiredPackages = ref([]);
-const inReviewPackages = ref([]);
-const readyToSendPackages = ref([]);
-const consolidatePackages = ref([]);
-
-// initialize
-const initializePackages = () => {
-    actionRequiredPackages.value = props.packages.filter((p) => p.status === 1);
-    inReviewPackages.value = props.packages.filter((p) => p.status === 2);
-    readyToSendPackages.value = props.packages.filter((p) => p.status === 3);
-    consolidatePackages.value = props.packages.filter((p) => p.status === 4);
-};
-watch(() => props.packages, initializePackages, { immediate: true });
-
-const onDragChange = async (event) => {
-    if (!event.added || !event.added.element) return;
-    const { added } = event;
-    if (!added || !added.element) return;
-
-    const packageId =
-        added.element.id ?? added.element.package_id ?? added.element._id;
-
-    // Determine status based on which array the package is in
-    let newStatus = null;
-    const packageItem = added.element;
-
-    if (actionRequiredPackages.value.some((p) => p.id === packageItem.id)) {
-        newStatus = 1;
-    } else if (inReviewPackages.value.some((p) => p.id === packageItem.id)) {
-        newStatus = 2;
-    } else if (readyToSendPackages.value.some((p) => p.id === packageItem.id)) {
-        newStatus = 3;
-    } else if (consolidatePackages.value.some((p) => p.id === packageItem.id)) {
-        newStatus = 4;
-    }
-
-    console.log("Package ID:", packageId, "→ New Status:", newStatus);
-
-    if (!packageId || !newStatus) {
-        toast.error("Could not identify package or status. Please try again.");
-        initializePackages();
-        return;
-    }
-
-    try {
-        const result = await updatePackageStatus(packageId, newStatus);
-        console.log("API response:", result);
-        toast.success("Package status updated successfully!");
-        emit("status-updated", { packageId, newStatus });
-    } catch (error) {
-        console.error("Error updating package status:", error);
-        toast.error("Failed to update package status. Reverting changes...");
-        initializePackages();
-    }
-};
-
-const updatePackageStatus = async (packageId, newStatus) => {
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        ?.getAttribute("content");
-    if (!csrfToken) throw new Error("CSRF token not found");
-
-    const response = await fetch(`/package/${packageId}/status`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken,
-            Accept: "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}`);
-    }
-    return response.json();
-};
-</script>

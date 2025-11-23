@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::post('/update/{package}', [PackageController::class, 'update'])->name('admin.packages.update');
         Route::delete('/delete/{package}', [PackageController::class, 'destroy'])->name('admin.packages.delete');
         Route::put('/{package}/status', [PackageController::class, 'updateStatus'])->name('admin.packages.updateStatus');
+
+        Route::put('/update-note/{package}', [PackageController::class, 'updateNote'])->name('admin.packages.updateNote');
     });
 
     // Package Item routes for individual item management
@@ -61,6 +63,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/edit/{user}', [UserController::class, 'edit'])->name('admin.users.userEdit');
         Route::put('/update/{user}', [UserController::class, 'update'])->name('admin.users.userUpdate');
 
+        // Route::get('/customers', [UserController::class, 'customers'])->name('admin.customers');
         Route::prefix('transactions')->group(function () {
             Route::get('/{user}', [TransactionController::class, 'userTransaction'])->name('admin.users.transactions');
             Route::put('/refund/{transaction}', [TransactionController::class, 'refundTransaction'])->name('admin.users.refundTransaction');

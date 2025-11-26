@@ -31,6 +31,7 @@
     height: 1000px;
     z-index: -10;
     object-fit: cover;
+
 }
 
 @keyframes airplane {

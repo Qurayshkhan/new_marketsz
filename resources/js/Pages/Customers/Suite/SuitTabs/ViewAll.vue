@@ -175,7 +175,7 @@ const showPackagePhotos = async (packageId) => {
     >
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-9">
-                <table class="w-full border text-center data-table text-sm">
+                <table class="w-full text-sm text-center border data-table">
                     <thead class="uppercase bg-gray-100">
                         <tr>
                             <th>
@@ -241,7 +241,7 @@ const showPackagePhotos = async (packageId) => {
                                         "
                                     >
                                         <i
-                                            class="fa-solid fa-check text-primary-500 font-extrabold"
+                                            class="font-extrabold fa-solid fa-check text-primary-500"
                                         ></i
                                         ><br />
                                         <span class="text-red-500">
@@ -284,7 +284,7 @@ const showPackagePhotos = async (packageId) => {
                                     v-if="expandedRows.has(action.id)"
                                     class="bg-gray-50"
                                 >
-                                    <td colspan="7" class="text-left px-5">
+                                    <td colspan="7" class="px-5 text-left">
                                         <div
                                             v-if="
                                                 action.status_name ==
@@ -353,7 +353,7 @@ const showPackagePhotos = async (packageId) => {
 
                                                         <div>
                                                             <button
-                                                                class="btn bg-primary-500 text-white"
+                                                                class="text-white btn bg-primary-500"
                                                                 @click="
                                                                     showPackagePhotos(
                                                                         action.id
@@ -384,7 +384,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 }}
                                                             </p>
                                                             <p
-                                                                class="text-md text-gray-600"
+                                                                class="text-gray-600 text-md"
                                                             >
                                                                 {{
                                                                     item?.description
@@ -448,7 +448,7 @@ const showPackagePhotos = async (packageId) => {
                                                 <tr>
                                                     <td colspan="7">
                                                         <div
-                                                            class="my-2 w-full"
+                                                            class="w-full my-2"
                                                         >
                                                             <a
                                                                 @click="
@@ -474,7 +474,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 "
                                                             />
                                                             <div
-                                                                class="my-2 flex gap-2 items-center"
+                                                                class="flex items-center gap-2 my-2"
                                                             >
                                                                 <DangerButton
                                                                     @click.prevent="
@@ -517,7 +517,7 @@ const showPackagePhotos = async (packageId) => {
                                                         >
                                                             <div class="w-full">
                                                                 <label
-                                                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                                                    class="block mb-2 text-sm font-medium text-gray-700"
                                                                     >Optional
                                                                     Services</label
                                                                 >
@@ -526,7 +526,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 >
                                                                     <button
                                                                         type="button"
-                                                                        class="w-full border border-gray-300 bg-white rounded-md shadow-sm pl-4 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                                                                        class="w-full py-2 pl-4 pr-10 text-sm text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                                                                         @click="
                                                                             toggleDropdown
                                                                         "
@@ -543,7 +543,7 @@ const showPackagePhotos = async (packageId) => {
                                                                             class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
                                                                         >
                                                                             <i
-                                                                                class="fa fa-chevron-down text-gray-400"
+                                                                                class="text-gray-400 fa fa-chevron-down"
                                                                             ></i>
                                                                         </span>
                                                                     </button>
@@ -552,7 +552,7 @@ const showPackagePhotos = async (packageId) => {
                                                                         v-if="
                                                                             dropdownOpen
                                                                         "
-                                                                        class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-sm ring-1 ring-black ring-opacity-5 overflow-auto"
+                                                                        class="absolute z-10 w-full py-1 mt-1 overflow-auto text-sm bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5"
                                                                     >
                                                                         <li
                                                                             v-for="(
@@ -562,7 +562,7 @@ const showPackagePhotos = async (packageId) => {
                                                                             :key="
                                                                                 index
                                                                             "
-                                                                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                                            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
                                                                             @click="
                                                                                 selectService(
                                                                                     service,
@@ -587,7 +587,7 @@ const showPackagePhotos = async (packageId) => {
                                                                                 >
                                                                             </div>
                                                                             <p
-                                                                                class="text-gray-500 text-xs mt-1"
+                                                                                class="mt-1 text-xs text-gray-500"
                                                                             >
                                                                                 {{
                                                                                     service.description
@@ -633,7 +633,7 @@ const showPackagePhotos = async (packageId) => {
                                                                     isUploadingInvoice
                                                                 "
                                                                 type="button"
-                                                                class="btn btn-big mt-4 bg-primary-600 text-white hover:bg-primary-700 disabled:bg-primary-400"
+                                                                class="mt-4 text-white btn btn-big bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400"
                                                                 @click="
                                                                     showUploadInvoiceModal(
                                                                         action.id
@@ -654,7 +654,7 @@ const showPackagePhotos = async (packageId) => {
                     </tbody>
                 </table>
             </div>
-            <div class="col-span-3 bg-gray-50 p-4 rounded">
+            <div class="col-span-3 p-4 rounded bg-gray-50">
                 <CurrencyDollarText />
                 <PackageLinks />
             </div>
@@ -662,7 +662,7 @@ const showPackagePhotos = async (packageId) => {
     </Report>
     <Modal :show="isShowUploadInvoiceModal" @close="closeModal">
         <div class="p-6 space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">
                     Upload Merchant Invoice
                 </h2>
@@ -681,22 +681,22 @@ const showPackagePhotos = async (packageId) => {
                     @change="onFileChange($event)"
                     accept=".bmp, .jpg, .jpeg, .gif, .tif, .tiff, .pdf"
                 />
-                <p class="text-sm text-gray-600 mt-1">
+                <p class="mt-1 text-sm text-gray-600">
                     Accepted File Types: BMP, JPG, JPEG, GIF, TIF, TIFF, PDF
                 </p>
                 <p class="text-sm text-gray-600">Max File Size: 2MB</p>
             </div>
 
             <div v-if="files.length" class="mt-4">
-                <p class="font-medium text-sm mb-1">Selected Files:</p>
-                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                <p class="mb-1 text-sm font-medium">Selected Files:</p>
+                <ul class="pl-5 space-y-1 text-sm text-gray-700 list-disc">
                     <li v-for="(file, index) in files" :key="index">
                         {{ file.name }}
                     </li>
                 </ul>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3">
                 <template v-for="(preview, index) in previews" :key="index">
                     <div class="relative group">
                         <img
@@ -707,7 +707,7 @@ const showPackagePhotos = async (packageId) => {
                         />
                         <button
                             @click="removeImage(index)"
-                            class="absolute top-1 right-1 bg-white text-red-500 border border-red-300 rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 hover:bg-red-100"
+                            class="absolute p-1 text-xs text-red-500 bg-white border border-red-300 rounded-full top-1 right-1 opacity-80 group-hover:opacity-100 hover:bg-red-100"
                             title="Remove"
                         >
                             ❌
@@ -720,7 +720,7 @@ const showPackagePhotos = async (packageId) => {
                             {{ files[index].type }} preview not supported.
                             <button
                                 @click="removeImage(index)"
-                                class="ml-2 text-red-500 underline text-xs"
+                                class="ml-2 text-xs text-red-500 underline"
                             >
                                 Remove
                             </button>
@@ -738,7 +738,7 @@ const showPackagePhotos = async (packageId) => {
                 </button>
                 <button
                     @click="upload"
-                    class="px-4 py-2 text-sm bg-primary-600 text-white"
+                    class="px-4 py-2 text-sm text-white bg-primary-600"
                 >
                     Upload Document
                 </button>
@@ -747,7 +747,7 @@ const showPackagePhotos = async (packageId) => {
     </Modal>
     <Modal :show="isShowPhotosModal" @close="closeModal">
         <div class="p-6 space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">
                     Package Photos
                 </h2>
@@ -760,7 +760,7 @@ const showPackagePhotos = async (packageId) => {
             </div>
 
             <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                 v-if="packagePhotos.length > 0"
             >
                 <img
@@ -768,7 +768,7 @@ const showPackagePhotos = async (packageId) => {
                     :key="index"
                     :src="photo.file_with_url"
                     alt="Package Photo"
-                    class="rounded shadow border"
+                    class="border rounded shadow"
                 />
             </div>
             <div class="text-center text-gray-900" v-else>

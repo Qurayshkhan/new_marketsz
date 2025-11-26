@@ -48,12 +48,12 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
 </script>
 
 <template>
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex items-center justify-between mb-4">
         <div>
             <p>Debit & Credit Cards</p>
             <p>Choose your card for checkout</p>
         </div>
-        <div class="flex gap-2 flex-wrap">
+        <div class="flex flex-wrap gap-2">
             <div class="w-10 h-10"><StripeIcon class="w-full h-full" /></div>
             <div class="w-10 h-10"><MasterCard class="w-full h-full" /></div>
             <div class="w-10 h-10"><Paypal class="w-full h-full" /></div>
@@ -61,7 +61,7 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
                 <AmericaExpress class="w-full h-full" />
             </div>
             <div class="w-10 h-10"><Visa class="w-full h-full" /></div>
-            <div class="w-10 h-10"><IdealPayment class="w-full h-full" /></div>
+            <!-- <div class="w-10 h-10"><IdealPayment class="w-full h-full" /></div> -->
         </div>
         <PrimaryButton class="bg-primary-500" @click="showCardModal">
             +Add Card
@@ -71,7 +71,7 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
     <!-- Dropdown -->
     <div class="relative w-full">
         <div
-            class="bg-white border rounded-lg p-4 flex justify-between items-center cursor-pointer shadow-sm w-full"
+            class="flex items-center justify-between w-full p-4 bg-white border rounded-lg shadow-sm cursor-pointer"
             @click="dropdownOpen = !dropdownOpen"
         >
             <span>
@@ -99,7 +99,7 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
         <!-- Dropdown List -->
         <ul
             v-if="dropdownOpen"
-            class="absolute mt-1 bg-white border rounded-lg shadow-lg w-full max-h-60 overflow-y-auto z-50"
+            class="absolute z-50 w-full mt-1 overflow-y-auto bg-white border rounded-lg shadow-lg max-h-60"
         >
             <li
                 v-for="card in cards"
@@ -108,10 +108,10 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
                     selectedCard = card.id;
                     dropdownOpen = false;
                 "
-                class="p-3 hover:bg-gray-100 cursor-pointer"
+                class="p-3 cursor-pointer hover:bg-gray-100"
             >
                 <p class="font-medium">{{ card.brand }}</p>
-                <p class="text-sm text-gray-500 tracking-widest">
+                <p class="text-sm tracking-widest text-gray-500">
                     **** **** **** {{ card.last4 }}
                 </p>
                 <p class="text-xs text-gray-400">{{ card.address_line1 }}</p>

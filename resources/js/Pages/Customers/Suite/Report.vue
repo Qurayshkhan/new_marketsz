@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const activeIndex = ref(null);
+const isOpenAddress = ref(false);
 
 const toggle = (index) => {
     activeIndex.value = activeIndex.value === index ? null : index;
@@ -26,9 +27,9 @@ const copyText = (text) => {
 
 <template>
     <AuthenticatedLayout>
-        <div class="grid grid-cols-7 gap-4 items-start">
+        <div class="grid items-start gap-4 md:grid-cols-10">
             <!-- Left Side -->
-            <div class="">
+            <div class="col-span-2">
                 <p class="text-lg font-semibold">
                     Suite: {{ $page?.props?.auth?.user?.suite }}
                 </p>
@@ -39,101 +40,134 @@ const copyText = (text) => {
             <div></div>
             <div></div>
             <!-- Right Side -->
-            <div class="space-y-2">
-                <div
-                    v-for="(address, index) in $page.props.auth.user
-                        .default_addresses"
-                    :key="index"
-                    class="shadow-md border border-gray-200 bg-white relative"
-                >
+            <div class="col-span-3 space-y-2">
+                <div class="relative bg-white border border-gray-200 shadow-md">
                     <!-- Header -->
                     <div
                         class="cursor-pointer bg-[#f3f3f4] text-[#9e1d22] font-[700] p-2 flex justify-between items-center"
-                        @click="toggle(index)"
-                    >
+                   @click="isOpenAddress = !isOpenAddress">
                         <div class="flex items-center gap-2">
-                            <span class="ml-2 text-sm px-2 py-1">
-                                {{ index === 1 ? "UK Address" : "US Address" }}
-                            </span>
+                            <span class="px-2 py-1 ml-2 text-sm"
+                                >US Address</span
+                            >
                         </div>
-                        <i
-                            class="fas"
-                            :class="
-                                activeIndex === index
-                                    ? 'fa-chevron-up'
-                                    : 'fa-chevron-down'
-                            "
-                        ></i>
                     </div>
 
                     <!-- Content -->
-                    <transition name="fade">
-                        <div
-                            v-show="activeIndex === index"
-                            class="p-4 space-y-2"
-                        >
-                            <div
-                                v-for="(field, label) in {
-                                    'Address 1': 'address_line_1',
-                                    'Address 2': 'address_line_2',
-                                    City: 'city',
-                                    State: 'state',
-                                    Country: 'country',
-                                    'Postal Code': 'postal_code',
-                                }"
-                                :key="label"
-                                v-if="
-                                    field !== 'address_line_2' ||
-                                    address['address_line_2']
-                                "
-                                class="flex justify-between items-center"
+                    <div class="p-4 space-y-2"  :class="isOpenAddress ? 'block z-10 absolute bg-white w-full shadow-md' : 'hidden'" >
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Address 1:</span
                             >
-                                <span
-                                    class="text-sm text-gray-700 font-semibold"
-                                    >{{ label }}:</span
-                                >
-                                <span
-                                    class="flex items-center gap-2 text-sm text-gray-700"
-                                >
-                                    {{ address[field] }}
-                                    <i
-                                        class="fas fa-copy text-primary-500 cursor-pointer"
-                                        @click="copyText(address[field])"
-                                    ></i>
-                                </span>
-                            </div>
-
-                            <div class="flex justify-between items-center">
-                                <span
-                                    class="text-sm text-gray-700 font-semibold"
-                                    >Phone:</span
-                                >
-                                <span
-                                    class="flex items-center gap-2 text-sm text-gray-700"
-                                >
-                                    +{{ address.country_code }}
-                                    {{ address.phone_number }}
-                                    <i
-                                        class="fas fa-copy text-primary-500 cursor-pointer"
-                                        @click="
-                                            copyText(
-                                                '+' +
-                                                    address.country_code +
-                                                    ' ' +
-                                                    address.phone_number
-                                            )
-                                        "
-                                    ></i>
-                                </span>
-                            </div>
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                2900 NW 112th Ave
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('2900 NW 112th Ave')"
+                                ></i>
+                            </span>
                         </div>
-                    </transition>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Address 2:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                Suite (customer) - Unit 2F
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="
+                                        copyText('Suite (customer) - Unit 2F')
+                                    "
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >City:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                Doral
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('Doral')"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >State:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                Florida
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('Florida')"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Postal Code:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                33172
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('33172')"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Country:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                United States
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('United States')"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700"
+                                >Phone:</span
+                            >
+                            <span
+                                class="flex items-center gap-2 text-sm text-gray-700"
+                            >
+                                +1 9414910433
+                                <i
+                                    class="cursor-pointer fas fa-copy text-primary-500"
+                                    @click="copyText('+1 9414910433')"
+                                ></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Tabs -->
-        <div class="flex gap-2 border-b pb-2 mt-6">
+        <div class="flex flex-wrap gap-2 pb-2 mt-6 border-b">
             <TabLink
                 label="Action Required"
                 :href="route('customer.suiteActionRequired')"
@@ -165,7 +199,7 @@ const copyText = (text) => {
             />
         </div>
 
-        <div class="mt-6 w-full">
+        <div class="w-full mt-6">
             <slot />
         </div>
     </AuthenticatedLayout>

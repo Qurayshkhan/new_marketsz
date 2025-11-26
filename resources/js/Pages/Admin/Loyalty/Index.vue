@@ -1,13 +1,13 @@
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
                     Loyalty Program Dashboard
                 </h2>
                 <Link
                     :href="route('admin.loyalty.rules')"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    class="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                     Manage Rules
                 </Link>
@@ -15,11 +15,11 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Statistics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-4">
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <div class="flex items-center">
@@ -43,7 +43,7 @@
                     </div>
 
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <div class="flex items-center">
@@ -67,7 +67,7 @@
                     </div>
 
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <div class="flex items-center">
@@ -93,7 +93,7 @@
                     </div>
 
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <div class="flex items-center">
@@ -124,24 +124,24 @@
                 </div>
 
                 <!-- Top Users and Recent Transactions -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
                     <!-- Top Loyalty Users -->
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <h3
-                                class="text-lg font-semibold text-gray-900 mb-4"
+                                class="mb-4 text-lg font-semibold text-gray-900"
                             >
                                 Top Loyalty Users
                             </h3>
 
                             <div
                                 v-if="topUsers.length === 0"
-                                class="text-center py-8"
+                                class="py-8 text-center"
                             >
                                 <UsersIcon
-                                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                                    class="w-12 h-12 mx-auto mb-4 text-gray-400"
                                 />
                                 <p class="text-gray-500">
                                     No users with loyalty points yet.
@@ -156,7 +156,7 @@
                                 >
                                     <div class="flex items-center">
                                         <div
-                                            class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center"
+                                            class="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full"
                                         >
                                             <span
                                                 class="text-sm font-medium text-blue-600"
@@ -187,7 +187,7 @@
                             <div class="mt-6 text-center">
                                 <Link
                                     :href="route('admin.loyalty.users')"
-                                    class="text-blue-600 hover:text-blue-800 font-medium"
+                                    class="font-medium text-blue-600 hover:text-blue-800"
                                 >
                                     View All Users →
                                 </Link>
@@ -197,21 +197,21 @@
 
                     <!-- Recent Transactions -->
                     <div
-                        class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+                        class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
                         <div class="p-6">
                             <h3
-                                class="text-lg font-semibold text-gray-900 mb-4"
+                                class="mb-4 text-lg font-semibold text-gray-900"
                             >
                                 Recent Transactions
                             </h3>
 
                             <div
                                 v-if="recentTransactions.length === 0"
-                                class="text-center py-8"
+                                class="py-8 text-center"
                             >
                                 <DocumentTextIcon
-                                    class="w-12 h-12 text-gray-400 mx-auto mb-4"
+                                    class="w-12 h-12 mx-auto mb-4 text-gray-400"
                                 />
                                 <p class="text-gray-500">
                                     No loyalty transactions yet.
@@ -222,7 +222,7 @@
                                 <div
                                     v-for="transaction in recentTransactions"
                                     :key="transaction.id"
-                                    class="border border-gray-200 rounded-lg p-3"
+                                    class="p-3 border border-gray-200 rounded-lg"
                                 >
                                     <div
                                         class="flex items-center justify-between"
@@ -299,7 +299,7 @@
                             <div class="mt-6 text-center">
                                 <Link
                                     :href="route('admin.loyalty.transactions')"
-                                    class="text-blue-600 hover:text-blue-800 font-medium"
+                                    class="font-medium text-blue-600 hover:text-blue-800"
                                 >
                                     View All Transactions →
                                 </Link>

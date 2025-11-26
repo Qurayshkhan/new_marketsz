@@ -1,13 +1,13 @@
-   <header class="relative w-full overflow-hidden text-white">
+   <header class="relative w-full overflow-hidden text-white bg-[#9E1D22]">
        <img class="header-bg" src="{{ asset('assets/image/home/background.svg') }}" alt="background" width="100%">
 
-       <nav class="text-md xl:text-lg font-bold">
-           <div class="flex items-center px-2 lg:px-4 pt-4 lg:p-8">
-               <div class="justify-start flex-auto md:flex md:flex-grow mr-0 md:-mr-20 lg:-mr-20 xl:mr-0">
+       <nav class="font-bold text-md xl:text-lg">
+           <div class="flex items-center px-2 pt-4 lg:px-4 lg:p-8">
+               <div class="justify-start flex-auto mr-0 md:flex md:flex-grow md:-mr-20 lg:-mr-20 xl:mr-0">
                    <a href="{{ route('web.home') }}"><img class="logo" src="{{ asset('assets/image/logo.svg') }}"
                            alt="app-logo"></a>
                </div>
-               <ul class="items-center justify-between hidden ml-2 xl:ml-10 h-full md:flex lg:flex">
+               <ul class="items-center justify-between hidden h-full ml-2 xl:ml-10 md:flex lg:flex">
                    <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
                            href="{{ route('web.calculator') }}">Cost Calculator</a></li>
                    <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
@@ -37,11 +37,11 @@
                        </li>
                    </template>
                </ul>
-               <div class="justify-end items-center hidden md:space-x-1 lg:space-x-2 md:flex md:flex-grow ml-0 lg:ml-4">
+               <div class="items-center justify-end hidden ml-0 md:space-x-1 lg:space-x-2 md:flex md:flex-grow lg:ml-4">
                    <a href="{{ route('login') }}"
-                       class="h-9 border-2 rounded-full border-opacity-25 md:px-1 lg:px-4 flex items-center whitespace-nowrap justify-center hover:border-opacity-100 text-sm lg:text-base border-white">Login</a>
+                       class="flex items-center justify-center text-sm border-2 border-white border-opacity-25 rounded-full h-9 md:px-1 lg:px-4 whitespace-nowrap hover:border-opacity-100 lg:text-base">Login</a>
                    <a href="{{ route('register') }}"
-                       class="h-9 md:px-1 lg:px-4 rounded-full font-bold text-sm md:text-base flex whitespace-nowrap items-center justify-center bg-white text-primary">Get
+                       class="flex items-center justify-center text-sm font-bold bg-white rounded-full h-9 md:px-1 lg:px-4 md:text-base whitespace-nowrap text-primary">Get
                        started</a>
                </div>
                <div class="block md:hidden">

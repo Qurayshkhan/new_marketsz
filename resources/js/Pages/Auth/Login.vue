@@ -36,25 +36,27 @@ const submit = () => {
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
-
+        <div class="text-center">
+            <h1 class="mb-1 text-black title-1">Welcome!</h1>
+        </div>
         <div
-            class="max-w-4xl mx-auto flex flex-col gap-4 md:gap-8 md:flex-row items-center py-8 px-4 rounded-xl"
+            class="flex flex-col items-center max-w-4xl gap-4 px-4 py-8 mx-auto md:gap-8 md:flex-row rounded-xl"
         >
-            <header class="w-full md:w-1/2 text-center">
+            <header class="w-full text-center md:w-1/2">
                 <div class="flex justify-center">
                     <img src="assets/image/home/ship.svg" alt="fish" />
                 </div>
             </header>
             <form
-                class="w-96 bg-rose-50 border-2 border-rose-200 py-4 px-3 sm:p-6 rounded-xl"
+                class="w-full px-3 py-4 border-2 bg-rose-50 border-rose-200 sm:p-6 rounded-xl"
                 @submit.prevent="submit"
             >
                 <div class="mb-6">
-                    <!-- <label for="email" class="block text-left mb-2 text-sm font-medium text-gray-900">Your email</label> -->
+                    <!-- <label for="email" class="block mb-2 text-sm font-medium text-left text-gray-900">Your email</label> -->
                     <TextInput
                         id="email"
                         type="email"
-                        class="mt-1 block w-full"
+                        class="block w-full mt-1"
                         v-model="form.email"
                         required
                         autofocus
@@ -67,14 +69,14 @@ const submit = () => {
                 <div class="mb-6">
                     <!-- <label
                         for="password"
-                        class="block text-left mb-2 text-sm font-medium text-gray-900"
+                        class="block mb-2 text-sm font-medium text-left text-gray-900"
                         >Your password</label
                     > -->
 
                     <TextInput
                         id="password"
                         type="password"
-                        class="mt-1 block w-full"
+                        class="block w-full mt-1"
                         v-model="form.password"
                         required
                         autocomplete="current-password"
@@ -87,7 +89,7 @@ const submit = () => {
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                        class="text-sm text-gray-600 underline rounded-md hover:text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     >
                         Forgot your password?
                     </Link>
@@ -96,13 +98,18 @@ const submit = () => {
                     </PrimaryButton>
                 </div>
             </form>
+             <header class="w-full text-center md:w-1/2">
+                <div class="flex justify-center">
+                    <img src="/assets/image/home/cartoon-plane.svg" alt="fish" />
+                </div>
+            </header>
         </div>
         <div
-            class="flex justify-center text-lg md:text-xl text-gray-600 text-center"
+            class="flex justify-center text-lg text-center text-gray-600 md:text-xl"
         >
             <div class="px-10">
-                <h1 class="title-1 mb-1 text-black">Welcome!</h1>
-                <p class="text-lg md:text-xl text-gray-600 mx-auto mb-2">
+
+                <p class="mx-auto mb-2 text-lg text-gray-600 md:text-xl">
                     Ready to Shop Some More? Your packages are waiting
                 </p>
                 <div>Forgot your password?</div>

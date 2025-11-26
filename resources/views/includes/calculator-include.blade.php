@@ -4,12 +4,12 @@
         you to ship.</p>
 </header>
 <div class="grid max-w-4xl grid-cols-2 gap-2 px-4 mx-auto sm:px-0">
-    <div class="col-span-2 p-8 bg-rose-50 md:col-span-2 rounded-xl w-full">
+    <div class="w-full col-span-2 p-8 bg-rose-50 md:col-span-2 rounded-xl">
         <div class="text-2xl font-bold">1. Where are you shopping?</div>
         <div class="text-gray-600"></div>
         <div class="flex flex-wrap pt-4 -mt-2 -ml-2">
             <button
-                class="mt-2 ml-2 flex-1 text-lg rounded-lg h-14 px-4 flex items-center justify-center whitespace-nowrap border-2 border-black bg-gray-50">
+                class="flex items-center justify-center flex-1 px-4 mt-2 ml-2 text-lg border-2 border-black rounded-lg h-14 whitespace-nowrap bg-gray-50">
                 <div><img draggable="false" class="flex-shrink-0 w-6 mr-2" alt="🇺🇸"
                         src="assets/image/home/1f1fa-1f1f8.png"></div>
                 <span>United States</span>
@@ -22,10 +22,10 @@
         <div class="text-gray-600">We forward to the Caribbean, America, and Canada.</div>
         <div class="relative mt-4">
             <select
-                class="flex items-center justify-between w-full px-4 text-lg border-2 rounded-lg border-black bg-gray-50 h-14"
+                class="flex items-center justify-between w-full px-4 text-lg border-2 border-black rounded-lg bg-gray-50 h-14"
                 id="headlessui-listbox" aria-labelledby="headlessui-listbox-button-5" role="listbox" tabindex="0"
                 aria-activedescendant="headlessui-listbox-option-64">
-                <option value="">🇨🇼Curaçao</option>
+                <option value="">Curacao</option>
                 <option id="headlessui-listbox-option-50" role="option" tabindex="-1">Anguilla</option>
                 <option id="headlessui-listbox-option-51" role="option" tabindex="-1">Antigua and Barbuda</option>
                 <option id="headlessui-listbox-option-52" role="option" tabindex="-1">Argentina</option>
@@ -40,7 +40,7 @@
                 <option id="headlessui-listbox-option-61" role="option" tabindex="-1">Cayman Islands</option>
                 <option id="headlessui-listbox-option-62" role="option" tabindex="-1">Chile</option>
                 <option id="headlessui-listbox-option-63" role="option" tabindex="-1">Colombia</option>
-                <option id="headlessui-listbox-option-64" role="option" tabindex="-1" aria-selected="true">Curaçao
+                <option id="headlessui-listbox-option-64" role="option" tabindex="-1" aria-selected="true">Curacao
                 </option>
                 <option id="headlessui-listbox-option-65" role="option" tabindex="-1">Dominica</option>
                 <option id="headlessui-listbox-option-66" role="option" tabindex="-1">Dominican Republic</option>
@@ -83,7 +83,7 @@
 
     </div>
     <div class="col-span-2 p-6 bg-rose-50 sm:p-8 rounded-xl">
-        <div class="md:flex items-center">
+        <div class="items-center md:flex">
             <div>
                 <div class="text-2xl font-bold">What are you ordering?</div>
                 <div class="text-gray-600">Enter your dimensions for a more accurate quote or choose a product.

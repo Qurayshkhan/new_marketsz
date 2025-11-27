@@ -23,7 +23,7 @@
                                 </path>
                             </svg>
                         </div>
-                        <span>1-3 Hassle Free Shipping</span>
+                        <span>2-4 Hassle Free Shipping</span>
                     </span>
                     <span class="flex items-center space-x-1.5 whitespace-nowrap">
                         <div class="flex items-center justify-center w-5 h-5 text-green-500 bg-white rounded-full">
@@ -76,7 +76,7 @@
                                 required="">
                         </div>
                         <div class="revue-form-actions">
-                            <input type="submit" value="Subscribe"
+                            <input type="submit" value="Get started"
                                 class="cursor-pointer bg-gray-50 focus:ring-2 focus:ring-black font-medium rounded-lg text-rose-900 text-sm px-5 py-2.5 text-center"
                                 name="member[subscribe]" id="member_submit">
                         </div>
@@ -202,7 +202,7 @@
                 <img src="{{ asset('assets') }}/image/home/cartoon-plane.svg" alt="Whale illustration"
                     class="h-20 transform md:h-36 lg:h-40 xl:h-48">
                 <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Whale illustration"
-                    class="h-20 transform md:h-36 lg:h-40 xl:h-48">
+                    class="">
             </div>
         </div>
         <div class="relative z-10 pt-12 pb-12 bg-rose-50 sm:pb-20 sm:pt-0 on-gray">
@@ -213,7 +213,7 @@
                         If you are looking for a hassle-free worldwide shopping and shipping experience, you
                         have come to the
                         right place. Guaranteed and quick deliveries from the most known couriers like DHL,
-                        Fedex, Seafraid and AirCargo.</p>
+                        Fedex, Sea-freight and Air-Cargo.</p>
                 </header>
                 <div class="max-w-6xl px-5 mx-auto text-xl leading-relaxed text-center">
                     <p>Don’t wait in line at a pickup store! Get your orders delivered right at your door.</p>
@@ -445,7 +445,7 @@
                                             <line x1="6" y1="6" x2="18" y2="18"></line>
                                         </svg>
                                     </div>
-                                    Only Air Freight
+                                    Only Air-Freight
                                 </td>
                             </tr>
 
@@ -844,9 +844,9 @@
             </div>
             <div class="flex flex-col items-center">
                 <div class="p-4 text-4xl"><i class="fa fa-database" aria-hidden="true"></i></div>
-                <div class="pl-4 text-lg font-bold leading-tight">30 Days of FREE storage</div>
+                <div class="pl-4 text-lg font-bold leading-tight">90 Days of FREE storage</div>
                 <div class="pt-1 pl-4 leading-snug text-center">
-                    Want to wait before shipping? No problem! We will store your products for you for 30 days
+                    Want to wait before shipping? No problem! We will store your products for you for 90 days
                     completely
                     free of charge.</div>
             </div>
@@ -857,7 +857,7 @@
             <img alt="Seahorse illustration" src="{{ asset('assets') }}/image/home/ship.svg"
                 class="absolute hidden w-auto h-40 md:-left-36 lg:left-2 xl:left-24 top-48 animate-float md:block">
             <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/cartoon-plane.svg"
-                class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:-mr-0 md:right-2 md:top-1/2 md:-translate-y-1/2 lg:right-24 xl:right-32 animate-wiggle">
+                class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:right-0 md:top-1/3 md:-translate-y-1/2 lg:right-24 xl:right-0 animate-wiggle">
             <section class="container pt-12 space-y-12 sm:pt-20">
                 <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
                     <h2 class="text-3xl font-bold leading-snug sm:text-4xl">It’s time to shop till you drop
@@ -923,10 +923,10 @@
                                     placeholder="Your email address..." type="email" name="member[email]"
                                     id="member_email" required="">
                             </div>
-                            <div class="">
+                            <div class="w-full">
                                 <button type="submit"
-                                    class="bg-primary focus:ring-2 focus:ring-black font-medium rounded-lg text-white text-sm px-5 py-2.5 text-center"
-                                    name="" id="" style="background-color:#9E1D22">Subscribe</button>
+                                    class="w-full bg-primary focus:ring-2 focus:ring-black font-medium rounded-lg text-white text-sm px-2  py-2.5 text-center"
+                                    name="" id="" style="background-color:#9E1D22">Get Started</button>
                             </div>
                         </div>
                     </form>

@@ -1,7 +1,7 @@
 @extends('layout.master')
 @section('title', 'Contact')
 @section('content')
-    <section class="container space-y-12 pt-12 sm:pt-20" id="meettheteam">
+    <section class="container pt-12 space-y-12 sm:pt-20" id="meettheteam">
         <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
             <h2 class="text-3xl font-bold leading-snug sm:text-4xl">Meet the Marketsz team</h2>
             <p class="mt-2 text-xl leading-snug sm:text-2xl">Marketsz is a diverse team of fun-loving individuals from around
@@ -200,7 +200,7 @@
                 class="absolute hidden w-auto h-40 md:-left-36 lg:left-2 xl:left-24 top-48 animate-float md:block">
             <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/cartoon-plane.svg"
                 class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:-mr-0 md:right-2 md:top-1/2 md:-translate-y-1/2 lg:right-24 xl:right-32 animate-wiggle">
-            <section class="container space-y-12 pt-12 sm:pt-20">
+            <section class="container pt-12 space-y-12 sm:pt-20">
                 <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
                     <h2 class="text-3xl font-bold leading-snug sm:text-4xl">It’s time to shop till you drop and get your
                         orders in record time!</h2>
@@ -211,7 +211,7 @@
                     <div
                         class="flex flex-col flex-wrap items-center justify-center space-y-2 text-lg font-bold text-center sm:flex-row sm:space-y-0 sm:space-x-5 mb-7">
                         <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                            <div class="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">
+                            <div class="flex items-center justify-center w-5 h-5 text-white rounded-full bg-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
@@ -220,7 +220,7 @@
                             </div><span>2-4 Days Shipping</span>
                         </span>
                         <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                            <div class="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">
+                            <div class="flex items-center justify-center w-5 h-5 text-white rounded-full bg-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
@@ -230,7 +230,7 @@
                             <span>Combine &amp; Track</span>
                         </span>
                         <span class="flex items-center space-x-1.5 whitespace-nowrap">
-                            <div class="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">
+                            <div class="flex items-center justify-center w-5 h-5 text-white rounded-full bg-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
@@ -244,10 +244,10 @@
                         <form action="register.html" method="get" class="relative w-full max-w-sm"><input
                                 type="hidden" name="country" value="">
                             <input type="email" name="email" placeholder="someone@mail.com"
-                                class="w-full bg-white rounded-full h-14 pl-4 text-gray-900 focus:ring-2 placeholder-gray-500 text-base sm:text-lg border border-gray-300"
+                                class="w-full pl-4 text-base text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-full h-14 focus:ring-2 sm:text-lg"
                                 aria-label="Enter your email address">
                             <button
-                                class="absolute flex items-center h-10 px-4 font-bold text-white bg-primary rounded-full top-2 right-2">Get
+                                class="absolute flex items-center h-10 px-4 font-bold text-white rounded-full bg-primary top-2 right-2">Get
                                 started</button>
                         </form>
                     </template>
@@ -267,7 +267,7 @@
                             <div class="">
                                 <button type="submit"
                                     class="bg-primary focus:ring-2 focus:ring-black font-medium rounded-lg text-white text-sm px-5 py-2.5 text-center"
-                                    name="" id="" style="background-color:#9E1D22">Subscribe</button>
+                                    name="" id="" style="background-color:#9E1D22">Get Started</button>
                             </div>
                         </div>
                     </form>

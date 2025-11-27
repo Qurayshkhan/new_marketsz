@@ -19,12 +19,13 @@
     </div>
     <div class="col-span-2 p-8 bg-rose-50 md:col-span-2 rounded-xl">
         <div class="text-2xl font-bold">2. Where should we send your package?</div>
-        <div class="text-gray-600">We forward to the Caribbean, America, and Canada.</div>
+        <div class="text-gray-600">We forward to the Caribbean</div>
         <div class="relative mt-4">
             <select
                 class="flex items-center justify-between w-full px-4 text-lg border-2 border-black rounded-lg bg-gray-50 h-14"
                 id="headlessui-listbox" aria-labelledby="headlessui-listbox-button-5" role="listbox" tabindex="0"
                 aria-activedescendant="headlessui-listbox-option-64">
+                <option value="">Select your country</option>
                 <option value="">Curacao</option>
                 <option id="headlessui-listbox-option-50" role="option" tabindex="-1">Anguilla</option>
                 <option id="headlessui-listbox-option-51" role="option" tabindex="-1">Antigua and Barbuda</option>

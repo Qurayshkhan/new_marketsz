@@ -17,6 +17,7 @@ const form = useForm({
     country: "",
     address: "",
     state: "",
+    city: "",
     zip_code: "",
     tax_id: "",
     year: "",
@@ -60,10 +61,10 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
         <main
-            class="container flex-1 flex justify-center items-center pt-4 pb-16 md:pt-12 md:pb-24 md:-mt-20"
+            class="container flex items-center justify-center flex-1 pt-4 pb-16 md:pt-12 md:pb-24 md:-mt-20"
             id="auth-form"
         >
-            <div class="text-center w-full max-w-md">
+            <div class="w-full max-w-md text-center">
                 <header class="mb-6 md:mb-8">
                     <div class="flex justify-center py-8">
                         <img
@@ -77,23 +78,23 @@ const submit = () => {
                             width="72%"
                         />
                     </div>
-                    <h1 class="title-1 mb-1 text-black">
+                    <h1 class="mb-1 text-black title-1">
                         Get Your FREE USA Shipping Address
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-600 mx-auto">
+                    <p class="mx-auto text-lg text-gray-600 md:text-xl">
                         As soon as your register, you can instantly get your
                         addresses and start shopping and shipping
                     </p>
                 </header>
                 <form
                     id="signup_form"
-                    class="bg-red-50 p-4 rounded-xl"
+                    class="p-4 bg-red-50 rounded-xl"
                     @submit.prevent="submit"
                 >
-                    <div class="label-input mb-2 text-black">
+                    <div class="mb-2 text-black label-input">
                         <select
                             required="required"
-                            class="input bg-white"
+                            class="bg-white input"
                             v-model="form.country"
                         >
                             <option value="">Choose…</option>
@@ -109,7 +110,7 @@ const submit = () => {
                     </div>
                     <div>
                         <div class="d-flex">
-                            <div class="label-input mb-2">
+                            <div class="mb-2 label-input">
                                 <TextInput
                                     placeholder="State"
                                     required="required"
@@ -120,7 +121,18 @@ const submit = () => {
                                 />
                                 <label>State</label>
                             </div>
-                            <div class="label-input mb-2">
+                            <div class="mb-2 label-input">
+                                <TextInput
+                                    placeholder="City"
+                                    required="required"
+                                    autocapitalize="sentences"
+                                    class="rounded"
+                                    type="text"
+                                    v-model="form.city"
+                                />
+                                <label>City</label>
+                            </div>
+                            <div class="mb-2 label-input">
                                 <TextInput
                                     placeholder="Zip code"
                                     required="required"
@@ -133,9 +145,9 @@ const submit = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="flex mb-2 justify-between">
+                    <div class="flex justify-between mb-2">
                         <div class="">
-                            <div class="label-input flex-1">
+                            <div class="flex-1 label-input">
                                 <TextInput
                                     v-model="form.first_name"
                                     required
@@ -155,7 +167,7 @@ const submit = () => {
                             />
                         </div>
                         <div class="">
-                            <div class="label-input flex-1 ml-2">
+                            <div class="flex-1 ml-2 label-input">
                                 <TextInput
                                     v-model="form.last_name"
                                     required
@@ -174,7 +186,7 @@ const submit = () => {
                         </div>
                     </div>
                     <div>
-                        <div class="label-input mb-2">
+                        <div class="mb-2 label-input">
                             <TextInput
                                 placeholder="Mobile phone number"
                                 required="required"
@@ -188,7 +200,7 @@ const submit = () => {
                         <InputError class="mt-2" :message="form.errors.phone" />
                     </div>
                     <div>
-                        <div class="label-input mb-2">
+                        <div class="mb-2 label-input">
                             <TextInput
                                 placeholder="Email address"
                                 required="required"
@@ -201,7 +213,7 @@ const submit = () => {
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
                     <div>
-                        <div class="label-input mb-2">
+                        <div class="mb-2 label-input">
                             <TextInput
                                 placeholder="Password"
                                 required="required"
@@ -216,7 +228,7 @@ const submit = () => {
                             :message="form.errors.password"
                         />
                     </div>
-                    <div class="label-input mb-2">
+                    <div class="mb-2 label-input">
                         <TextInput
                             placeholder="Tax ID Optional"
                             class="rounded"
@@ -226,17 +238,17 @@ const submit = () => {
                         <label>Tax id</label>
                     </div>
                     <!-- <label
-                        class="flex checkbox mt-4 text-left text-sm leading-snug items-start text-black"
+                        class="flex items-start mt-4 text-sm leading-snug text-left text-black checkbox"
                     >
-                        <span class="checkbox-label mt-px"></span>
+                        <span class="mt-px checkbox-label"></span>
                     </label> -->
-                    <p class="text-black text-left">
+                    <p class="text-left text-black">
                         You must be over 18 years in order to create an account
                     </p>
                     <div class="flex mb-3 text-black bg-white">
                         <select
                             required="required"
-                            class="input flex-1 bg-white"
+                            class="flex-1 bg-white input"
                             v-model="form.year"
                         >
                             <option value="">Year</option>
@@ -250,7 +262,7 @@ const submit = () => {
                         </select>
                         <select
                             required="required"
-                            class="input flex-1 ml-2 bg-white"
+                            class="flex-1 ml-2 bg-white input"
                             v-model="form.month"
                         >
                             <option value="">Month</option>
@@ -264,7 +276,7 @@ const submit = () => {
                         </select>
                         <select
                             required="required"
-                            class="input flex-1 ml-2 bg-white"
+                            class="flex-1 ml-2 bg-white input"
                             v-model="form.day"
                         >
                             <option value="">Day</option>
@@ -276,7 +288,7 @@ const submit = () => {
                     <div class="flex items-center text-black">
                         <Checkbox class="mx-2" required />
                         <p>
-                            <span class="checkbox-label mt-px">
+                            <span class="mt-px checkbox-label">
                                 By signing up I agree to the
                                 <a
                                     class="underline"
@@ -296,7 +308,7 @@ const submit = () => {
                             Register
                         </PrimaryButton>
                         <div
-                            class="mt-5 max-w-xs mx-auto text-xs text-center text-gray-600"
+                            class="max-w-xs mx-auto mt-5 text-xs text-center text-gray-600"
                         >
                             By submitting this form you agree to receive
                             occasional emails from us. You can unsubscribe at

@@ -23,18 +23,18 @@ const props = defineProps({
                 <li class="mb-2">
                     <Link
                         :href="route('customer.dashboard')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 $page.url.startsWith('/customer/suite'),
                         }"
                     >
-                        <i class="fa-solid fa-house w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-house"></i>
                         My Suite
                     </Link>
                     <Link
                         :href="route('customer.shipment.myShipments')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700': $page.url.startsWith(
                                 '/customer/shipment/'
@@ -42,40 +42,40 @@ const props = defineProps({
                         }"
                     >
                         <i
-                            class="fa-solid fa-cart-shopping text-white w-5 h-5 mr-3"
+                            class="w-5 h-5 mr-3 text-white fa-solid fa-cart-shopping"
                         ></i>
                         My Shipments
                     </Link>
                     <Link
                         :href="route('customer.account.profile')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700': $page.url.startsWith(
                                 '/customer/account-setting'
                             ),
                         }"
                     >
-                        <i class="fa-solid fa-gear w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-gear"></i>
                         Account Setting
                     </Link>
-                    <Link
+                    <!-- <Link
                         :href="route('customer.loyalty.dashboard')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 $page.url.startsWith('/customer/loyalty'),
                         }"
                     >
-                        <i class="fa-solid fa-star w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-star"></i>
                         Loyalty Points
-                    </Link>
+                    </Link> -->
                     <Link
                         :href="route('logout')"
                         method="post"
-                        class="flex items-center w-full p-3 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"
+                        class="flex items-center w-full p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                     >
                         <i
-                            class="fa-solid fa-arrow-right-from-bracket mr-3"
+                            class="mr-3 fa-solid fa-arrow-right-from-bracket"
                         ></i>
                         Logout
                     </Link>

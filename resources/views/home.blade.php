@@ -3,9 +3,25 @@
 @section('content')
     <header class="relative w-full overflow-hidden text-white bg-[#9E1D22]">
         <img class="header-bg" src="assets/image/home/background.svg" alt="background" width="100%">
-        <header class="container pt-16 space-y-12 sm:pt-32">
+        <header class="pt-16 space-y-12 container-fluid sm:pt-32">
+            <div class="relative z-10 mx-auto mt-12 max-w-7xl">
+                <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
+                <div class="flex items-end justify-between">
+                    <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
+                    {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
+                    <img src="{{ asset('assets') }}/image/home/dolphin.png" alt="Dolphin"
+                        class="z-10 -mb-px dolphin city xl:mx-0">
+                    <div class="w-full">
+                        <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship"
+                            class="z-10 -mb-px xl:mx-0 city ship">
+                    </div>
+                    <img src="assets/image/home/home2.svg" alt="EU illustration" class="city">
+                </div>
+            </div>
             <div class="px-4 mx-auto text-center sm:px-0 max-w-7xl">
-                <h1 class="text-4xl font-bold leading-snug sm:text-10xl">Hassle-Free Shipping and Forwarding</h1>
+                <h1 class="text-4xl font-bold leading-snug text-white sm:text-10xl">Get Your Tax Free USA Shipping
+                    Address for the
+                    Caribbean</h1>
                 <div class="block mx-auto text-4xl font-bold">From the US to The Caribbean</div>
                 <p class="mx-auto mt-3 text-xl sm:text-2xl">
                     Shop at any online store using your unique and personal Marketsz USA Address and we quickly ship your
@@ -57,24 +73,9 @@
                             Started</button>
                     </form>
                 </template>
-                <form action="https://www.getrevue.co/profile/flowbite/add_subscriber" method="post" id="revue-form"
-                    name="revue-form">
+                <form action="{{ route('register') }}" method="GET" id="revue-form" name="revue-form">
                     <div class="flex items-center mb-3">
-                        <div class="relative w-full mr-3 revue-form-group">
-                            <label for="member_email"
-                                class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
-                                address</label>
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <!-- <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                                                                                                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                                                                                                            </svg> -->
-                            </div>
-                            <input
-                                class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
-                                placeholder="Your email address..." type="email" name="member[email]" id="member_email"
-                                required="">
-                        </div>
+
                         <div class="revue-form-actions">
                             <input type="submit" value="Get started"
                                 class="cursor-pointer bg-gray-50 focus:ring-2 focus:ring-black font-medium rounded-lg text-rose-900 text-sm px-5 py-2.5 text-center"
@@ -82,20 +83,9 @@
                         </div>
                     </div>
                 </form>
-                <div class="flex items-center mt-2 text-sm text-center">Shop - Ship - Receive</div>
             </div>
         </header>
-        <div class="relative z-10 mx-auto mt-12 max-w-7xl">
-            <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
-            <div class="flex items-end justify-between">
-                <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
-                {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
-            <div class="w-full">
-                <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship" class="z-10 -mb-px xl:mx-0 city ship">
-            </div>
-                <img src="assets/image/home/home2.svg" alt="EU illustration" class="city">
-            </div>
-        </div>
+
         <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
             class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
         <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
@@ -104,22 +94,9 @@
             class="absolute h-10 mr-8 opacity-50 right-8 top-64">
         <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
             class="absolute h-8 opacity-25 top-80 left-20">
-        {{-- <div class="w-40">
-            <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship" class="z-10 w-full -mb-px xl:mx-0 ship">
-        </div> --}}
+
     </header>
-    {{-- <div class="relative z-10 mx-auto mt-12 max-w-7xl">
-        <img src="{{ asset('assets') }}/image/home/airplane.svg" alt="EU illustration"
-            class="z-10 -mb-px xl:mx-0 airplane">
-        <div class="flex items-end justify-between">
-            <img src="{{ asset('assets/image/home/us-with-plane.svg') }}" alt="U.S. illustration" class="city">
-            <img src="{{ asset('assets/image/home/island.svg') }}" alt="Island illustration" class="city">
-            <img src="{{ asset('assets/image/home/home2.svg') }}" alt="EU illustration" class="city">
-        </div>
-        <div class="w-40">
-            <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship" class="z-10 w-full -mb-px xl:mx-0 ship">
-        </div>
-    </div> --}}
+
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
         class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
@@ -201,8 +178,7 @@
             <div class="animate-wiggle">
                 <img src="{{ asset('assets') }}/image/home/cartoon-plane.svg" alt="Whale illustration"
                     class="h-20 transform md:h-36 lg:h-40 xl:h-48">
-                <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Whale illustration"
-                    class="">
+                <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Whale illustration" class="">
             </div>
         </div>
         <div class="relative z-10 pt-12 pb-12 bg-rose-50 sm:pb-20 sm:pt-0 on-gray">
@@ -227,7 +203,7 @@
                 <div class="grid grid-cols-1 gap-12 px-4 md:grid-cols-3 sm:px-0">
                     <div class="p-4 text-center bg-gray-50 rounded-xl">
                         <div class="flex items-center justify-center"><img
-                                src="{{ asset('assets') }}/image/home/shipment.svg" alt="" class="max-h-32">
+                                src="{{ asset('assets') }}/image/home/delivery.png" alt="" class="max-h-32">
                         </div>
                         <div class="mt-5 text-2xl font-bold leading-tight">Quick and Guaranteed Shopping and
                             Shipping</div>
@@ -431,7 +407,7 @@
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                     </div>
-                                    Air Cargo & Sea Freight
+                                    Air-Cargo & Sea-Freight
                                 </td>
 
                                 <!-- Competitors Column -->
@@ -911,18 +887,9 @@
                         </form>
                     </template>
 
-                    <form action="https://www.getrevue.co/profile/flowbite/add_subscriber" method="post" id="revue-form"
-                        name="revue-form">
+                    <form action="{{ route('register') }}" method="get" id="revue-form" name="revue-form">
                         <div class="flex items-center mb-3">
-                            <div class="relative w-full mr-3 revue-form-group">
-                                <label for="member_email"
-                                    class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
-                                    address</label>
-                                <input
-                                    class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
-                                    placeholder="Your email address..." type="email" name="member[email]"
-                                    id="member_email" required="">
-                            </div>
+
                             <div class="w-full">
                                 <button type="submit"
                                     class="w-full bg-primary focus:ring-2 focus:ring-black font-medium rounded-lg text-white text-sm px-2  py-2.5 text-center"
@@ -930,7 +897,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="flex items-center mt-2 text-sm text-center">Quick • Simple • Free</div>
+                    {{-- <div class="flex items-center mt-2 text-sm text-center">Quick • Simple • Free</div> --}}
                 </div>
             </section>
         </div>

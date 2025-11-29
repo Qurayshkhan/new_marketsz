@@ -1,18 +1,18 @@
-   <header class="relative w-full overflow-hidden text-white bg-[#9E1D22]">
+   <header class="relative w-full overflow-hidden text-white bg-white">
        <img class="header-bg" src="{{ asset('assets/image/home/background.svg') }}" alt="background" width="100%">
 
        <nav class="font-bold text-md xl:text-lg">
            <div class="flex items-center px-2 pt-4 lg:px-4 lg:p-8">
                <div class="justify-start flex-auto mr-0 md:flex md:flex-grow md:-mr-20 lg:-mr-20 xl:mr-0">
-                   <a href="{{ route('web.home') }}"><img class="logo" src="{{ asset('assets/image/logo.svg') }}"
-                           alt="app-logo"></a>
+                   <a href="{{ route('web.home') }}"><img class="logo"
+                           src="{{ asset('assets/image/logo-original.svg') }}" alt="app-logo"></a>
                </div>
                <ul class="items-center justify-between hidden h-full ml-2 xl:ml-10 md:flex lg:flex">
-                   <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                   <li class="relative z-20 mx-1 text-black lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
                            href="{{ route('web.calculator') }}">Cost Calculator</a></li>
-                   <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                   <li class="relative z-20 mx-1 text-black lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
                            href="{{ route('web.about') }}">About</a></li>
-                   <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                   <li class="relative z-20 mx-1 text-black lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
                            href="{{ route('web.contact') }}">Contact US</a></li>
                    <template>
                        <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6">
@@ -37,12 +37,19 @@
                        </li>
                    </template>
                </ul>
+               {{-- <div class="items-center justify-end hidden ml-0 md:space-x-1 lg:space-x-2 md:flex md:flex-grow lg:ml-4">
+                   <a href="{{ route('login') }}"
+                       class="flex items-center justify-center text-sm border-2 border-white border-opacity-25 rounded-full h-9 md:px-1 lg:px-4 whitespace-nowrap hover:border-opacity-100 lg:text-base text-primary-500">Login</a>
+                   <a href="{{ route('register') }}"
+                       class="flex items-center justify-center text-sm font-bold bg-white border rounded-full border-[#9e1d22] h-9 md:px-1 lg:px-4 md:text-base whitespace-nowrap text-primary">Get
+                       started</a>
+               </div> --}}
                <div class="items-center justify-end hidden ml-0 md:space-x-1 lg:space-x-2 md:flex md:flex-grow lg:ml-4">
                    <a href="{{ route('login') }}"
-                       class="flex items-center justify-center text-sm border-2 border-white border-opacity-25 rounded-full h-9 md:px-1 lg:px-4 whitespace-nowrap hover:border-opacity-100 lg:text-base">Login</a>
+                       class="border !text-[#9e1d22] !border-[#9e1d22] px-3 py-2 rounded-full">Login</a>
                    <a href="{{ route('register') }}"
-                       class="flex items-center justify-center text-sm font-bold bg-white rounded-full h-9 md:px-1 lg:px-4 md:text-base whitespace-nowrap text-primary">Get
-                       started</a>
+                       class="border !text-white !border-[#9e1d22] p-2 rounded-full !bg-[#9e1d22]">Get Started</a>
+
                </div>
                <div class="block md:hidden">
                    <button aria-label="Open menu" class="p-2">

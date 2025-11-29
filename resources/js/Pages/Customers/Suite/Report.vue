@@ -45,7 +45,8 @@ const copyText = (text) => {
                     <!-- Header -->
                     <div
                         class="cursor-pointer bg-[#f3f3f4] text-[#9e1d22] font-[700] p-2 flex justify-between items-center"
-                   @click="isOpenAddress = !isOpenAddress">
+                        @click="isOpenAddress = !isOpenAddress"
+                    >
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-1 ml-2 text-sm"
                                 >US Address</span
@@ -54,7 +55,14 @@ const copyText = (text) => {
                     </div>
 
                     <!-- Content -->
-                    <div class="p-4 space-y-2"  :class="isOpenAddress ? 'block z-10 absolute bg-white w-full shadow-md' : 'hidden'" >
+                    <div
+                        class="p-4 space-y-2"
+                        :class="
+                            isOpenAddress
+                                ? 'block z-10 absolute bg-white w-full shadow-md'
+                                : 'hidden'
+                        "
+                    >
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-semibold text-gray-700"
                                 >Address 1:</span
@@ -77,11 +85,13 @@ const copyText = (text) => {
                             <span
                                 class="flex items-center gap-2 text-sm text-gray-700"
                             >
-                                Suite (customer) - Unit 2F
+                                {{ $page?.props?.auth?.user?.suite }} - Unit 2F
                                 <i
                                     class="cursor-pointer fas fa-copy text-primary-500"
                                     @click="
-                                        copyText('Suite (customer) - Unit 2F')
+                                        copyText(
+                                            `${$page?.props?.auth?.user?.suite} - Unit 2F`
+                                        )
                                     "
                                 ></i>
                             </span>

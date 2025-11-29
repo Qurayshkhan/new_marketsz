@@ -1,4 +1,4 @@
-<header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
+<header class="max-w-2xl px-4 mx-auto text-center sm:pt-24">
     <h2 class="text-3xl font-bold leading-snug sm:text-4xl">How much does it cost?</h2>
     <p class="mt-2 text-xl leading-snug sm:text-2xl">Use our calculator to estimate exactly how much it would cost
         you to ship.</p>

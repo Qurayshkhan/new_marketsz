@@ -5,7 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
     userAddresses: Array,
@@ -15,7 +15,6 @@ const emit = defineEmits(["setSelectedAddress"]);
 const showModal = ref(false);
 const selectedAddress = ref(null);
 const dropdownOpen = ref(false);
-
 watch(selectedAddress, (val) => {
     emit("setSelectedAddress", val);
 });
@@ -83,10 +82,29 @@ const getAddressLabel = (address) => {
         address.city || ""
     }, ${address.country}`;
 };
+
+watch(
+    () => props.userAddresses,
+    (list) => {
+        if (!selectedAddress.value) {
+            const defaultUS = list.find((a) => a.is_default_us);
+            if (defaultUS) selectedAddress.value = defaultUS.id;
+        }
+    },
+    { immediate: true }
+);
+
+onMounted(() => {
+    const defaultUS = props.userAddresses.find((a) => a.is_default_us);
+
+    if (defaultUS) {
+        selectedAddress.value = defaultUS.id;
+    }
+});
 </script>
 
 <template>
-    <div class="mb-4 flex justify-between items-center mt-2">
+    <div class="flex items-center justify-between mt-2 mb-4">
         <div>
             <p>Shipping Address</p>
             <p>Choose your address for shipping</p>
@@ -97,7 +115,7 @@ const getAddressLabel = (address) => {
     <!-- Dropdown -->
     <div class="relative w-full">
         <div
-            class="bg-white border rounded-lg p-4 flex justify-between items-center cursor-pointer shadow-sm"
+            class="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm cursor-pointer"
             @click="dropdownOpen = !dropdownOpen"
         >
             <span>
@@ -129,7 +147,7 @@ const getAddressLabel = (address) => {
         <!-- Address List -->
         <ul
             v-if="dropdownOpen"
-            class="absolute mt-1 bg-white border rounded-lg shadow-lg w-full max-h-60 overflow-y-auto z-50"
+            class="absolute z-50 w-full mt-1 overflow-y-auto bg-white border rounded-lg shadow-lg max-h-60"
         >
             <li
                 v-for="address in props.userAddresses"
@@ -138,7 +156,7 @@ const getAddressLabel = (address) => {
                     selectedAddress = address.id;
                     dropdownOpen = false;
                 "
-                class="p-3 hover:bg-gray-100 cursor-pointer"
+                class="p-3 cursor-pointer hover:bg-gray-100"
             >
                 <p class="font-medium">{{ address.full_name }}</p>
                 <p class="text-sm text-gray-500">
@@ -156,7 +174,7 @@ const getAddressLabel = (address) => {
     <!-- Add/Edit Modal -->
     <Modal :show="showModal" @close="showModal = false">
         <div class="p-6">
-            <h2 class="text-xl font-semibold mb-4 text-black">
+            <h2 class="mb-4 text-xl font-semibold text-black">
                 {{ form.id ? "Edit Address" : "Add New Address" }}
             </h2>
             <form @submit.prevent="saveAddress" class="grid gap-3">
@@ -205,7 +223,7 @@ const getAddressLabel = (address) => {
                     />
                 </div>
 
-                <div class="mt-4 flex justify-end gap-2">
+                <div class="flex justify-end gap-2 mt-4">
                     <SecondaryButton type="button" @click="showModal = false">
                         Cancel
                     </SecondaryButton>

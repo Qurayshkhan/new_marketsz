@@ -32,9 +32,15 @@ const bulkCheckbox = ref(false);
 const selectedService = ref(null);
 const dropdownOpen = ref(false);
 const estimatedAmount = ref(0);
+
+const totalValue = ref(0);
+const totalWeight = ref(0);
+const totalPackages = ref(0);
+
 watch(selectedIds, () => {
     bulkCheckbox.value = selectedIds.value.length === readyToSends.length;
     calculateEstimatedShipment();
+    calculateTotals();
 });
 
 const selectAll = (e) => {
@@ -167,10 +173,22 @@ const calculateEstimatedShipment = async () => {
     estimatedAmount.value = amount;
 };
 
+const calculateTotals = () => {
+    const selected = readyToSends.filter((item) =>
+        selectedIds.value.includes(item.id)
+    );
+
+    totalPackages.value = selected.length;
+    totalValue.value = selected.reduce(
+        (sum, p) => sum + Number(p.total_value),
+        0
+    );
+    totalWeight.value = selected.reduce((sum, p) => sum + Number(p.weight), 0);
+};
 onMounted(() => {
     selectedIds.value = readyToSends.map((item) => item.id);
-
     calculateEstimatedShipment();
+    calculateTotals();
 });
 </script>
 
@@ -182,9 +200,9 @@ onMounted(() => {
         :readyToSendCount="props?.packageCounts?.ready_to_send"
         :allPackagesCount="props?.packageCounts?.all"
     >
-        <div class="grid grid-cols-12 gap-4">
-            <div class="col-span-9">
-                <table class="w-full border text-center data-table text-sm">
+        <div class="grid gap-4 md:grid-cols-12">
+            <div class="md:col-span-9">
+                <table class="w-full text-sm text-center border data-table">
                     <thead class="uppercase bg-gray-100">
                         <tr>
                             <th>
@@ -207,7 +225,7 @@ onMounted(() => {
                             <th>Total weight</th>
                             <th>
                                 <input
-                                    class="border-gray-300 text-primary-600 shadow-sm focus:ring-primary-500"
+                                    class="border-gray-300 shadow-sm text-primary-600 focus:ring-primary-500"
                                     type="checkbox"
                                     v-model="bulkCheckbox"
                                     @change="selectAll"
@@ -246,7 +264,7 @@ onMounted(() => {
                                 </td>
                                 <td>
                                     {{
-                                        __to_fixed_number(
+                                        __currency_format(
                                             readyToSend.total_value
                                         )
                                     }}
@@ -255,7 +273,7 @@ onMounted(() => {
                                 <td>{{ readyToSend.weight }} lbs</td>
                                 <td class="whitespace-nowrap !text-center">
                                     <input
-                                        class="border-gray-300 text-primary-600 shadow-sm focus:ring-primary-500"
+                                        class="border-gray-300 shadow-sm text-primary-600 focus:ring-primary-500"
                                         type="checkbox"
                                         :value="readyToSend.id"
                                         v-model="selectedIds"
@@ -267,7 +285,7 @@ onMounted(() => {
                                     v-if="expandedRows.has(readyToSend.id)"
                                     class="bg-gray-50"
                                 >
-                                    <td colspan="6" class="text-left px-5">
+                                    <td colspan="6" class="px-5 text-left">
                                         <div>
                                             <strong
                                                 >Upload Merchant Invoice</strong
@@ -306,7 +324,7 @@ onMounted(() => {
 
                                                         <div>
                                                             <button
-                                                                class="btn bg-primary-500 text-white"
+                                                                class="text-white btn bg-primary-500"
                                                                 @click="
                                                                     showPackagePhotos(
                                                                         readyToSend.id
@@ -337,7 +355,7 @@ onMounted(() => {
                                                                 }}
                                                             </p>
                                                             <p
-                                                                class="text-md text-gray-600"
+                                                                class="text-gray-600 text-md"
                                                             >
                                                                 {{
                                                                     item?.description
@@ -354,17 +372,21 @@ onMounted(() => {
                                                                 }}
                                                             </p>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{ item?.quantity }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{
-                                                                item?.value_per_unit
+                                                                __currency_format(
+                                                                    item?.value_per_unit
+                                                                )
                                                             }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{
-                                                                item?.total_line_value
+                                                                __currency_format(
+                                                                    item?.total_line_value
+                                                                )
                                                             }}
                                                         </td>
                                                     </tr>
@@ -391,7 +413,9 @@ onMounted(() => {
                                                                     of this
                                                                     package: </span
                                                                 >{{
-                                                                    readyToSend.total_value
+                                                                    __currency_format(
+                                                                        readyToSend.total_value
+                                                                    )
                                                                 }}
                                                                 USD
                                                             </p>
@@ -405,7 +429,7 @@ onMounted(() => {
                                                         >
                                                             <div class="w-full">
                                                                 <label
-                                                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                                                    class="block mb-2 text-sm font-medium text-gray-700"
                                                                     >Optional
                                                                     Services</label
                                                                 >
@@ -414,7 +438,7 @@ onMounted(() => {
                                                                 >
                                                                     <button
                                                                         type="button"
-                                                                        class="w-full border border-gray-300 bg-white rounded-md shadow-sm pl-4 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                                                                        class="w-full py-2 pl-4 pr-10 text-sm text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                                                                         @click="
                                                                             toggleDropdown
                                                                         "
@@ -431,7 +455,7 @@ onMounted(() => {
                                                                             class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
                                                                         >
                                                                             <i
-                                                                                class="fa fa-chevron-down text-gray-400"
+                                                                                class="text-gray-400 fa fa-chevron-down"
                                                                             ></i>
                                                                         </span>
                                                                     </button>
@@ -440,7 +464,7 @@ onMounted(() => {
                                                                         v-if="
                                                                             dropdownOpen
                                                                         "
-                                                                        class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-sm ring-1 ring-black ring-opacity-5 overflow-auto"
+                                                                        class="absolute z-10 w-full py-1 mt-1 overflow-auto text-sm bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5"
                                                                     >
                                                                         <li
                                                                             v-for="(
@@ -450,7 +474,7 @@ onMounted(() => {
                                                                             :key="
                                                                                 index
                                                                             "
-                                                                            class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                                            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
                                                                             @click="
                                                                                 selectService(
                                                                                     service,
@@ -475,7 +499,7 @@ onMounted(() => {
                                                                                 >
                                                                             </div>
                                                                             <p
-                                                                                class="text-gray-500 text-xs mt-1"
+                                                                                class="mt-1 text-xs text-gray-500"
                                                                             >
                                                                                 {{
                                                                                     service?.description
@@ -542,7 +566,7 @@ onMounted(() => {
                                                 <tr>
                                                     <td colspan="6">
                                                         <div
-                                                            class="my-2 w-full"
+                                                            class="w-full my-2"
                                                         >
                                                             <a
                                                                 @click="
@@ -568,7 +592,7 @@ onMounted(() => {
                                                                 "
                                                             />
                                                             <div
-                                                                class="my-2 flex gap-2 items-center"
+                                                                class="flex items-center gap-2 my-2"
                                                             >
                                                                 <DangerButton
                                                                     @click.prevent="
@@ -613,19 +637,37 @@ onMounted(() => {
                     </tbody>
                 </table>
             </div>
-            <div class="col-span-3 bg-gray-50 p-4 rounded">
+            <div class="p-4 rounded md:col-span-3 bg-gray-50">
                 <CurrencyDollarText />
-                <div class="col-span-3 bg-white p-4 mt-4 rounded shadow">
-                    <div class="flex items-center justify-between md:flex-wrap">
-                        <h3 class="text-lg font-semibold mb-2">
+                <div class="col-span-3 p-4 mt-4 bg-white rounded shadow">
+                    <div class="flex flex-wrap items-center justify-between">
+                        <h3 class="mb-2 text-lg font-semibold">
                             Estimated Shipping:
                         </h3>
-                        <p class="text-red-600 font-medium mt-2">
+                        <div
+                            class="flex flex-wrap items-center justify-between w-full"
+                        >
+                            <p>Total Values</p>
+                            <p>{{ __currency_format(totalValue) }}</p>
+                        </div>
+                        <div
+                            class="flex flex-wrap items-center justify-between w-full"
+                        >
+                            <p>Total Weight</p>
+                            <p>{{ totalWeight }} lbs</p>
+                        </div>
+                        <div
+                            class="flex flex-wrap items-center justify-between w-full"
+                        >
+                            <p>Packages</p>
+                            <p>{{ totalPackages }}</p>
+                        </div>
+                        <p class="mt-2 font-medium text-red-600">
                             {{ __currency_format(estimatedAmount) }}
                         </p>
                     </div>
                     <p class="text-sm text-gray-700">How is this calculated?</p>
-                    <p class="text-sm text-gray-700 mt-2">
+                    <p class="mt-2 text-sm text-gray-700">
                         One or more packages in this ship request cannot be
                         delivered. Please contact customer service for more
                         information.
@@ -638,7 +680,7 @@ onMounted(() => {
                             Create ship request
                         </PrimaryButton>
                     </div>
-                    <p class="text-sm text-gray-600 mt-2">
+                    <p class="mt-2 text-sm text-gray-600">
                         All items are subject to a customs duty upon receipt of
                         package. Payment will be due when your package is
                         delivered.
@@ -652,7 +694,7 @@ onMounted(() => {
 
     <Modal :show="isShowPhotosModal" @close="closeModal">
         <div class="p-6 space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">
                     Package Photos
                 </h2>
@@ -665,7 +707,7 @@ onMounted(() => {
             </div>
 
             <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                 v-if="packagePhotos.length > 0"
             >
                 <img
@@ -673,7 +715,7 @@ onMounted(() => {
                     :key="index"
                     :src="photo.file_with_url"
                     alt="Package Photo"
-                    class="rounded shadow border"
+                    class="border rounded shadow"
                 />
             </div>
             <div class="text-center text-gray-900" v-else>

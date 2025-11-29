@@ -8,6 +8,7 @@ import axios from "axios";
 import { useToast } from "vue-toastification";
 import { Head, router } from "@inertiajs/vue3";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
+import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 
 const props = defineProps({
     actions: Object,
@@ -200,7 +201,7 @@ const showPackagePhotos = async (packageId) => {
                     </thead>
                     <tbody>
                         <template v-for="action in actions" :key="action.id">
-                            <tr>
+                            <tr class="text-center">
                                 <td
                                     @click="toggleRow(action.id)"
                                     class="cursor-pointer"
@@ -330,17 +331,22 @@ const showPackagePhotos = async (packageId) => {
                                                                 }}
                                                             </p>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{ item?.quantity }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
+                                                            $
                                                             {{
-                                                                item?.value_per_unit
+                                                                item?.value_per_unit?.toFixed(
+                                                                    2
+                                                                )
                                                             }}
                                                         </td>
-                                                        <td>
-                                                            {{
-                                                                item?.total_line_value
+                                                        <td class="text-center">
+                                                            ${{
+                                                                item?.total_line_value.toFixed(
+                                                                    2
+                                                                )
                                                             }}
                                                         </td>
                                                     </tr>
@@ -366,8 +372,10 @@ const showPackagePhotos = async (packageId) => {
                                                                     >Total value
                                                                     of this
                                                                     package: </span
-                                                                >{{
-                                                                    action.total_value
+                                                                >${{
+                                                                    action?.total_value.toFixed(
+                                                                        2
+                                                                    )
                                                                 }}
                                                                 USD
                                                             </p>
@@ -581,6 +589,7 @@ const showPackagePhotos = async (packageId) => {
             </div>
             <div class="col-span-3 p-4 rounded bg-gray-50">
                 <CurrencyDollarText />
+                <PackageLinks />
             </div>
         </div>
     </Report>

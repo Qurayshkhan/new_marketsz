@@ -1,4 +1,5 @@
 <script setup>
+import Footer from "@/Components/Footer.vue";
 import ApplicationLogo from "@/Components/Images/Icons/ApplicationLogo.vue";
 import Logo from "@/Components/Images/Icons/Logo.vue";
 import { Link, usePage } from "@inertiajs/vue3";
@@ -11,7 +12,7 @@ const currentPath = page.url;
     <div class="flex flex-col bg-white">
         <!-- Navbar -->
         <nav
-            class="flex justify-between items-center h-20 px-6 text-md xl:text-lg font-bold bg-white border-b"
+            class="flex items-center justify-between h-20 px-6 font-bold bg-white border-b text-md xl:text-lg"
         >
             <a href="/">
                 <img
@@ -21,17 +22,17 @@ const currentPath = page.url;
                     width="160"
                 />
             </a>
-            <div class="text-gray-600 flex items-center">
+            <div class="flex items-center text-gray-600">
                 <Link
                     v-if="currentPath === '/login'"
-                    class="py-2 text-white px-4 rounded-full font-bold text-sm md:text-base flex whitespace-nowrap items-center justify-center bg-primary-500"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-bold text-white rounded-full md:text-base whitespace-nowrap bg-primary-500"
                     :href="route('register')"
                 >
                     Register
                 </Link>
                 <Link
                     v-else
-                    class="py-2 text-white px-4 rounded-full font-bold text-sm md:text-base flex whitespace-nowrap items-center justify-center bg-primary-500"
+                    class="flex items-center justify-center px-4 py-2 text-sm font-bold text-white rounded-full md:text-base whitespace-nowrap bg-primary-500"
                     :href="route('login')"
                 >
                     Login
@@ -45,8 +46,8 @@ const currentPath = page.url;
         </main>
 
         <!-- Footer -->
-        <footer
-            class="text-xs text-gray-600 text-center px-4 py-8 bg-gray-100"
+        <!-- <footer
+            class="px-4 py-8 text-xs text-center text-gray-600 bg-gray-100"
             style="background: linear-gradient(#f8f8f8, #fff)"
         >
             <div class="mb-6">
@@ -59,10 +60,11 @@ const currentPath = page.url;
                 </p>
             </div>
             <div>
-                <a class="underline px-2" href="terms.html">Terms of Service</a>
+                <a class="px-2 underline" href="terms.html">Terms of Service</a>
                 &middot;
-                <a class="underline px-2" href="privacy.html">Privacy Policy</a>
+                <a class="px-2 underline" href="privacy.html">Privacy Policy</a>
             </div>
-        </footer>
+        </footer> -->
+        <Footer />
     </div>
 </template>

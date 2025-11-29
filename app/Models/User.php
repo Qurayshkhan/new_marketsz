@@ -43,6 +43,7 @@ class User extends Authenticatable
         'type',
         'avatar',
         'state',
+        'city',
         'zip_code',
         'stripe_id',
         'loyalty_points'

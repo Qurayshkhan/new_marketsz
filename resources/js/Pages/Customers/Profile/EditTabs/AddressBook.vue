@@ -20,6 +20,7 @@ const showModal = ref(false);
 const showDeleteModal = ref(false);
 const addressToDelete = ref(null);
 
+const isSettingDefault = ref(false);
 const form = useForm({
     id: null,
     address_name: "",
@@ -93,7 +94,9 @@ const saveAddress = () => {
 };
 
 const handleSetDefault = (event, addressId) => {
-    const type = event.target.value;
+    isSettingDefault.value = true;
+    // const type = event.target.value;
+    const type = "us";
     if (!type) return;
 
     form.clearErrors();
@@ -107,6 +110,7 @@ const handleSetDefault = (event, addressId) => {
             preserveScroll: true,
             onSuccess: () => {
                 event.target.selectedIndex = 0;
+                isSettingDefault.value = false;
             },
         }
     );
@@ -141,13 +145,13 @@ const deleteAddress = () => {
         <!-- Flash Messages -->
         <div
             v-if="$page.props.flash?.success"
-            class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded"
+            class="p-4 mb-4 text-green-700 bg-green-100 border border-green-400 rounded"
         >
             {{ $page.props.flash.success }}
         </div>
         <div
             v-if="$page.props.flash?.error || $page.props.flash?.message"
-            class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded"
+            class="p-4 mb-4 text-red-700 bg-red-100 border border-red-400 rounded"
         >
             {{ $page.props.flash.error || $page.props.flash.message }}
         </div>
@@ -159,27 +163,27 @@ const deleteAddress = () => {
         </div>
 
         <!-- Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <template
                 v-if="props?.userAddresses && props.userAddresses.length > 0"
             >
                 <div
                     v-for="address in props.userAddresses"
                     :key="address.id"
-                    class="bg-white rounded-2xl shadow-md p-5 border relative flex flex-col justify-between hover:shadow-lg transition-shadow"
+                    class="relative flex flex-col justify-between p-5 transition-shadow bg-white border shadow-md rounded-2xl hover:shadow-lg"
                 >
                     <!-- Action Buttons -->
-                    <div class="absolute top-2 right-2 flex gap-2">
+                    <div class="absolute flex gap-2 top-2 right-2">
                         <button
                             @click="openModal(address)"
-                            class="text-blue-500 text-sm hover:underline"
+                            class="text-sm text-blue-500 hover:underline"
                             title="Edit Address"
                         >
                             Edit
                         </button>
                         <button
                             @click="confirmDelete(address)"
-                            class="text-red-500 text-sm hover:underline"
+                            class="text-sm text-red-500 hover:underline"
                             title="Delete Address"
                         >
                             Delete
@@ -215,24 +219,31 @@ const deleteAddress = () => {
                         <div class="mt-2 space-x-2">
                             <span
                                 v-if="address.is_default_us"
-                                class="text-xs text-white bg-blue-600 px-2 py-1 rounded-full"
+                                class="px-2 py-1 text-xs text-white rounded-full bg-primary-600"
                             >
-                                Default US
+                                Default
                             </span>
                             <span
                                 v-if="address.is_default_uk"
-                                class="text-xs text-white bg-green-600 px-2 py-1 rounded-full"
+                                class="px-2 py-1 text-xs text-white bg-green-600 rounded-full"
                             >
                                 Default UK
                             </span>
                         </div>
+
+                        <PrimaryButton
+                            v-if="!address.is_default_us"
+                            @click="handleSetDefault($event, address.id)"
+                            :disabled="isSettingDefault"
+                            >Set as default</PrimaryButton
+                        >
                     </div>
 
                     <!-- Set Default Dropdown -->
-                    <div class="mt-auto pt-3 border-t">
+                    <!-- <div class="pt-3 mt-auto border-t">
                         <select
                             @change="handleSetDefault($event, address.id)"
-                            class="w-full px-3 py-2 rounded-md border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option disabled selected>
                                 Set as Default Address...
@@ -259,13 +270,13 @@ const deleteAddress = () => {
                                 Default for US & UK
                             </option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
             </template>
-            <div v-else class="col-span-full text-center py-8">
+            <div v-else class="py-8 text-center col-span-full">
                 <div class="text-gray-500">
                     <svg
-                        class="mx-auto h-12 w-12 text-gray-400"
+                        class="w-12 h-12 mx-auto text-gray-400"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -296,7 +307,7 @@ const deleteAddress = () => {
         <!-- Add/Edit Modal -->
         <Modal :show="showModal" @close="showModal = false">
             <div class="p-6">
-                <h2 class="text-xl font-semibold mb-4 text-black">
+                <h2 class="mb-4 text-xl font-semibold text-black">
                     {{ form.id ? "Edit Address" : "Add New Address" }}
                 </h2>
                 <form @submit.prevent="saveAddress" class="grid gap-3">
@@ -399,7 +410,7 @@ const deleteAddress = () => {
                         </div>
                     </div>
 
-                    <div class="mt-4 flex justify-end gap-2">
+                    <div class="flex justify-end gap-2 mt-4">
                         <SecondaryButton
                             type="button"
                             @click="showModal = false"
@@ -409,7 +420,7 @@ const deleteAddress = () => {
                         <PrimaryButton
                             type="submit"
                             :disabled="form.processing"
-                            class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                            class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
                         >
                             {{
                                 form.processing
@@ -427,10 +438,10 @@ const deleteAddress = () => {
         <!-- Delete Confirmation Modal -->
         <Modal :show="showDeleteModal" @close="showDeleteModal = false">
             <div class="p-6">
-                <h2 class="text-xl font-semibold mb-4 text-black">
+                <h2 class="mb-4 text-xl font-semibold text-black">
                     Delete Address
                 </h2>
-                <p class="text-gray-600 mb-4">
+                <p class="mb-4 text-gray-600">
                     Are you sure you want to delete the address "{{
                         addressToDelete?.address_name
                     }}"? This action cannot be undone.

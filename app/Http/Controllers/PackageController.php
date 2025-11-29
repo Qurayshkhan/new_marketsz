@@ -70,7 +70,7 @@ class PackageController extends Controller
 
     public function create()
     {
-        $users = User::where('is_active', User::STATUS_ACTIVE)->where('type', User::USER_TYPE_CUSTOMER)->get();
+        $users = User::where('type', User::USER_TYPE_CUSTOMER)->get();
         return Inertia::render('Package/Create', ['users' => $users]);
     }
 

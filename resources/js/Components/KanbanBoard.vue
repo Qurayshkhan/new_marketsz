@@ -9,7 +9,6 @@ const toast = useToast();
 const props = defineProps({
     packages: { type: Array, required: true },
 });
-console.log("🚀 ~ packages:", props?.packages);
 
 const emit = defineEmits(["status-updated"]);
 
@@ -93,12 +92,12 @@ const updatePackageStatus = async (packageId, newStatus) => {
 
 <template>
     <div class="kanban-board">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <!-- Action Required Column -->
             <div
-                class="kanban-column bg-red-50 border border-red-200 rounded-lg"
+                class="border border-red-200 rounded-lg kanban-column bg-red-50"
             >
-                <div class="column-header bg-red-100 p-4 rounded-t-lg">
+                <div class="p-4 bg-red-100 rounded-t-lg column-header">
                     <h3 class="text-lg font-semibold text-red-800">
                         Action Required
                     </h3>
@@ -111,6 +110,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
                         v-model="actionRequiredPackages"
                         group="packages"
                         item-key="id"
+                        handle=".drag-handle"
                         @change="onDragChange"
                         class="space-y-2"
                         :data-status="1"
@@ -127,9 +127,9 @@ const updatePackageStatus = async (packageId, newStatus) => {
 
             <!-- In Review Column -->
             <div
-                class="kanban-column bg-yellow-50 border border-yellow-200 rounded-lg"
+                class="border border-yellow-200 rounded-lg kanban-column bg-yellow-50"
             >
-                <div class="column-header bg-yellow-100 p-4 rounded-t-lg">
+                <div class="p-4 bg-yellow-100 rounded-t-lg column-header">
                     <h3 class="text-lg font-semibold text-yellow-800">
                         In Review
                     </h3>
@@ -142,6 +142,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
                         v-model="inReviewPackages"
                         group="packages"
                         item-key="id"
+                        handle=".drag-handle"
                         @change="onDragChange"
                         class="space-y-2"
                         :data-status="2"
@@ -158,9 +159,9 @@ const updatePackageStatus = async (packageId, newStatus) => {
 
             <!-- Ready to Send Column -->
             <div
-                class="kanban-column bg-blue-50 border border-blue-200 rounded-lg"
+                class="border border-blue-200 rounded-lg kanban-column bg-blue-50"
             >
-                <div class="column-header bg-blue-100 p-4 rounded-t-lg">
+                <div class="p-4 bg-blue-100 rounded-t-lg column-header">
                     <h3 class="text-lg font-semibold text-blue-800">
                         Ready to Send
                     </h3>
@@ -173,6 +174,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
                         v-model="readyToSendPackages"
                         group="packages"
                         item-key="id"
+                        handle=".drag-handle"
                         @change="onDragChange"
                         class="space-y-2"
                         :data-status="3"
@@ -189,9 +191,9 @@ const updatePackageStatus = async (packageId, newStatus) => {
 
             <!-- Consolidate Column -->
             <div
-                class="kanban-column bg-green-50 border border-green-200 rounded-lg"
+                class="border border-green-200 rounded-lg kanban-column bg-green-50"
             >
-                <div class="column-header bg-green-100 p-4 rounded-t-lg">
+                <div class="p-4 bg-green-100 rounded-t-lg column-header">
                     <h3 class="text-lg font-semibold text-green-800">
                         Consolidate
                     </h3>
@@ -204,6 +206,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
                         v-model="consolidatePackages"
                         group="packages"
                         item-key="id"
+                        handle=".drag-handle"
                         @change="onDragChange"
                         class="space-y-2"
                         :data-status="4"

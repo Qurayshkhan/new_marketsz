@@ -25,11 +25,7 @@
     @inertiaHead
 
 
-    <script>
-        window.addEventListener("load", () => {
-            LiveChatWidget.call("hide_button", false);
-        });
-    </script>
+
     <!-- LiveChat -->
     <script>
         window.__lc = window.__lc || {};

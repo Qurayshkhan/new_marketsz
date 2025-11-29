@@ -241,28 +241,27 @@
                         </span>
                     </div>
                     <template>
-                        <form action="register.html" method="get" class="relative w-full max-w-sm"><input
+                        <form action="{{ route('register') }}" method="get" class="relative w-full max-w-sm"><input
                                 type="hidden" name="country" value="">
-                            <input type="email" name="email" placeholder="someone@mail.com"
+                            {{-- <input type="email" name="email" placeholder="someone@mail.com"
                                 class="w-full pl-4 text-base text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-full h-14 focus:ring-2 sm:text-lg"
-                                aria-label="Enter your email address">
+                                aria-label="Enter your email address"> --}}
                             <button
                                 class="absolute flex items-center h-10 px-4 font-bold text-white rounded-full bg-primary top-2 right-2">Get
                                 started</button>
                         </form>
                     </template>
 
-                    <form action="https://www.getrevue.co/profile/flowbite/add_subscriber" method="post" id="revue-form"
-                        name="revue-form">
+                    <form action="{{ route('register') }}" method="GET" id="revue-form" name="revue-form">
                         <div class="flex items-center mb-3">
                             <div class="relative w-full mr-3 revue-form-group">
                                 <label for="member_email"
                                     class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email
                                     address</label>
-                                <input
+                                {{-- <input
                                     class="revue-form-field bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-72 pl-10 p-2.5"
                                     placeholder="Your email address..." type="email" name="member[email]"
-                                    id="member_email" required="">
+                                    id="member_email" required=""> --}}
                             </div>
                             <div class="">
                                 <button type="submit"

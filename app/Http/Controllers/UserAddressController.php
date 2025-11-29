@@ -135,7 +135,7 @@ class UserAddressController extends Controller
                 default => 'Unknown'
             };
 
-            return redirect()->back()->with('success', "Address set as default for {$typeText} successfully.");
+            return redirect()->back()->with('success', "Address set as default successfully.");
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['message' => 'Failed to set default address. Please try again.']);
         }

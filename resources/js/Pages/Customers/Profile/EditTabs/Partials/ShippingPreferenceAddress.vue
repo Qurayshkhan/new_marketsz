@@ -14,12 +14,12 @@ const options = [
         flag: "https://www.marketsz.com/content/images/flags/us_flag.png",
         type: "is_us",
     },
-    {
-        label: "UK Shipping Preferences",
-        value: 4,
-        flag: "https://www.marketsz.com/content/images/flags/gb_flag.png",
-        type: "is_uk",
-    },
+    // {
+    //     label: "UK Shipping Preferences",
+    //     value: 4,
+    //     flag: "https://www.marketsz.com/content/images/flags/gb_flag.png",
+    //     type: "is_uk",
+    // },
 ];
 
 const isOpen = ref(false);
@@ -49,16 +49,17 @@ function selectOption(option) {
     <div class="relative w-full max-w-[21.2rem]">
         <button
             @click="toggleDropdown"
-            class="w-full flex justify-between items-center px-4 py-3 border border-gray-300 rounded-md bg-white shadow-sm"
+            class="flex items-center justify-between w-full px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm"
             :aria-expanded="isOpen.toString()"
             aria-controls="shipping-options"
         >
             <span class="flex items-center space-x-2">
                 <span class="font-semibold">{{ selectedOption.label }}</span>
                 <img
+                    v-if="selectedOption.flag"
                     :src="selectedOption.flag"
                     :alt="selectedOption.label"
-                    class="w-6 h-4 object-cover"
+                    class="object-cover w-6 h-4"
                 />
             </span>
             <svg
@@ -84,15 +85,16 @@ function selectOption(option) {
             <div
                 v-for="option in options"
                 :key="option.value"
-                class="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                class="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100"
                 @click="selectOption(option)"
             >
                 <span class="flex items-center space-x-2">
                     <span class="font-semibold">{{ option.label }}</span>
                     <img
+                        v-if="option.flag"
                         :src="option.flag"
                         :alt="option.label"
-                        class="w-6 h-4 object-cover"
+                        class="object-cover w-6 h-4"
                     />
                 </span>
             </div>

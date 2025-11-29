@@ -18,6 +18,7 @@ const props = defineProps({
         type: String,
     },
 });
+console.log("🚀 ~ users:", props?.users);
 console.log("🚀 ~ props.users:", props.users);
 const photos = ref([]);
 const form = useForm({
@@ -149,13 +150,13 @@ const addCameraPhoto = (index, file) => {
             {{ status }}
         </div>
         <div class="container py-8">
-            <h1 class="text-xl font-semibold mb-4">
-                <i class="fa-solid fa-cube mr-2"></i> Add Package Shipment
+            <h1 class="mb-4 text-xl font-semibold">
+                <i class="mr-2 fa-solid fa-cube"></i> Add Package Shipment
             </h1>
 
             <form @submit.prevent="submitForm" enctype="multipart/form-data">
                 <div class="card">
-                    <div class="card-body grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-6 card-body">
                         <div>
                             <InputLabel for="from" value="From" />
                             <TextInput
@@ -175,7 +176,7 @@ const addCameraPhoto = (index, file) => {
                             <InputLabel for="date" value="Date Received" />
                             <VueDatePicker
                                 v-model="form.date"
-                                class="w-full rounded-md text-black border-gray-300 shadow-sm"
+                                class="w-full text-black border-gray-300 rounded-md shadow-sm"
                             />
                             <InputError
                                 class="mt-2"
@@ -195,7 +196,7 @@ const addCameraPhoto = (index, file) => {
                             />
                         </div>
                         <div class="col-span-2 mt-4">
-                            <h2 class="font-semibold text-lg">
+                            <h2 class="text-lg font-semibold">
                                 Sender Information
                             </h2>
                         </div>
@@ -204,7 +205,7 @@ const addCameraPhoto = (index, file) => {
                             <InputLabel for="sender" value="Select Sender" />
                             <SearchableSelect
                                 id="sender_id"
-                                class="mt-1 w-full"
+                                class="w-full mt-1"
                                 label="suite"
                                 :options="props.users"
                                 :reduce="(option) => option.id"
@@ -226,7 +227,7 @@ const addCameraPhoto = (index, file) => {
                             />
                         </div>
                         <div class="col-span-2 mt-4">
-                            <h2 class="font-semibold text-lg">
+                            <h2 class="text-lg font-semibold">
                                 Add package items
                             </h2>
                             <div class="mt-2 text-end">
@@ -243,14 +244,14 @@ const addCameraPhoto = (index, file) => {
                             <div
                                 v-for="(item, index) in form.items"
                                 :key="index"
-                                class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 border p-4 rounded relative"
+                                class="relative grid grid-cols-1 gap-4 p-4 mb-4 border rounded sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
                             >
-                                <div class="col-span-full text-right">
+                                <div class="text-right col-span-full">
                                     <button
                                         v-if="form.items.length > 1"
                                         type="button"
                                         @click="removeItem(index)"
-                                        class="text-red-600 text-sm absolute top-2 right-2"
+                                        class="absolute text-sm text-red-600 top-2 right-2"
                                     >
                                         Remove
                                     </button>
@@ -385,7 +386,7 @@ const addCameraPhoto = (index, file) => {
                         <div class="col-span-2 text-end">
                             <PrimaryButton
                                 type="submit"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                                class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                                 :disabled="form.processing"
                             >
                                 Save Package

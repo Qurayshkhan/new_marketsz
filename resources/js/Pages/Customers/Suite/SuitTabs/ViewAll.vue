@@ -229,7 +229,7 @@ const showPackagePhotos = async (packageId) => {
                                     }}
                                 </td>
                                 <td>
-                                    {{ __to_fixed_number(action?.total_value) }}
+                                    {{ __currency_format(action?.total_value) }}
                                     USD
                                 </td>
                                 <td>{{ action?.weight }} lbs</td>
@@ -401,17 +401,21 @@ const showPackagePhotos = async (packageId) => {
                                                                 }}
                                                             </p>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{ item?.quantity }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{
-                                                                item?.value_per_unit
+                                                                __currency_format(
+                                                                    item?.value_per_unit
+                                                                )
                                                             }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{
-                                                                item?.total_line_value
+                                                                __currency_format(
+                                                                    item?.total_line_value
+                                                                )
                                                             }}
                                                         </td>
                                                     </tr>
@@ -438,7 +442,9 @@ const showPackagePhotos = async (packageId) => {
                                                                     of this
                                                                     package: </span
                                                                 >{{
-                                                                    action.total_value
+                                                                    __currency_format(
+                                                                        action.total_value
+                                                                    )
                                                                 }}
                                                                 USD
                                                             </p>

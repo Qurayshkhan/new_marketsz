@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/tw.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/home2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/about.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/web_custom.css') }}">
     <meta name="csrf_token" content="{{ csrf_token() }}" />

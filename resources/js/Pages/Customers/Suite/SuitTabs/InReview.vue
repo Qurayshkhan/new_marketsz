@@ -7,6 +7,7 @@ import Modal from "@/Components/Modal.vue";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import CurrencyDollarText from "@/Components/Packages/CurrencyDollarText.vue";
+import PackageLinks from "@/Components/Packages/PackageLinks.vue";
 
 const props = defineProps({
     inReviews: Object,
@@ -85,7 +86,7 @@ const showPackagePhotos = async (packageId) => {
     >
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-9">
-                <table class="w-full border text-center data-table text-sm">
+                <table class="w-full text-sm text-center border data-table">
                     <thead class="uppercase bg-gray-100">
                         <tr>
                             <th>
@@ -138,7 +139,7 @@ const showPackagePhotos = async (packageId) => {
                                     }}
                                 </td>
                                 <td>
-                                    {{
+                                    ${{
                                         __to_fixed_number(in_review.total_value)
                                     }}
                                     USD
@@ -150,7 +151,7 @@ const showPackagePhotos = async (packageId) => {
                                     v-if="expandedRows.has(in_review.id)"
                                     class="bg-gray-50"
                                 >
-                                    <td colspan="6" class="text-left px-5">
+                                    <td colspan="6" class="px-5 text-left">
                                         <div>
                                             <strong class="bold"
                                                 >Why is this package in
@@ -193,7 +194,7 @@ const showPackagePhotos = async (packageId) => {
 
                                                         <div>
                                                             <button
-                                                                class="btn bg-white text-black"
+                                                                class="text-black bg-white btn"
                                                                 @click="
                                                                     showPackagePhotos(
                                                                         in_review.id
@@ -224,7 +225,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 }}
                                                             </p>
                                                             <p
-                                                                class="text-md text-gray-600"
+                                                                class="text-gray-600 text-md"
                                                             >
                                                                 {{
                                                                     item?.description
@@ -241,17 +242,22 @@ const showPackagePhotos = async (packageId) => {
                                                                 }}
                                                             </p>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             {{ item?.quantity }}
                                                         </td>
-                                                        <td>
-                                                            {{
-                                                                item?.value_per_unit
+                                                        <td class="text-center">
+                                                            ${{
+                                                                __to_fixed_number(
+                                                                    item?.value_per_unit
+                                                                )
                                                             }}
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
+                                                            $
                                                             {{
-                                                                item?.total_line_value
+                                                                __to_fixed_number(
+                                                                    item?.total_line_value
+                                                                )
                                                             }}
                                                         </td>
                                                     </tr>
@@ -309,7 +315,7 @@ const showPackagePhotos = async (packageId) => {
                                                 <tr>
                                                     <td colspan="5">
                                                         <div
-                                                            class="my-2 w-full"
+                                                            class="w-full my-2"
                                                         >
                                                             <a
                                                                 @click="
@@ -336,7 +342,7 @@ const showPackagePhotos = async (packageId) => {
                                                                 "
                                                             />
                                                             <div
-                                                                class="my-2 flex gap-2 items-center"
+                                                                class="flex items-center gap-2 my-2"
                                                             >
                                                                 <DangerButton
                                                                     @click.prevent="
@@ -381,14 +387,15 @@ const showPackagePhotos = async (packageId) => {
                     </tbody>
                 </table>
             </div>
-            <div class="col-span-3 bg-gray-50 p-4 rounded">
+            <div class="col-span-3 p-4 rounded bg-gray-50">
                 <CurrencyDollarText />
+                <PackageLinks />
             </div>
         </div>
     </Report>
     <Modal :show="isShowPhotosModal" @close="closeModal">
         <div class="p-6 space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">
                     Package Photos
                 </h2>
@@ -401,7 +408,7 @@ const showPackagePhotos = async (packageId) => {
             </div>
 
             <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                 v-if="packagePhotos.length > 0"
             >
                 <img
@@ -409,7 +416,7 @@ const showPackagePhotos = async (packageId) => {
                     :key="index"
                     :src="photo.file_with_url"
                     alt="Package Photo"
-                    class="rounded shadow border"
+                    class="border rounded shadow"
                 />
             </div>
             <div class="text-center text-gray-900" v-else>

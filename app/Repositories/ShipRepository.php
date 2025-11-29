@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\ShipInterface;
 use App\Models\Ship;
 use App\Models\ShippingPricing;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ShipRepository implements ShipInterface
@@ -17,9 +18,16 @@ class ShipRepository implements ShipInterface
         $this->shipPricing = $shipPricing;
     }
 
-    public function getShipments()
+    public function getShipments(Request $request)
     {
-        return $this->ship->with('user', 'packages', 'internationalShipping')->paginate(25);
+        $shipments = $this->ship->query();
+
+        $shipments->with('user', 'packages', 'internationalShipping')->when($request->status, function($query) use ($request){
+            $query->where('status', $request->status);
+        });
+
+      return  $shipments->paginate(25);
+
     }
 
     public function create(array $data)

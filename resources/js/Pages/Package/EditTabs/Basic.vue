@@ -24,7 +24,8 @@ const form = useForm({
     date: new Date(editPackage?.date_received),
     sender_id: editPackage?.sender_id,
     status: editPackage?.status,
-    files: [], // package-level new files
+    note: editPackage?.note || "",
+    files: [],
     items: editPackage?.items?.map((item) => ({
         id: item.id,
         title: item.title || "",
@@ -34,9 +35,9 @@ const form = useForm({
         value_per_unit: item.value_per_unit || 0,
         total_line_value: item.total_line_value || 0,
         total_line_weight: item.total_line_weight || 0,
-        package_files: item.package_files || [], // existing DB files
-        new_files: [], // new uploaded files
-        delete_file_ids: [], // files to delete
+        package_files: item.package_files || [],
+        new_files: [],
+        delete_file_ids: [],
     })) ?? [
         {
             title: "",
@@ -56,7 +57,6 @@ const form = useForm({
     tracking_no: editPackage?.tracking_id,
 });
 
-// ----- Calculate totals -----
 const calculateTotals = () => {
     form.items.forEach((item) => {
         item.total_line_value = parseFloat(
@@ -78,7 +78,6 @@ const calculateTotals = () => {
 watch(() => form.items, calculateTotals, { deep: true });
 onMounted(calculateTotals);
 
-// ----- Add / Remove Item -----
 const addItem = () => {
     form.items.push({
         title: "",
@@ -123,6 +122,7 @@ const submitForm = () => {
         payload.append("date_received", data.date);
         payload.append("sender_id", data.sender_id);
         payload.append("status", data.status);
+        payload.append("note", data.note);
         payload.append("tracking_id", data.tracking_no);
         payload.append("total_value", data.totalPrice);
         payload.append("weight", data.totalWeight);
@@ -177,7 +177,7 @@ const addCameraPhoto = (index, file) => {
     <EditLayout :package="props.package">
         <form @submit.prevent="submitForm" enctype="multipart/form-data">
             <div class="card">
-                <div class="card-body grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-2 gap-6 card-body">
                     <div>
                         <InputLabel for="from" value="From" />
                         <TextInput
@@ -194,7 +194,7 @@ const addCameraPhoto = (index, file) => {
                         <InputLabel for="date" value="Date Received" />
                         <VueDatePicker
                             v-model="form.date"
-                            class="w-full rounded-md text-black border-gray-300 shadow-sm"
+                            class="w-full text-black border-gray-300 rounded-md shadow-sm"
                         />
                         <InputError class="mt-2" :message="form.errors.date" />
                     </div>
@@ -224,8 +224,23 @@ const addCameraPhoto = (index, file) => {
                             :message="form.errors.tracking_no"
                         />
                     </div>
+                    <div v-if="form.status === 1" class="col-span-2">
+                        <InputLabel
+                            for="note"
+                            value="Package Note (Required)"
+                        />
+                        <TextInput
+                            v-model="form.note"
+                            id="note"
+                            rows="3"
+                            class="w-full p-2 border rounded"
+                            placeholder="Enter special note or requested action"
+                        />
+                        <InputError class="mt-2" :message="form.errors.note" />
+                    </div>
+
                     <div class="col-span-2 mt-4">
-                        <h2 class="font-semibold text-lg">
+                        <h2 class="text-lg font-semibold">
                             Sender Information
                         </h2>
                     </div>
@@ -234,7 +249,7 @@ const addCameraPhoto = (index, file) => {
                         <InputLabel for="sender" value="Select Sender" />
                         <SearchableSelect
                             id="sender_id"
-                            class="mt-1 w-full"
+                            class="w-full mt-1"
                             label="name"
                             :options="props.customers"
                             :reduce="(option) => option.id"
@@ -255,7 +270,7 @@ const addCameraPhoto = (index, file) => {
                             multiple
                         />
                         <div
-                            class="py-4 grid sm:text-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                            class="grid py-4 sm:text-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
                         >
                             <div
                                 class="w-40"
@@ -270,7 +285,7 @@ const addCameraPhoto = (index, file) => {
                     <div class="col-span-2">
                         <h1 class="text-2xl">Invoices</h1>
                         <div
-                            class="py-4 grid sm:text-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5"
+                            class="grid py-4 sm:text-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5"
                         >
                             <div
                                 class="w-40 mt-2"
@@ -287,7 +302,7 @@ const addCameraPhoto = (index, file) => {
                         </div>
                     </div>
                     <div class="col-span-2 mt-4">
-                        <h2 class="font-semibold text-lg">Add package items</h2>
+                        <h2 class="text-lg font-semibold">Add package items</h2>
                         <div class="mt-2 text-end">
                             <PrimaryButton
                                 type="button"
@@ -302,14 +317,14 @@ const addCameraPhoto = (index, file) => {
                         <div
                             v-for="(item, index) in form.items"
                             :key="index"
-                            class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 border p-4 rounded relative"
+                            class="relative grid grid-cols-1 gap-4 p-4 mb-4 border rounded sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
                         >
-                            <div class="col-span-full text-right">
+                            <div class="text-right col-span-full">
                                 <button
                                     v-if="form.items.length > 1"
                                     type="button"
                                     @click="removeItem(index)"
-                                    class="text-red-600 text-sm absolute top-2 right-2"
+                                    class="absolute text-sm text-red-600 top-2 right-2"
                                 >
                                     Remove
                                 </button>
@@ -397,32 +412,51 @@ const addCameraPhoto = (index, file) => {
                                 />
                             </div>
 
-                            <!-- 📂 Item Images Section -->
                             <div class="col-span-full">
-                                <InputLabel
-                                    :for="'itemImages' + index"
-                                    value="Item Images"
-                                />
-                                <div class="mb-4">
-                                    <input
-                                        type="file"
-                                        multiple
-                                        accept="image/jpeg,image/png,image/webp"
-                                        @change="
-                                            (e) =>
-                                                handleItemFileChange(e, index)
-                                        "
-                                        class="w-full border rounded p-2"
-                                    />
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        Accepted formats: JPEG, PNG, WebP (max
-                                        2MB each)
-                                    </p>
+                                <div
+                                    class="flex flex-col items-center gap-4 md:flex-row"
+                                >
+                                    <div class="w-full">
+                                        <InputLabel
+                                            :for="'itemImages' + index"
+                                            value="Item Images"
+                                        />
+                                        <div class="mb-4">
+                                            <input
+                                                type="file"
+                                                multiple
+                                                accept="image/jpeg,image/png,image/webp"
+                                                @change="
+                                                    (e) =>
+                                                        handleItemFileChange(
+                                                            e,
+                                                            index
+                                                        )
+                                                "
+                                                class="w-full p-2 border rounded"
+                                            />
+                                            <p
+                                                class="mt-1 text-sm text-gray-600"
+                                            >
+                                                Accepted formats: JPEG, PNG,
+                                                WebP (max 2MB each)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="w-full h-full">
+                                        <CameraCapture
+                                            @add-photo="
+                                                (file) =>
+                                                    addCameraPhoto(index, file)
+                                            "
+                                            :isPreview="true"
+                                        />
+                                    </div>
                                 </div>
 
                                 <!-- Image Previews -->
                                 <div
-                                    class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+                                    class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6"
                                 >
                                     <!-- Existing Images from DB -->
                                     <div
@@ -433,12 +467,12 @@ const addCameraPhoto = (index, file) => {
                                         class="relative group"
                                     >
                                         <div
-                                            class="w-full h-32 border rounded-lg overflow-hidden bg-gray-100"
+                                            class="w-full h-32 overflow-hidden bg-gray-100 border rounded-lg"
                                         >
                                             <img
                                                 :src="file.file_with_url"
                                                 :alt="file.name"
-                                                class="w-full h-full object-cover"
+                                                class="object-cover w-full h-full"
                                             />
                                         </div>
                                         <button
@@ -450,13 +484,13 @@ const addCameraPhoto = (index, file) => {
                                                     true
                                                 )
                                             "
-                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            class="absolute flex items-center justify-center w-6 h-6 text-xs text-white transition-opacity bg-red-500 rounded-full opacity-0 -top-2 -right-2 group-hover:opacity-100"
                                             title="Delete image"
                                         >
                                             ✕
                                         </button>
                                         <p
-                                            class="text-xs text-gray-600 mt-1 truncate"
+                                            class="mt-1 text-xs text-gray-600 truncate"
                                             :title="file.name"
                                         >
                                             {{ file.name }}
@@ -471,13 +505,13 @@ const addCameraPhoto = (index, file) => {
                                         class="relative group"
                                     >
                                         <div
-                                            class="w-full h-32 border rounded-lg overflow-hidden bg-gray-100"
+                                            class="w-full h-32 overflow-hidden bg-gray-100 border rounded-lg"
                                         >
                                             {{ file }}
                                             <img
                                                 :src="URL.createObjectURL(file)"
                                                 :alt="file.name"
-                                                class="w-full h-full object-cover"
+                                                class="object-cover w-full h-full"
                                             />
                                         </div>
                                         <button
@@ -489,13 +523,13 @@ const addCameraPhoto = (index, file) => {
                                                     false
                                                 )
                                             "
-                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                                            class="absolute flex items-center justify-center w-6 h-6 text-xs text-white transition-opacity bg-red-500 rounded-full opacity-0 -top-2 -right-2 group-hover:opacity-100"
                                             title="Remove image"
                                         >
                                             ✕
                                         </button>
                                         <p
-                                            class="text-xs text-gray-600 mt-1 truncate"
+                                            class="mt-1 text-xs text-gray-600 truncate"
                                             :title="file.name"
                                         >
                                             {{ file.name }}
@@ -555,13 +589,7 @@ const addCameraPhoto = (index, file) => {
                                 </div>
                             </div>
 
-                            <div class="col-span-full">
-                                <CameraCapture
-                                    @add-photo="
-                                        (file) => addCameraPhoto(index, file)
-                                    "
-                                />
-                            </div>
+                            <div class="col-span-full"></div>
                         </div>
                     </div>
 
@@ -585,14 +613,14 @@ const addCameraPhoto = (index, file) => {
                     </div>
 
                     <div
-                        class="col-span-2 text-end flex items-center justify-end gap-2"
+                        class="flex items-center justify-end col-span-2 gap-2 text-end"
                     >
                         <Delete @click.prevent.stop :id="editPackage.id">
                             Delete
                         </Delete>
                         <PrimaryButton
                             type="submit"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                            class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                             :disabled="form.processing"
                         >
                             Update package

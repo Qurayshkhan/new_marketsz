@@ -25,48 +25,114 @@ const authUser = usePage().props.auth.user;
                 <li class="mb-2">
                     <Link
                         :href="route('dashboard')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 route().current('dashboard'),
                         }"
                     >
-                        <i class="fa-solid fa-house w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-house"></i>
                         Dashboard
                     </Link>
                 </li>
-                <li class="mb-2">
+                <!-- <li class="mb-2">
                     <Link
                         :href="route('admin.shipments')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 $page.url.startsWith('/shipments'),
                         }"
                     >
-                        <i class="fa-solid fa-ship w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-ship"></i>
                         Shipment
                     </Link>
-                </li>
+                </li> -->
 
                 <li class="mb-2">
                     <button
+                        @click="toggleDropdown('shipments')"
+                        class="flex items-center justify-between w-full p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700 focus:outline-none"
+                        :class="{
+                            'bg-primary-700 text-white':
+                                isActiveDropdown('admin.shipments'),
+                        }"
+                    >
+                        <span class="flex items-center">
+                            <i class="w-5 h-5 mr-3 fa-solid fa-cube"></i>
+                            Shipment
+                        </span>
+                        <svg
+                            :class="{
+                                'rotate-90': activeDropdown === 'shipments',
+                            }"
+                            class="w-4 h-4 transition-transform duration-200 transform"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7"
+                            ></path>
+                        </svg>
+                    </button>
+                    <ul
+                        v-if="activeDropdown === 'shipments'"
+                        class="pl-8 mt-1 space-y-1"
+                    >
+                        <li>
+                            <Link
+                                :href="route('admin.shipments')"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
+                                :class="{
+                                    'text-white bg-primary-700':
+                                        route().current('admin.shipments'),
+                                }"
+                                >Shipment Requests</Link
+                            >
+                        </li>
+                        <li>
+                            <Link
+                                :href="
+                                    route('admin.shipments.outbond', {
+                                        status: 'shipped',
+                                    })
+                                "
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
+                                :class="{
+                                    'text-white bg-primary-700':
+                                        route().current(
+                                            'admin.shipments.outbond'
+                                        ),
+                                }"
+                            >
+                                Outbond Requests</Link
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li class="mb-2">
+                    <button
                         @click="toggleDropdown('products')"
-                        class="flex items-center justify-between w-full p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200 focus:outline-none"
+                        class="flex items-center justify-between w-full p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700 focus:outline-none"
                         :class="{
                             'bg-primary-700 text-white':
                                 isActiveDropdown('admin.packages'),
                         }"
                     >
                         <span class="flex items-center">
-                            <i class="fa-solid fa-cube w-5 h-5 mr-3"></i>
+                            <i class="w-5 h-5 mr-3 fa-solid fa-cube"></i>
                             Packages
                         </span>
                         <svg
                             :class="{
                                 'rotate-90': activeDropdown === 'products',
                             }"
-                            class="w-4 h-4 transform transition-transform duration-200"
+                            class="w-4 h-4 transition-transform duration-200 transform"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -86,8 +152,21 @@ const authUser = usePage().props.auth.user;
                     >
                         <li>
                             <Link
+                                :href="route('admin.packages.create')"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
+                                :class="{
+                                    'text-white bg-primary-700':
+                                        route().current(
+                                            'admin.packages.create'
+                                        ),
+                                }"
+                                >Create Packages</Link
+                            >
+                        </li>
+                        <li>
+                            <Link
                                 :href="route('admin.packages')"
-                                class="block p-2 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                                 :class="{
                                     'text-white bg-primary-700':
                                         route().current('admin.packages'),
@@ -98,7 +177,7 @@ const authUser = usePage().props.auth.user;
                         <li>
                             <Link
                                 :href="route('admin.packages.kanban')"
-                                class="block p-2 rounded-md hover:bg-primary-700 transition-colors duration-200 text-white"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                                 :class="{
                                     'text-white bg-primary-700':
                                         route().current(
@@ -115,7 +194,7 @@ const authUser = usePage().props.auth.user;
                 <li class="mb-2">
                     <button
                         @click="toggleDropdown('users')"
-                        class="flex items-center justify-between w-full p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200 focus:outline-none"
+                        class="flex items-center justify-between w-full p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700 focus:outline-none"
                         :class="{
                             'bg-primary-700 text-white':
                                 isActiveDropdown('admin.users'),
@@ -123,7 +202,7 @@ const authUser = usePage().props.auth.user;
                     >
                         <span class="flex items-center">
                             <i
-                                class="fa fa-user w-5 h-5 mr-3"
+                                class="w-5 h-5 mr-3 fa fa-user"
                                 aria-hidden="true"
                             ></i>
                             Users
@@ -132,7 +211,7 @@ const authUser = usePage().props.auth.user;
                             :class="{
                                 'rotate-90': activeDropdown === 'users',
                             }"
-                            class="w-4 h-4 transform transition-transform duration-200"
+                            class="w-4 h-4 transition-transform duration-200 transform"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -153,7 +232,7 @@ const authUser = usePage().props.auth.user;
                         <li>
                             <Link
                                 :href="route('admin.users')"
-                                class="block text-white p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                                 :class="{
                                     ' bg-primary-700':
                                         route().current('admin.users'),
@@ -164,7 +243,7 @@ const authUser = usePage().props.auth.user;
                         <!-- <li>
                             <Link
                                 :href="route('admin.customers')"
-                                class="block text-white p-2 rounded-md hover:bg-primary-700 transition-colors duration-200"
+                                class="block p-2 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                                 :class="{
                                     ' bg-primary-700':
                                         route().current('admin.customers'),
@@ -177,44 +256,44 @@ const authUser = usePage().props.auth.user;
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.transactions.allTransactions')"
-                        class="flex items-center p-3 rounded-md hover:bg-primary-700 text-white transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700': route().current(
                                 'admin.transactions.allTransactions'
                             ),
                         }"
                     >
-                        <i class="fa-solid fa-dollar-sign w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-dollar-sign"></i>
                         Transaction
                     </Link>
                 </li>
 
-                <li class="mb-2" v-if="authUser.type == 1">
+                <!-- <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.import')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 route().current('admin.import'),
                         }"
                     >
                         <i
-                            class="fa fa-cloud-upload w-5 h-5 mr-3"
+                            class="w-5 h-5 mr-3 fa fa-cloud-upload"
                             aria-hidden="true"
                         ></i>
                         Imports
                     </Link>
-                </li>
+                </li> -->
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.coupons.index')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 route().current('admin.coupons'),
                         }"
                     >
-                        <i class="fa-solid fa-ticket w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-ticket"></i>
                         Coupons
                     </Link>
                 </li>
@@ -222,13 +301,13 @@ const authUser = usePage().props.auth.user;
                 <li class="mb-2" v-if="authUser.type == 1">
                     <Link
                         :href="route('admin.loyalty.index')"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700"
                         :class="{
                             'text-white bg-primary-700':
                                 route().current('admin.loyalty'),
                         }"
                     >
-                        <i class="fa-solid fa-star w-5 h-5 mr-3"></i>
+                        <i class="w-5 h-5 mr-3 fa-solid fa-star"></i>
                         Loyalty Program
                     </Link>
                 </li>
@@ -236,10 +315,10 @@ const authUser = usePage().props.auth.user;
                     <Link
                         :href="route('logout')"
                         method="post"
-                        class="flex items-center p-3 rounded-md text-white hover:bg-primary-700 transition-colors duration-200 hover:w-full"
+                        class="flex items-center p-3 text-white transition-colors duration-200 rounded-md hover:bg-primary-700 hover:w-full"
                     >
                         <i
-                            class="fa-solid fa-right-from-bracket w-5 h-5 mr-3"
+                            class="w-5 h-5 mr-3 fa-solid fa-right-from-bracket"
                         ></i>
                         Logout
                     </Link>

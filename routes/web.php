@@ -81,6 +81,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('edit/{ship}', [ShipmentController::class, 'edit'])->name('admin.shipments.edit');
         Route::post('/update/{ship}', [ShipmentController::class, 'update'])->name('admin.shipments.update');
         Route::get('/packages/{ship}', [ShipmentController::class, 'shipPackages'])->name('admin.shipments.packages');
+        Route::get('/outbond', [ShipmentController::class, 'outbondRequests'])->name('admin.shipments.outbond');
     });
 
     // Coupon Management Routes

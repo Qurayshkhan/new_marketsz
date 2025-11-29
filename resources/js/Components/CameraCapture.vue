@@ -4,11 +4,11 @@
             <video
                 ref="video"
                 autoplay
-                class="rounded-lg w-64 h-48 bg-black"
+                class="w-64 h-48 bg-black rounded-lg"
             ></video>
 
             <PrimaryButton type="button" @click="capturePhoto">
-                Capture Photo
+                Take Picture
             </PrimaryButton>
 
             <SecondaryButton type="button" @click="closeCamera">
@@ -16,21 +16,28 @@
             </SecondaryButton>
         </div>
 
-        <PrimaryButton v-if="!showCamera" @click="openCamera">
-            Open Camera
+        <PrimaryButton
+            v-if="!showCamera"
+            @click="openCamera"
+            class="w-full h-full text-center"
+        >
+            Take Picture
         </PrimaryButton>
 
-        <div v-if="photos.length" class="mt-4 grid grid-cols-4 gap-3">
+        <div
+            v-if="photos.length && isPreview"
+            class="grid grid-cols-4 gap-3 mt-4"
+        >
             <div v-for="(photo, index) in photos" :key="index" class="relative">
                 <img
                     :src="photo"
-                    class="w-full h-full object-cover rounded-md"
+                    class="object-cover w-full h-full rounded-md"
                 />
 
                 <button
                     type="button"
                     @click="removePhoto(index)"
-                    class="absolute top-1 right-1 bg-red-600 text-white text-xs px-1 rounded"
+                    class="absolute px-1 text-xs text-white bg-red-600 rounded top-1 right-1"
                 >
                     X
                 </button>
@@ -43,6 +50,13 @@
 import { ref } from "vue";
 import PrimaryButton from "./PrimaryButton.vue";
 import SecondaryButton from "./SecondaryButton.vue";
+
+const props = defineProps({
+    isPreview: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const emit = defineEmits(["add-photo"]);
 

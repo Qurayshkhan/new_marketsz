@@ -3,11 +3,12 @@
 namespace App\Interfaces;
 
 use App\Models\Ship;
+use Illuminate\Http\Request;
 
 interface ShipInterface
 {
 
-    public function getShipments();
+    public function getShipments(Request $request);
     public function create(array $data);
 
     public function update(Ship $ship, array $data);

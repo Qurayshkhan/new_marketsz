@@ -141,6 +141,7 @@ class PackageController extends Controller
                 'total_value' => $request->total_value,
                 'weight' => $request->weight,
                 'status' => $request->status,
+                'note' => $request->note,
             ]);
 
             if ($request->hasFile('files')) {

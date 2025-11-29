@@ -92,7 +92,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
 
 <template>
     <div class="kanban-board">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <!-- Action Required Column -->
             <div
                 class="border border-red-200 rounded-lg kanban-column bg-red-50"
@@ -190,7 +190,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
             </div>
 
             <!-- Consolidate Column -->
-            <div
+            <!-- <div
                 class="border border-green-200 rounded-lg kanban-column bg-green-50"
             >
                 <div class="p-4 bg-green-100 rounded-t-lg column-header">
@@ -219,7 +219,7 @@ const updatePackageStatus = async (packageId, newStatus) => {
                         </template>
                     </draggable>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

@@ -36,7 +36,8 @@ class PackageRequest extends FormRequest
             'items.*.files.*' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'items.*.new_files.*' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'items.*.delete_file_ids' => 'nullable|array',
-            'items.*.delete_file_ids.*' => 'exists:package_files,id'
+            'items.*.delete_file_ids.*' => 'exists:package_files,id',
+            'note' => 'required_if:status,1',
         ];
     }
 

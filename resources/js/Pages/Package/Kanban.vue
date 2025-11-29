@@ -4,12 +4,12 @@
 
         <div class="container-fluid">
             <div class="mb-6">
-                <div class="flex justify-between items-center">
+                <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">
                             Package Status Management
                         </h1>
-                        <p class="text-gray-600 mt-1">
+                        <p class="mt-1 text-gray-600">
                             Drag and drop packages to update their status
                         </p>
                     </div>
@@ -18,27 +18,27 @@
                             :href="route('admin.packages')"
                             class="btn btn-outline"
                         >
-                            <i class="fas fa-list mr-2"></i>
+                            <i class="mr-2 fas fa-list"></i>
                             Table View
                         </Link>
-                        <Link
+                        <!-- <Link
                             :href="route('admin.packages.create')"
                             class="btn btn-primary"
                         >
-                            <i class="fas fa-plus mr-2"></i>
+                            <i class="mr-2 fas fa-plus"></i>
                             Create Package
-                        </Link>
+                        </Link> -->
                     </div>
                 </div>
             </div>
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3">
+                <div class="p-4 border border-red-200 rounded-lg bg-red-50">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <i
-                                class="fas fa-exclamation-triangle text-red-600 text-2xl"
+                                class="text-2xl text-red-600 fas fa-exclamation-triangle"
                             ></i>
                         </div>
                         <div class="ml-4">
@@ -53,12 +53,12 @@
                 </div>
 
                 <div
-                    class="bg-yellow-50 border border-yellow-200 rounded-lg p-4"
+                    class="p-4 border border-yellow-200 rounded-lg bg-yellow-50"
                 >
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <i
-                                class="fas fa-search text-yellow-600 text-2xl"
+                                class="text-2xl text-yellow-600 fas fa-search"
                             ></i>
                         </div>
                         <div class="ml-4">
@@ -72,11 +72,11 @@
                     </div>
                 </div>
 
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="p-4 border border-blue-200 rounded-lg bg-blue-50">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <i
-                                class="fas fa-shipping-fast text-blue-600 text-2xl"
+                                class="text-2xl text-blue-600 fas fa-shipping-fast"
                             ></i>
                         </div>
                         <div class="ml-4">
@@ -90,10 +90,10 @@
                     </div>
                 </div>
 
-                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <!-- <div class="p-4 border border-green-200 rounded-lg bg-green-50">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-boxes text-green-600 text-2xl"></i>
+                            <i class="text-2xl text-green-600 fas fa-boxes"></i>
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-green-600">
@@ -104,11 +104,11 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Kanban Board -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
                 <div class="p-6">
                     <KanbanBoard
                         :packages="packages"

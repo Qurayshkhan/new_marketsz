@@ -18,10 +18,15 @@ class ShipmentController extends Controller
     {
         $this->shipRepository = $shipRepository;
     }
-    public function index()
+    public function index(Request $request)
     {
-        $shipments = $this->shipRepository->getShipments();
+        $shipments = $this->shipRepository->getShipments($request);
         return Inertia::render('Admin/Shipments/Report', ['shipments' => $shipments]);
+    }
+
+    public function outbondRequests(Request $request){
+        $shipments = $this->shipRepository->getShipments($request);
+        return Inertia::render('Admin/Shipments/OutbondShipRequest/Report', ['shipments' => $shipments]);
     }
 
     public function edit(Ship $ship)

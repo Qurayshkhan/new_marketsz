@@ -18,8 +18,6 @@ const props = defineProps({
         type: String,
     },
 });
-console.log("🚀 ~ users:", props?.users);
-console.log("🚀 ~ props.users:", props.users);
 const photos = ref([]);
 const form = useForm({
     from: "",
@@ -35,6 +33,7 @@ const form = useForm({
             total_line_value: 0,
             total_line_weight: 0,
             files: [],
+            preview: [],
         },
     ],
     totalPrice: 0,
@@ -52,6 +51,7 @@ const addItem = () => {
         total_line_value: 0,
         total_line_weight: 0,
         files: [],
+        preview: [],
     });
 };
 
@@ -84,7 +84,12 @@ const totalWeight = computed(() =>
 );
 
 const handleFileChange = (e, index) => {
-    form.items[index].files = Array.from(e.target.files);
+    const files = Array.from(e.target.files);
+
+    files.forEach((file) => {
+        form.items[index].files.push(file);
+        form.items[index].preview.push(URL.createObjectURL(file));
+    });
 };
 
 const submitForm = () => {
@@ -140,31 +145,45 @@ const submitForm = () => {
 
 const addCameraPhoto = (index, file) => {
     form.items[index].files.push(file);
+    form.items[index].preview.push(URL.createObjectURL(file));
+};
+
+const removeImage = (itemIndex, imgIndex) => {
+    form.items[itemIndex].preview.splice(imgIndex, 1);
+    form.items[itemIndex].files.splice(imgIndex, 1);
 };
 </script>
 
 <template>
     <Head title="Create Package" />
     <AuthenticatedLayout>
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <div
+            v-if="status"
+            class="p-3 mb-4 text-sm font-medium text-green-700 border border-green-200 rounded-md bg-green-50"
+        >
             {{ status }}
         </div>
-        <div class="container py-8">
-            <h1 class="mb-4 text-xl font-semibold">
-                <i class="mr-2 fa-solid fa-cube"></i> Add Package Shipment
-            </h1>
+
+        <div class="max-w-6xl py-8 mx-auto">
+            <div class="flex items-center gap-2 mb-6">
+                <i class="text-2xl text-primary-600 fa-solid fa-cube"></i>
+                <h1 class="text-2xl font-bold">Create Shipment Package</h1>
+            </div>
 
             <form @submit.prevent="submitForm" enctype="multipart/form-data">
-                <div class="card">
-                    <div class="grid grid-cols-2 gap-6 card-body">
+                <div class="p-6 mb-8 bg-white border shadow-sm rounded-xl">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-700">
+                        Package Information
+                    </h2>
+
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
                             <InputLabel for="from" value="From" />
                             <TextInput
                                 id="from"
                                 v-model="form.from"
-                                type="text"
-                                placeholder="Enter company name e.g Amazon"
-                                class="w-full"
+                                class="w-full mt-1"
+                                placeholder="Amazon, eBay, Walmart etc."
                             />
                             <InputError
                                 class="mt-2"
@@ -176,125 +195,98 @@ const addCameraPhoto = (index, file) => {
                             <InputLabel for="date" value="Date Received" />
                             <VueDatePicker
                                 v-model="form.date"
-                                class="w-full text-black border-gray-300 rounded-md shadow-sm"
+                                class="w-full mt-1 text-black border-gray-300 rounded-md"
                             />
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.date"
                             />
                         </div>
-                        <div class="" hidden>
+
+                        <div class="hidden">
                             <InputLabel value="Tracking No" />
                             <TextInput
-                                type="text"
                                 v-model="form.tracking_no"
                                 class="w-full"
                             />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.tracking_no"
-                            />
                         </div>
-                        <div class="col-span-2 mt-4">
-                            <h2 class="text-lg font-semibold">
-                                Sender Information
-                            </h2>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="col-span-2">
-                            <InputLabel for="sender" value="Select Sender" />
-                            <SearchableSelect
-                                id="sender_id"
-                                class="w-full mt-1"
-                                label="suite"
-                                :options="props.users"
-                                :reduce="(option) => option.id"
-                                v-model="form.sender_id"
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.sender_id"
-                            />
-                        </div>
+                <div class="p-6 mb-8 bg-white border shadow-sm rounded-xl">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-700">
+                        Sender Information
+                    </h2>
 
-                        <div class="col-span-2" hidden>
-                            <InputLabel for="files" value="Upload Files" />
-                            <TextInput
-                                type="file"
-                                @change="handleFileChange"
-                                class="w-full"
-                                multiple
-                            />
-                        </div>
-                        <div class="col-span-2 mt-4">
-                            <h2 class="text-lg font-semibold">
-                                Add package items
-                            </h2>
-                            <div class="mt-2 text-end">
-                                <PrimaryButton
-                                    type="button"
-                                    @click="addItem"
-                                    class="bg-green-600 hover:bg-green-700"
-                                >
-                                    + Add More Items
-                                </PrimaryButton>
-                            </div>
-                        </div>
-                        <div class="col-span-2">
-                            <div
-                                v-for="(item, index) in form.items"
-                                :key="index"
-                                class="relative grid grid-cols-1 gap-4 p-4 mb-4 border rounded sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
+                    <div>
+                        <InputLabel for="sender" value="Select Sender" />
+                        <SearchableSelect
+                            id="sender_id"
+                            class="w-full mt-1"
+                            label="suite"
+                            :options="props.users"
+                            :reduce="(option) => option.id"
+                            v-model="form.sender_id"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.sender_id"
+                        />
+                    </div>
+                </div>
+                <div class="p-6 mb-8 bg-white border shadow-sm rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-gray-700">
+                            Package Items
+                        </h2>
+                        <PrimaryButton
+                            type="button"
+                            @click="addItem"
+                            class="bg-green-600 hover:bg-green-700"
+                        >
+                            + Add Item
+                        </PrimaryButton>
+                    </div>
+                    <div class="space-y-6">
+                        <div
+                            v-for="(item, index) in form.items"
+                            :key="index"
+                            class="relative p-5 border shadow-sm rounded-xl bg-gray-50"
+                        >
+                            <button
+                                v-if="form.items.length > 1"
+                                @click="removeItem(index)"
+                                type="button"
+                                class="absolute text-sm text-red-500 top-3 right-3 hover:text-red-600"
                             >
-                                <div class="text-right col-span-full">
-                                    <button
-                                        v-if="form.items.length > 1"
-                                        type="button"
-                                        @click="removeItem(index)"
-                                        class="absolute text-sm text-red-600 top-2 right-2"
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-
+                                ✕ Remove
+                            </button>
+                            <div
+                                class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+                            >
                                 <div>
-                                    <InputLabel
-                                        :for="'title' + index"
-                                        value="Title"
-                                    />
+                                    <InputLabel value="Title" />
                                     <TextInput
                                         v-model="item.title"
-                                        type="text"
                                         class="w-full"
                                     />
                                 </div>
                                 <div>
-                                    <InputLabel
-                                        :for="'description' + index"
-                                        value="Description"
-                                    />
+                                    <InputLabel value="Description" />
                                     <TextInput
                                         v-model="item.description"
-                                        type="text"
                                         class="w-full"
                                     />
                                 </div>
                                 <div>
-                                    <InputLabel
-                                        :for="'note' + index"
-                                        value="Note"
-                                    />
+                                    <InputLabel value="Note" />
                                     <TextInput
                                         v-model="item.item_note"
-                                        type="text"
                                         class="w-full"
                                     />
                                 </div>
                                 <div>
-                                    <InputLabel
-                                        :for="'quantity' + index"
-                                        value="Quantity"
-                                    />
+                                    <InputLabel value="Quantity" />
                                     <TextInput
                                         v-model.number="item.quantity"
                                         type="number"
@@ -302,36 +294,27 @@ const addCameraPhoto = (index, file) => {
                                     />
                                 </div>
                                 <div>
-                                    <InputLabel
-                                        :for="'valuePerUnit' + index"
-                                        value="Value per unit"
-                                    />
+                                    <InputLabel value="Value / Unit" />
                                     <TextInput
                                         v-model.number="item.value_per_unit"
                                         type="number"
-                                        class="w-full"
                                         step="any"
+                                        class="w-full"
                                     />
                                 </div>
                                 <div>
-                                    <InputLabel
-                                        :for="'totalLineValue' + index"
-                                        value="Total line value"
-                                    />
+                                    <InputLabel value="Total Value" />
                                     <TextInput
                                         :value="
                                             item.quantity * item.value_per_unit
                                         "
                                         readonly
-                                        step="any"
                                         class="w-full bg-gray-200"
                                     />
                                 </div>
+
                                 <div>
-                                    <InputLabel
-                                        :for="'weight' + index"
-                                        value="Weight in lbs"
-                                    />
+                                    <InputLabel value="Weight (lbs)" />
                                     <TextInput
                                         v-model.number="item.total_line_weight"
                                         type="number"
@@ -339,60 +322,93 @@ const addCameraPhoto = (index, file) => {
                                         step="any"
                                     />
                                 </div>
-                                <div>
-                                    <InputLabel
-                                        :for="'files' + index"
-                                        value="Upload Files"
-                                    />
-                                    <TextInput
-                                        type="file"
-                                        multiple
-                                        capture="environment"
-                                        @change="
-                                            handleFileChange($event, index)
-                                        "
-                                    />
-                                </div>
-                                <div class="col-span-full">
+                            </div>
+
+                            <div class="mt-4">
+                                <InputLabel value="Photos" />
+
+                                <div class="flex gap-3 mt-2">
+                                    <label
+                                        class="w-full px-3 py-2 bg-white border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
+                                    >
+                                        Browse Photo
+                                        <input
+                                            type="file"
+                                            class="hidden"
+                                            multiple
+                                            @change="
+                                                handleFileChange($event, index)
+                                            "
+                                        />
+                                    </label>
+
                                     <CameraCapture
+                                        button-text="Take Picture"
                                         @add-photo="
                                             (file) =>
                                                 addCameraPhoto(index, file)
                                         "
                                     />
                                 </div>
+
+                                <div
+                                    v-if="item.preview.length"
+                                    class="flex flex-wrap gap-2 mt-3"
+                                >
+                                    <div
+                                        v-for="(img, i) in item.preview"
+                                        :key="i"
+                                        class="relative w-20 h-20 overflow-hidden border rounded-lg"
+                                    >
+                                        <img
+                                            :src="img"
+                                            class="object-cover w-full h-full"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            @click="removeImage(index, i)"
+                                            class="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full top-1 right-1"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="">
+                    </div>
+                </div>
+                <div class="p-6 mb-8 bg-white border shadow-sm rounded-xl">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-700">
+                        Summary
+                    </h2>
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
                             <InputLabel value="Total Price" />
                             <TextInput
                                 :value="totalPrice"
                                 readonly
                                 class="w-full bg-gray-200"
-                                step="any"
                             />
                         </div>
-                        <div class="">
+                        <div>
                             <InputLabel value="Total Weight" />
                             <TextInput
                                 :value="totalWeight"
                                 readonly
                                 class="w-full bg-gray-200"
-                                step="any"
                             />
                         </div>
-
-                        <div class="col-span-2 text-end">
-                            <PrimaryButton
-                                type="submit"
-                                class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-                                :disabled="form.processing"
-                            >
-                                Save Package
-                            </PrimaryButton>
-                        </div>
                     </div>
+                </div>
+                <div class="flex justify-end">
+                    <PrimaryButton
+                        type="submit"
+                        :disabled="form.processing"
+                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700"
+                    >
+                        Save Package
+                    </PrimaryButton>
                 </div>
             </form>
         </div>

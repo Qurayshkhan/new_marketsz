@@ -56,12 +56,15 @@ const handleNavigate = (id) => {
                     />
 
                     <div class="card">
-                        <div class="flex max-lg:flex-col justify-between gap-3">
+                        <div class="flex justify-between gap-3 max-lg:flex-col">
                             <div class="card-title">Packages</div>
                             <div>
-                                <Link :href="route('admin.packages.create')">
-                                    <PrimaryButton
-                                        >+ Create Package</PrimaryButton
+                                <Link :href="route('admin.packages.kanban')">
+                                    <SecondaryButton>
+                                        <i
+                                            class="mr-2 fa-solid fa-chess-board"
+                                        ></i>
+                                        Card View</SecondaryButton
                                     >
                                 </Link>
                             </div>
@@ -119,7 +122,7 @@ const handleNavigate = (id) => {
                                                 {{ list?.status_name }}
                                             </td>
                                             <td
-                                                class="border text-center flex items-center justify-center space-x-2"
+                                                class="flex items-center justify-center space-x-2 text-center border"
                                             >
                                                 <Link
                                                     :href="

@@ -171,6 +171,10 @@ const addCameraPhoto = (index, file) => {
         console.warn("Captured file is not a valid File object:", file);
     }
 };
+
+const selectedSender = computed(() => {
+    return props.customers.find((u) => u.id === form.sender_id);
+});
 </script>
 
 <template>
@@ -250,7 +254,7 @@ const addCameraPhoto = (index, file) => {
                         <SearchableSelect
                             id="sender_id"
                             class="w-full mt-1"
-                            label="name"
+                            label="suite"
                             :options="props.customers"
                             :reduce="(option) => option.id"
                             v-model="form.sender_id"
@@ -259,6 +263,38 @@ const addCameraPhoto = (index, file) => {
                             class="mt-2"
                             :message="form.errors.sender_id"
                         />
+
+                        <div
+                            v-if="selectedSender"
+                            class="p-4 mt-4 border rounded-lg bg-gray-50"
+                        >
+                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <p>
+                                    <strong>Suite:</strong>
+                                    {{ selectedSender?.suite ?? "N/A" }}
+                                </p>
+                                <p>
+                                    <strong>Name:</strong>
+                                    {{ selectedSender?.name ?? "N/A" }}
+                                </p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    {{ selectedSender?.email ?? "N/A" }}
+                                </p>
+                                <p>
+                                    <strong>Phone:</strong>
+                                    {{ selectedSender?.phone ?? "N/A" }}
+                                </p>
+                                <p>
+                                    <strong>City:</strong>
+                                    {{ selectedSender?.city ?? "N/A" }}
+                                </p>
+                                <p>
+                                    <strong>State:</strong>
+                                    {{ selectedSender?.state ?? "N/A" }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-span-2" hidden>
@@ -378,27 +414,59 @@ const addCameraPhoto = (index, file) => {
                             <div>
                                 <InputLabel
                                     :for="'valuePerUnit' + index"
-                                    value="Value per unit"
+                                    value="Value / Unit"
                                 />
-                                <TextInput
-                                    v-model.number="item.value_per_unit"
-                                    type="number"
-                                    class="w-full"
-                                    step="any"
+
+                                <div
+                                    class="flex items-center gap-2 px-3 bg-gray-200 border rounded-md h-11"
+                                >
+                                    <div class="pr-2 border-r border-gray-400">
+                                        <i
+                                            class="text-gray-700 fa-solid fa-dollar-sign"
+                                        ></i>
+                                    </div>
+
+                                    <TextInput
+                                        :id="'valuePerUnit' + index"
+                                        v-model.number="item.value_per_unit"
+                                        type="number"
+                                        step="any"
+                                        class="w-full bg-transparent border-none shadow-none outline-none"
+                                    />
+                                </div>
+
+                                <InputError
+                                    class="mt-1"
+                                    :message="
+                                        form.errors[
+                                            `items.${index}.value_per_unit`
+                                        ]
+                                    "
                                 />
                             </div>
+
                             <div>
                                 <InputLabel
                                     :for="'totalLineValue' + index"
                                     value="Total line value"
                                 />
-                                <TextInput
-                                    v-model="item.total_line_value"
-                                    readonly
-                                    step="any"
-                                    class="w-full bg-gray-200"
-                                />
+                                <div
+                                    class="flex items-center gap-2 px-3 bg-gray-200 border rounded-md h-11"
+                                >
+                                    <div class="pr-2 border-r border-gray-400">
+                                        <i
+                                            class="text-gray-700 fa-solid fa-dollar-sign"
+                                        ></i>
+                                    </div>
+                                    <TextInput
+                                        v-model="item.total_line_value"
+                                        readonly
+                                        step="any"
+                                        class="w-full bg-gray-200"
+                                    />
+                                </div>
                             </div>
+
                             <div>
                                 <InputLabel
                                     :for="'weight' + index"
@@ -433,7 +501,7 @@ const addCameraPhoto = (index, file) => {
                                                             index
                                                         )
                                                 "
-                                                class="w-full p-2 border rounded"
+                                                class="w-full p-2"
                                             />
                                             <p
                                                 class="mt-1 text-sm text-gray-600"
@@ -593,17 +661,28 @@ const addCameraPhoto = (index, file) => {
                         </div>
                     </div>
 
-                    <div class="">
+                    <div>
                         <InputLabel value="Total Price" />
-                        <TextInput
-                            :value="form.totalPrice"
-                            readonly
-                            class="w-full bg-gray-200"
-                            step="any"
-                        />
+
+                        <div
+                            class="flex items-center gap-2 px-3 bg-gray-200 border rounded-md h-11"
+                        >
+                            <div class="pr-2 border-r border-gray-400">
+                                <i
+                                    class="text-gray-700 fa-solid fa-dollar-sign"
+                                ></i>
+                            </div>
+                            <TextInput
+                                :value="Number(form.totalPrice).toFixed(2)"
+                                readonly
+                                class="w-full bg-transparent border-none shadow-none outline-none"
+                                type="text"
+                            />
+                        </div>
                     </div>
+
                     <div class="">
-                        <InputLabel value="Total Weight" />
+                        <InputLabel value="Total Weight in lbs" />
                         <TextInput
                             :value="form.totalWeight"
                             readonly

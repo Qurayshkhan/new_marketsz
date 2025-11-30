@@ -141,12 +141,12 @@ onMounted(() => {
     <AuthenticatedLayout>
         <Head title="Shipment Checkout" />
         <h1 class="text-2xl">Checkout</h1>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4">
+        <div class="grid grid-cols-1 gap-6 p-4 lg:grid-cols-3">
             <div class="lg:col-span-2">
                 <div class="mb-4 text-end">
-                    <div class="w-60 ml-auto">
+                    <div class="ml-auto w-60">
                         <p
-                            class="flex flex-col items-center justify-between text-gray-700 mb-2"
+                            class="flex flex-col items-center justify-between mb-2 text-gray-700"
                         >
                             Estimated shipping cost: ${{ checkoutAmount }}
                         </p>
@@ -164,32 +164,32 @@ onMounted(() => {
                 <div class="mt-4 overflow-x-auto">
                     <div class="min-w-full bg-white rounded-lg shadow">
                         <table
-                            class="min-w-full divide-y divide-gray-200 border text-center"
+                            class="min-w-full text-center border divide-y divide-gray-200"
                         >
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border"
                                     >
                                         View
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border"
                                     >
                                         Tracking Number
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border"
                                     >
                                         Total Price
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border"
                                     >
                                         Total Weight
                                     </th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border"
                                     >
                                         Remove
                                     </th>
@@ -205,7 +205,7 @@ onMounted(() => {
                                 >
                                     <tr class="hover:bg-gray-100">
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap border"
+                                            class="px-6 py-4 border whitespace-nowrap"
                                         >
                                             <button
                                                 @click="
@@ -228,7 +228,7 @@ onMounted(() => {
                                             </button>
                                         </td>
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap border"
+                                            class="px-6 py-4 border whitespace-nowrap"
                                         >
                                             <div class="text-sm text-gray-900">
                                                 {{ shipPackage?.from }}
@@ -238,21 +238,25 @@ onMounted(() => {
                                             </div>
                                         </td>
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap border"
+                                            class="px-6 py-4 border whitespace-nowrap"
                                         >
                                             <div class="text-sm text-gray-900">
-                                                ${{ shipPackage?.total_value }}
+                                                {{
+                                                    __currency_format(
+                                                        shipPackage?.total_value
+                                                    )
+                                                }}
                                             </div>
                                         </td>
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap border"
+                                            class="px-6 py-4 border whitespace-nowrap"
                                         >
                                             <div class="text-sm text-gray-900">
                                                 {{ shipPackage?.weight }} lbs
                                             </div>
                                         </td>
                                         <td
-                                            class="px-6 py-4 whitespace-nowrap border text-center"
+                                            class="px-6 py-4 text-center border whitespace-nowrap"
                                         >
                                             <Delete
                                                 :id="props?.ship?.id"
@@ -268,7 +272,7 @@ onMounted(() => {
                                         >
                                             <div class="p-4 rounded-lg">
                                                 <h4
-                                                    class="text-lg font-semibold mb-2"
+                                                    class="mb-2 text-lg font-semibold"
                                                 >
                                                     Package Details
                                                 </h4>
@@ -286,8 +290,11 @@ onMounted(() => {
                                                     }}
                                                 </p>
                                                 <p>
-                                                    <strong>Value:</strong> ${{
-                                                        shipPackage?.total_value
+                                                    <strong>Value:</strong>
+                                                    {{
+                                                        __currency_format(
+                                                            shipPackage?.total_value
+                                                        )
                                                     }}
                                                 </p>
                                                 <p>
@@ -300,7 +307,7 @@ onMounted(() => {
                                     </tr>
                                 </template>
                                 <tr
-                                    class="bg-primary-500 text-white text-center uppercase"
+                                    class="text-center text-white uppercase bg-primary-500"
                                 >
                                     <td></td>
                                     <td class="px-6 py-4">
@@ -308,7 +315,7 @@ onMounted(() => {
                                     </td>
                                     <td>
                                         {{
-                                            __to_fixed_number(
+                                            __currency_format(
                                                 props?.ship?.total_price
                                             )
                                         }}
@@ -331,8 +338,8 @@ onMounted(() => {
 
             <!-- Right Section -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h2 class="text-xl font-semibold mb-2">
+                <div class="p-4 bg-white rounded-lg shadow">
+                    <h2 class="mb-2 text-xl font-semibold">
                         Shipment Details & Options
                     </h2>
                     <div class="mb-4">
@@ -375,7 +382,7 @@ onMounted(() => {
                             </p>
                         </div>
                         <div>
-                            <p class="text-gray-600 mb-2">
+                            <p class="mb-2 text-gray-600">
                                 (Based on 8lbs weight)
                             </p>
                         </div>
@@ -468,11 +475,11 @@ onMounted(() => {
                     </div>
                     <hr />
                     <div
-                        class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md mx-auto"
+                        class="w-full max-w-md p-6 mx-auto bg-white shadow-lg rounded-2xl"
                     >
-                        <div class="border-b pb-4 mb-4">
+                        <div class="pb-4 mb-4 border-b">
                             <div
-                                class="flex items-center justify-between text-base font-semibold text-gray-700 mb-3"
+                                class="flex items-center justify-between mb-3 text-base font-semibold text-gray-700"
                             >
                                 <h3>Subtotal</h3>
                                 <p class="text-gray-800">
@@ -487,7 +494,7 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div class="text-center mb-4">
+                        <div class="mb-4 text-center">
                             <h3 class="text-lg font-medium text-gray-800">
                                 Estimated Shipping Charges
                             </h3>
@@ -496,7 +503,7 @@ onMounted(() => {
                             </p>
                         </div>
 
-                        <div class="text-sm text-gray-600 mb-4 text-center">
+                        <div class="mb-4 text-sm text-center text-gray-600">
                             Your selected card will be used for this
                             transaction.
                         </div>

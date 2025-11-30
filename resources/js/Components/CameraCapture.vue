@@ -21,7 +21,7 @@
             @click="openCamera"
             class="w-full h-full text-center"
         >
-            Take Picture
+            <i class="mr-2 fa-solid fa-camera"></i> Take Picture
         </PrimaryButton>
 
         <div

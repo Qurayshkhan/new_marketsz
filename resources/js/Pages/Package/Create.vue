@@ -152,6 +152,10 @@ const removeImage = (itemIndex, imgIndex) => {
     form.items[itemIndex].preview.splice(imgIndex, 1);
     form.items[itemIndex].files.splice(imgIndex, 1);
 };
+
+const selectedSender = computed(() => {
+    return props.users.find((u) => u.id === form.sender_id);
+});
 </script>
 
 <template>
@@ -233,6 +237,38 @@ const removeImage = (itemIndex, imgIndex) => {
                             :message="form.errors.sender_id"
                         />
                     </div>
+
+                    <div
+                        v-if="selectedSender"
+                        class="p-4 mt-4 border rounded-lg bg-gray-50"
+                    >
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <p>
+                                <strong>Suite:</strong>
+                                {{ selectedSender?.suite ?? "N/A" }}
+                            </p>
+                            <p>
+                                <strong>Name:</strong>
+                                {{ selectedSender?.name ?? "N/A" }}
+                            </p>
+                            <p>
+                                <strong>Email:</strong>
+                                {{ selectedSender?.email ?? "N/A" }}
+                            </p>
+                            <p>
+                                <strong>Phone:</strong>
+                                {{ selectedSender?.phone ?? "N/A" }}
+                            </p>
+                            <p>
+                                <strong>City:</strong>
+                                {{ selectedSender?.city ?? "N/A" }}
+                            </p>
+                            <p>
+                                <strong>State:</strong>
+                                {{ selectedSender?.state ?? "N/A" }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="p-6 mb-8 bg-white border shadow-sm rounded-xl">
                     <div class="flex items-center justify-between mb-4">
@@ -242,7 +278,7 @@ const removeImage = (itemIndex, imgIndex) => {
                         <PrimaryButton
                             type="button"
                             @click="addItem"
-                            class="bg-green-600 hover:bg-green-700"
+                            class="bg-primary-600 hover:bg-primary-700"
                         >
                             + Add Item
                         </PrimaryButton>
@@ -295,22 +331,42 @@ const removeImage = (itemIndex, imgIndex) => {
                                 </div>
                                 <div>
                                     <InputLabel value="Value / Unit" />
-                                    <TextInput
-                                        v-model.number="item.value_per_unit"
-                                        type="number"
-                                        step="any"
-                                        class="w-full"
-                                    />
+
+                                    <div
+                                        class="flex items-center px-3 bg-gray-100 border border-gray-300 rounded-md h-11"
+                                    >
+                                        <i
+                                            class="mr-2 text-gray-700 fa-solid fa-dollar-sign"
+                                        ></i>
+
+                                        <TextInput
+                                            v-model.number="item.value_per_unit"
+                                            type="number"
+                                            step="any"
+                                            class="flex-1 bg-transparent border-none outline-none"
+                                        />
+                                    </div>
                                 </div>
+
                                 <div>
                                     <InputLabel value="Total Value" />
-                                    <TextInput
-                                        :value="
-                                            item.quantity * item.value_per_unit
-                                        "
-                                        readonly
-                                        class="w-full bg-gray-200"
-                                    />
+
+                                    <div
+                                        class="flex items-center px-3 bg-gray-100 border border-gray-300 rounded-md h-11"
+                                    >
+                                        <i
+                                            class="mr-2 text-gray-700 fa-solid fa-dollar-sign"
+                                        ></i>
+
+                                        <TextInput
+                                            :value="
+                                                item.quantity *
+                                                item.value_per_unit
+                                            "
+                                            readonly
+                                            class="flex-1 bg-transparent border-none outline-none cursor-not-allowed"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div>
@@ -328,19 +384,32 @@ const removeImage = (itemIndex, imgIndex) => {
                                 <InputLabel value="Photos" />
 
                                 <div class="flex gap-3 mt-2">
-                                    <label
-                                        class="w-full px-3 py-2 bg-white border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
+                                    <div
+                                        class="flex items-center w-full gap-3 bg-white border border-gray-300 rounded-lg shadow-sm"
                                     >
-                                        Browse Photo
-                                        <input
-                                            type="file"
-                                            class="hidden"
-                                            multiple
-                                            @change="
-                                                handleFileChange($event, index)
-                                            "
-                                        />
-                                    </label>
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 rounded-lg text-primary-500 bg-primary"
+                                        >
+                                            <i class="fa-solid fa-file"></i>
+                                        </div>
+
+                                        <label
+                                            class="flex items-center justify-center flex-1 px-4 py-2 transition cursor-pointer hover:bg-gray-100"
+                                        >
+                                            Browse Photo
+                                            <input
+                                                type="file"
+                                                class="hidden"
+                                                multiple
+                                                @change="
+                                                    handleFileChange(
+                                                        $event,
+                                                        index
+                                                    )
+                                                "
+                                            />
+                                        </label>
+                                    </div>
 
                                     <CameraCapture
                                         button-text="Take Picture"
@@ -383,16 +452,26 @@ const removeImage = (itemIndex, imgIndex) => {
                         Summary
                     </h2>
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        <div>
+                        <div class="">
                             <InputLabel value="Total Price" />
-                            <TextInput
-                                :value="totalPrice"
-                                readonly
-                                class="w-full bg-gray-200"
-                            />
+
+                            <div
+                                class="relative flex items-center px-3 bg-gray-100 border border-gray-300 rounded-md h-11"
+                            >
+                                <i
+                                    class="mr-2 text-gray-700 fa-solid fa-dollar-sign"
+                                ></i>
+
+                                <TextInput
+                                    :value="totalPrice.toFixed(2)"
+                                    readonly
+                                    class="flex-1 bg-transparent border-none outline-none cursor-not-allowed"
+                                />
+                            </div>
                         </div>
+
                         <div>
-                            <InputLabel value="Total Weight" />
+                            <InputLabel value="Total Weight in lbs" />
                             <TextInput
                                 :value="totalWeight"
                                 readonly
@@ -405,7 +484,7 @@ const removeImage = (itemIndex, imgIndex) => {
                     <PrimaryButton
                         type="submit"
                         :disabled="form.processing"
-                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700"
+                        class="px-6 py-2 bg-primary-600 hover:bg-primary-700"
                     >
                         Save Package
                     </PrimaryButton>

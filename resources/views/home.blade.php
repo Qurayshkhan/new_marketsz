@@ -9,7 +9,7 @@
                 <div class="flex items-end justify-between">
                     <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
                     {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
-                    <img src="{{ asset('assets') }}/image/home/dolphin.png" alt="Dolphin"
+                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" alt="Dolphin"
                         class="z-10 -mb-px dolphin city xl:mx-0">
                     <div class="w-full">
                         <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship"
@@ -133,12 +133,12 @@
                     <div class="text-xl leading-tight">Shop at ANY online store using your <strong>Marketsz
                             unique USA Address</strong> as your shipping address</div>
                 </div>
-                <div class="space-y-5 text-center">
+                <div class="space-y-0 text-center">
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         3</div>
-                    <div><img src="{{ asset('assets') }}/image/home/airplane-icon.svg" alt=""
-                            class="mx-auto shipment-icon">
+                    <div class="w-full h-[222px]"><img src="{{ asset('assets') }}/image/home/plane-and-ship.svg"
+                            alt="" class="w-full h-full mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight"><strong>Marketsz ships your orders</strong> to you in
                         the
@@ -830,10 +830,14 @@
     </section>
     <div class="mt-auto">
         <div class="relative pt-8 pb-40 mt-20 bg-rose-50 sm:pt-0 sm:mt-40">
-            <img alt="Seahorse illustration" src="{{ asset('assets') }}/image/home/ship.svg"
-                class="absolute hidden w-auto h-40 md:-left-36 lg:left-2 xl:left-24 top-48 animate-float md:block">
-            <img alt="Fish illustration" src="{{ asset('assets') }}/image/home/cartoon-plane.svg"
-                class="absolute w-auto h-20 -mr-20 transform -translate-x-1/2 sm:h-24 bottom-8 right-1/2 md:right-0 md:top-1/3 md:-translate-y-1/2 lg:right-24 xl:right-0 animate-wiggle">
+            <div class="absolute inset-0 flex items-center justify-between px-4 pointer-events-none md:px-10 lg:px-20">
+
+                <img alt="Seahorse illustration" src="{{ asset('assets/image/home/ship.svg') }}"
+                    class="hidden h-auto w-80 md:block lg:w-40 animate-float" />
+
+                <img alt="Fish illustration" src="{{ asset('assets/image/home/cartoon-plane.svg') }}"
+                    class="h-auto w-80 sm:w-24 lg:w-80 animate-wiggle" />
+            </div>
             <section class="container pt-12 space-y-12 sm:pt-20">
                 <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
                     <h2 class="text-3xl font-bold leading-snug sm:text-4xl">It’s time to shop till you drop

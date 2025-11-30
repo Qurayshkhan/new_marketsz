@@ -27,11 +27,11 @@ const updateShipment = () => {
     <Head title="Edit shipment" />
     <AuthenticatedLayout>
         <Edit :ship="props?.ship">
-            <div class="card bg-base-100 shadow-sm w-full">
+            <div class="w-full shadow-sm card bg-base-100">
                 <div class="card-body">
                     <form @submit.prevent="updateShipment">
                         <div
-                            class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-2"
+                            class="grid gap-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1"
                         >
                             <div>
                                 <InputLabel value="Tracking number" />
@@ -48,12 +48,28 @@ const updateShipment = () => {
                                 />
                             </div>
                             <div>
-                                <InputLabel value="Total price" />
-                                <TextInput v-model="form.total_price" />
+                                <InputLabel value="Total Price" />
+
+                                <div
+                                    class="flex items-center px-3 bg-gray-100 border border-gray-300 rounded-md h-11"
+                                >
+                                    <i
+                                        class="mr-2 text-gray-700 fa-solid fa-dollar-sign"
+                                    ></i>
+
+                                    <TextInput
+                                        v-model="form.total_price"
+                                        type="number"
+                                        step="any"
+                                        class="flex-1 bg-transparent border-none outline-none"
+                                    />
+                                </div>
+
                                 <InputError
                                     :message="form.errors.total_price"
                                 />
                             </div>
+
                             <div>
                                 <InputLabel value="Status" />
                                 <VueSelect
@@ -77,7 +93,7 @@ const updateShipment = () => {
                                 />
                             </div>
                         </div>
-                        <div class="text-end mt-2">
+                        <div class="mt-2 text-end">
                             <PrimaryButton :processing="form.processing"
                                 >Update</PrimaryButton
                             >

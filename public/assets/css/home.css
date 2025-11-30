@@ -185,9 +185,9 @@
 }
 
 .dolphin {
-    width: 160px;
+    width: 100px;
     position: absolute;
-    bottom: 10px;
+    bottom: -50px;
     left: 25%;
     z-index: 30;
     pointer-events: none;

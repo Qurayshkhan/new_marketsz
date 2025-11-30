@@ -57,7 +57,7 @@ const closeModal = () => {
         <Edit :ship="props?.ship">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12">
-                    <table class="w-full border text-center data-table text-sm">
+                    <table class="w-full text-sm text-center border data-table">
                         <thead class="uppercase bg-gray-100">
                             <tr>
                                 <th>
@@ -112,7 +112,7 @@ const closeModal = () => {
                                     </td>
                                     <td>
                                         {{
-                                            __to_fixed_number(
+                                            __currency_format(
                                                 shipPackage?.total_value
                                             )
                                         }}
@@ -127,7 +127,7 @@ const closeModal = () => {
                                             "
                                         >
                                             <i
-                                                class="fa-solid fa-check text-primary-500 font-extrabold"
+                                                class="font-extrabold fa-solid fa-check text-primary-500"
                                             ></i
                                             ><br />
                                             <span class="text-red-500">
@@ -171,7 +171,7 @@ const closeModal = () => {
                                         v-if="expandedRows.has(shipPackage.id)"
                                         class="bg-gray-50"
                                     >
-                                        <td colspan="7" class="text-left px-5">
+                                        <td colspan="7" class="px-5 text-left">
                                             <div
                                                 v-if="
                                                     shipPackage.status_name ==
@@ -246,7 +246,7 @@ const closeModal = () => {
 
                                                             <div>
                                                                 <button
-                                                                    class="btn bg-primary-500 text-white"
+                                                                    class="text-white btn bg-primary-500"
                                                                     @click="
                                                                         showPackagePhotos(
                                                                             shipPackage.id
@@ -283,7 +283,7 @@ const closeModal = () => {
                                                                     }}
                                                                 </p>
                                                                 <p
-                                                                    class="text-md text-gray-600"
+                                                                    class="text-gray-600 text-md"
                                                                 >
                                                                     {{
                                                                         item?.description
@@ -300,19 +300,29 @@ const closeModal = () => {
                                                                     }}
                                                                 </p>
                                                             </td>
-                                                            <td>
+                                                            <td
+                                                                class="text-center"
+                                                            >
                                                                 {{
                                                                     item?.quantity
                                                                 }}
                                                             </td>
-                                                            <td>
+                                                            <td
+                                                                class="text-center"
+                                                            >
                                                                 {{
-                                                                    item?.value_per_unit
+                                                                    __currency_format(
+                                                                        item?.value_per_unit
+                                                                    )
                                                                 }}
                                                             </td>
-                                                            <td>
+                                                            <td
+                                                                class="text-center"
+                                                            >
                                                                 {{
-                                                                    item?.total_line_value
+                                                                    __currency_format(
+                                                                        item?.total_line_value
+                                                                    )
                                                                 }}
                                                             </td>
                                                         </tr>
@@ -340,7 +350,9 @@ const closeModal = () => {
                                                                         this
                                                                         package: </span
                                                                     >{{
-                                                                        shipPackage.total_value
+                                                                        __currency_format(
+                                                                            shipPackage.total_value
+                                                                        )
                                                                     }}
                                                                     USD
                                                                 </p>
@@ -361,7 +373,7 @@ const closeModal = () => {
     </AuthenticatedLayout>
     <Modal :show="isShowPhotosModal" @close="closeModal">
         <div class="p-6 space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">
                     Package Photos
                 </h2>
@@ -374,7 +386,7 @@ const closeModal = () => {
             </div>
 
             <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
                 v-if="packagePhotos.length > 0"
             >
                 <img
@@ -382,7 +394,7 @@ const closeModal = () => {
                     :key="index"
                     :src="photo.file_with_url"
                     alt="Package Photo"
-                    class="rounded shadow border"
+                    class="border rounded shadow"
                 />
             </div>
             <div class="text-center text-gray-900" v-else>

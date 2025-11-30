@@ -10904,7 +10904,7 @@
         <img src="{{ asset('assets') }}/image/home/black-crow.svg" alt="bird illustration"
             class="hero-black-crow hero-black-crow-5 animate-bird">
 
-        <div class="hero-heading-and-content-outer">
+        <div class="hero-heading-and-content-outer mt-[-168px]">
             <div class="relative z-10 w-full">
                 <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
                 <div class="flex items-end justify-between">

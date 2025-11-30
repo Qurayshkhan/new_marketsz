@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/image/favicon.ico') }}" type="image/x-icon">
     <meta name="description"
         content="MyMalls gives you a personal shopping address in the US and Europe with express forwarding to your home or business in . Sign up now for free!">
     <link rel="stylesheet" href="{{ asset('assets/css/tw.css') }}">

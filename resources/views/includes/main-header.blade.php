@@ -10930,7 +10930,7 @@
                     <img src="assets/image/home/home2.svg" alt="EU illustration" class="city">
                 </div>
             </div>
-            <div class="py-8 hero-heading-and-content-inner">
+            <div class="py-[2.3rem] hero-heading-and-content-inner">
                 <h1> Get Your <span>USA</span> Shipping Address for the Dutch Caribbean </h1>
                 <p>
                     Shop on any online store using your unique and personal Marketsz

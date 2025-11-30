@@ -184,8 +184,8 @@
     }
 }
 
-.dolphin {
-    width: 100px;
+/* .dolphin {
+    width: 50px;
     position: absolute;
     bottom: -50px;
     left: 25%;
@@ -232,12 +232,97 @@
     }
 }
 
-/* Mobile */
 @media (max-width: 640px) {
     .dolphin {
         width: 110px;
         left: 38%;
         bottom: 20px;
         animation-duration: 5.2s;
+    }
+} */
+
+.dolphin {
+    width: 50px;
+    position: absolute;
+    bottom: -40px; /* baseline */
+    z-index: 30;
+    pointer-events: none;
+    transform-origin: center;
+    animation-duration: 6s; /* slower, more natural */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.left-dolphin {
+    left: 25%;
+    animation-name: dolphinSwimRight;
+}
+
+.right-dolphin {
+    right: 25%;
+    left: auto;
+    animation-name: dolphinSwimLeft;
+}
+
+.delay-0 {
+    animation-delay: 0s;
+}
+.delay-500 {
+    animation-delay: 0.5s;
+}
+.delay-1000 {
+    animation-delay: 1s;
+}
+
+@keyframes dolphinSwimRight {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    25% {
+        transform: translate(60px, -10px) rotate(-5deg);
+        opacity: 0.95;
+    }
+    50% {
+        transform: translate(120px, 0) rotate(0deg);
+        opacity: 1;
+    }
+    75% {
+        transform: translate(180px, -10px) rotate(5deg);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes dolphinSwimLeft {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    25% {
+        transform: translate(-60px, -10px) rotate(5deg);
+        opacity: 0.95;
+    }
+    50% {
+        transform: translate(-120px, 0) rotate(0deg);
+        opacity: 1;
+    }
+    75% {
+        transform: translate(-180px, -10px) rotate(-5deg);
+        opacity: 0.95;
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .dolphin {
+        width: 70px;
+        animation-duration: 5.5s;
     }
 }

@@ -10878,7 +10878,7 @@
         animation-delay: 5s;
     }
 </style>
-<section class="py-12 section-wrapper hero-outer">
+<section class="py-20 section-wrapper hero-outer">
     <div class="max-width-container container-fluid">
         <img src="{{ asset('assets') }}/image/home/cloud-1.svg" alt="cloud illustration"
             class="hero-cloud hero-cloud-1 animate-cloud">
@@ -10910,16 +10910,27 @@
                 <div class="flex items-end justify-between">
                     <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
                     {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
-                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" alt="Dolphin"
-                        class="z-10 -mb-px dolphin city xl:mx-0">
+
+                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" class="dolphin left-dolphin delay-0">
+                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg"
+                        class="delay-1000 dolphin left-dolphin">
+                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg"
+                        class="dolphin left-dolphin delay-2000">
+
+
                     <div class="w-full">
                         <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship"
                             class="z-10 -mb-px xl:mx-0 city ship">
                     </div>
+                    <img src="{{ asset('assets') }}/image/home/dolphin-left.svg" class="dolphin right-dolphin delay-0">
+                    <img src="{{ asset('assets') }}/image/home/dolphin-left.svg"
+                        class="delay-1000 dolphin right-dolphin">
+                    <img src="{{ asset('assets') }}/image/home/dolphin-left.svg"
+                        class="dolphin right-dolphin delay-2000">
                     <img src="assets/image/home/home2.svg" alt="EU illustration" class="city">
                 </div>
             </div>
-            <div class="py-2 hero-heading-and-content-inner">
+            <div class="py-8 hero-heading-and-content-inner">
                 <h1> Get Your <span>USA</span> Shipping Address for the Dutch Caribbean </h1>
                 <p>
                     Shop on any online store using your unique and personal Marketsz

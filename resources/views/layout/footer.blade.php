@@ -1,39 +1,39 @@
-     <footer class="px-4 text-white bg-primary md:px-0 relative">
+     <footer class="relative px-4 text-white bg-primary md:px-0">
          <style>
              .footer-round {
                  border-radius: 100% 100% 0 0;
              }
          </style>
          <div
-             class="footer-round absolute left-0 right-0 -top-6 h-6 md:h-10 z-10 overflow-hidden bg-primary rounded-t-full">
+             class="absolute left-0 right-0 z-10 h-6 overflow-hidden rounded-t-full footer-round -top-6 md:h-10 bg-primary">
          </div>
          <div class="container">
-             <nav class="flex flex-col items-center justify-between pt-0 pb-6  text-center md:flex-row md:text-left">
+             <nav class="flex flex-col items-center justify-between pt-0 pb-6 text-center md:flex-row md:text-left">
                  <div><a href="/"><img class="logo" src="assets/image/logo.svg" alt="app-logo"></a></div>
                  <ul class="flex flex-col text-lg font-bold md:flex-row">
-                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="text-white border-b-2 border-transparent"
                              href="{{ route('web.about') }}">About</a></li>
-                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="text-white border-b-2 border-transparent"
                              href="{{ route('web.contact') }}">Contact US</a>
                      </li>
-                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="text-white border-b-2 border-transparent"
                              href="{{ route('web.calculator') }}">Cost
                              Calculator</a></li>
-                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="border-b-2 border-transparent"
+                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6"><a class="text-white border-b-2 border-transparent"
                              href="{{ route('web.faqs') }}">FAQ</a></li>
                  </ul>
                  <div class="flex flex-col items-center sm:flex-row">
                      <ul class="flex">
                          <li class="px-2"><a href="https://www.facebook.com/Marketsz/" target="_blank"
-                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-facebook"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl text-white fab fa-facebook"
                                      aria-hidden="true"></i></a>
                          </li>
                          <li class="px-2"><a href="https://www.instagram.com/marketsz.official/" target="_blank"
-                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-instagram"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl text-white fab fa-instagram"
                                      aria-hidden="true"></i></a>
                          </li>
                          <li class="px-2"><a href="https://www.youtube.com/@marketsz.official" target="_blank"
-                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl fab fa-youtube"
+                                 rel="noreferrer" class="hover:scale-105"><i class="text-xl text-white fab fa-youtube"
                                      aria-hidden="true"></i></a>
                          </li>
                      </ul>
@@ -43,10 +43,11 @@
              <div class="pt-6 pb-12 text-sm text-center text-white text-opacity-75">
                  <div class="max-w-lg mx-auto"><span class="">© All Rights Reserved - {{ date('Y') }}</span>
                      <div class="mt-2 space-x-4">
-                         <a class="underline whitespace-nowrap hover:text-white" href="{{ route('web.terms') }}">Terms
+                         <a class="text-white underline whitespace-nowrap hover:text-white"
+                             href="{{ route('web.terms') }}">Terms
                              of
                              Service</a>
-                         <a class="underline whitespace-nowrap hover:text-white"
+                         <a class="text-white underline whitespace-nowrap hover:text-white"
                              href="{{ route('web.privacy') }}">Privacy
                              Policy</a>
                      </div>

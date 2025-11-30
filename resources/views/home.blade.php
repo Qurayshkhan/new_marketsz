@@ -1,14 +1,14 @@
 @extends('layout.master')
 @section('title', 'Home')
 @section('content')
-    <header class="relative w-full overflow-hidden text-white bg-[#9E1D22]">
+    {{-- <header class="relative w-full overflow-hidden text-white bg-[#9E1D22]">
         <img class="header-bg" src="assets/image/home/background.svg" alt="background" width="100%">
         <header class="pt-16 space-y-12 container-fluid sm:pt-32">
             <div class="relative z-10 mx-auto mt-12 max-w-7xl">
                 <img src="assets/image/home/airplane.svg" alt="EU illustration" class="z-10 -mb-px xl:mx-0 airplane">
                 <div class="flex items-end justify-between">
                     <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
-                    {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
+                    <img src="assets/image/home/island.svg" alt="Island illustration" class="city">
                     <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" alt="Dolphin"
                         class="z-10 -mb-px dolphin city xl:mx-0">
                     <div class="w-full">
@@ -95,7 +95,9 @@
         <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
             class="absolute h-8 opacity-25 top-80 left-20">
 
-    </header>
+    </header> --}}
+
+    @include('includes.main-header')
 
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
         class="absolute h-12 -ml-64 opacity-50 top-28 left-1/2">
@@ -103,8 +105,7 @@
         class="absolute h-8 mt-2 ml-64 opacity-25 top-32 left-1/2">
     <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
         class="absolute h-10 mr-8 opacity-50 right-8 top-64">
-    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon"
-        class="absolute h-8 opacity-25 top-80 left-20">
+    <img src="{{ asset('assets') }}/image/home/box.svg" alt="floating icon" class="absolute h-8 opacity-25 top-80 left-20">
     <section class="container pt-12 space-y-12 sm:pt-20">
         <header class="max-w-2xl px-4 mx-auto text-center sm:pt-20">
             <h2 class="text-3xl font-bold leading-snug sm:text-4xl">Hassle-Free Worldwide Shopping and Shipping
@@ -117,8 +118,7 @@
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         1</div>
-                    <div><img src="{{ asset('assets') }}/image/home/home.svg" alt=""
-                            class="mx-auto shipment-icon">
+                    <div><img src="{{ asset('assets') }}/image/home/home.svg" alt="" class="mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight">Get a <strong>Marketsz USA Shipping Address</strong>
                         instantly when you sign up</div>
@@ -127,8 +127,7 @@
                     <div
                         class="flex items-center justify-center w-10 h-10 mx-auto text-xl font-bold text-white rounded-full bg-primary">
                         2</div>
-                    <div><img src="{{ asset('assets') }}/image/home/cart.svg" alt=""
-                            class="mx-auto shipment-icon">
+                    <div><img src="{{ asset('assets') }}/image/home/cart.svg" alt="" class="mx-auto shipment-icon">
                     </div>
                     <div class="text-xl leading-tight">Shop at ANY online store using your <strong>Marketsz
                             unique USA Address</strong> as your shipping address</div>

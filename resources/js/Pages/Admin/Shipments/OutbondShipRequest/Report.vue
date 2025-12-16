@@ -24,6 +24,7 @@ const props = defineProps({
                                     <tr>
                                         <th class="border">Tracking Number</th>
                                         <th class="border">Customer</th>
+                                        <th class="border">Suite</th>
                                         <th class="border">Total weight</th>
                                         <th class="border">Total Price</th>
                                         <th class="border">Status</th>
@@ -44,6 +45,9 @@ const props = defineProps({
                                         </td>
                                         <td class="border">
                                             {{ shipment?.user?.name ?? "" }}
+                                        </td>
+                                        <td class="border">
+                                            {{ shipment?.user?.suite ?? "" }}
                                         </td>
                                         <td class="border">
                                             {{ shipment?.total_weight ?? "" }}

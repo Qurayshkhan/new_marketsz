@@ -16,40 +16,40 @@ import { Link } from "@inertiajs/vue3";
                 class="flex flex-col items-center justify-between pt-0 pb-6 text-center md:flex-row md:text-left"
             >
                 <div>
-                    <Link :href="route('web.home')"
+                    <a :href="route('web.home')"
                         ><img
                             class="logo"
                             src="assets/image/logo.svg"
                             alt="app-logo"
-                    /></Link>
+                    /></a>
                 </div>
                 <ul class="flex flex-col text-lg font-bold md:flex-row">
                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6">
-                        <Link
+                        <a
                             class="border-b-2 border-transparent"
                             :href="route('web.about')"
-                            >About</Link
+                            >About</a
                         >
                     </li>
                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6">
-                        <Link
+                        <a
                             class="border-b-2 border-transparent"
                             :href="route('web.contact')"
-                            >Contact US</Link
+                            >Contact US</a
                         >
                     </li>
                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6">
-                        <Link
+                        <a
                             class="border-b-2 border-transparent"
                             :href="route('web.calculator')"
-                            >Cost Calculator</Link
+                            >Cost Calculator</a
                         >
                     </li>
                     <li class="relative z-20 mx-1 lg:mx-2 xl:mx-6">
-                        <Link
+                        <a
                             class="border-b-2 border-transparent"
                             :href="route('web.faqs')"
-                            >FAQ</Link
+                            >FAQ</a
                         >
                     </li>
                 </ul>
@@ -101,15 +101,15 @@ import { Link } from "@inertiajs/vue3";
                 <div class="max-w-lg mx-auto">
                     <span class="">© All Rights Reserved - {{ 2025 }}</span>
                     <div class="mt-2 space-x-4">
-                        <Link
+                        <a
                             class="underline whitespace-nowrap hover:text-white"
                             :href="route('web.terms')"
-                            >Terms of Service</Link
+                            >Terms of Service</a
                         >
-                        <Link
+                        <a
                             class="underline whitespace-nowrap hover:text-white"
                             :href="route('web.privacy')"
-                            >Privacy Policy</Link
+                            >Privacy Policy</a
                         >
                     </div>
                 </div>

@@ -54,7 +54,7 @@ const getCardLabel = (card) => `${card.brand} **** **** **** ${card.last4}`;
             <p>Choose your card for checkout</p>
         </div>
         <div class="flex flex-wrap gap-2">
-            <div class="w-10 h-10"><StripeIcon class="w-full h-full" /></div>
+            <!-- <div class="w-10 h-10"><StripeIcon class="w-full h-full" /></div> -->
             <div class="w-10 h-10"><MasterCard class="w-full h-full" /></div>
             <div class="w-10 h-10"><Paypal class="w-full h-full" /></div>
             <div class="w-10 h-10">

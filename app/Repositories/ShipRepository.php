@@ -22,11 +22,23 @@ class ShipRepository implements ShipInterface
     {
         $shipments = $this->ship->query();
 
-        $shipments->with('user', 'packages', 'internationalShipping')->when($request->status, function($query) use ($request){
+        $shipments->with([
+            'user',
+            'userAddress',
+            'internationalShipping',
+            'packages' => function($query) {
+                $query->with([
+                    'files',
+                    'items.packageFiles',
+                    'invoices',
+                    'customer'
+                ]);
+            }
+        ])->when($request->status, function($query) use ($request){
             $query->where('status', $request->status);
         });
 
-      return  $shipments->paginate(25);
+      return  $shipments->orderBy('created_at', 'desc')->paginate(25);
 
     }
 

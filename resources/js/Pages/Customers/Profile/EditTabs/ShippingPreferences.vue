@@ -127,6 +127,7 @@ const handleSubmitPreferences = () => {
                                 </div>
                             </div>
                         </span>
+                        <span>-</span>
                     </div>
                     <div>{{ iso?.description }}</div>
                 </div>

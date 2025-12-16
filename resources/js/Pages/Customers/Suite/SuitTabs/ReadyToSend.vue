@@ -200,8 +200,8 @@ onMounted(() => {
         :readyToSendCount="props?.packageCounts?.ready_to_send"
         :allPackagesCount="props?.packageCounts?.all"
     >
-        <div class="grid gap-4 md:grid-cols-12">
-            <div class="md:col-span-9">
+        <div class="grid md:grid-cols-12 gap-2">
+            <div class="col-span-12 md:col-span-9">
                 <table class="w-full text-sm text-center border data-table">
                     <thead class="uppercase bg-gray-100">
                         <tr>

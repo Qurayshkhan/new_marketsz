@@ -784,8 +784,10 @@
         </div>
         <div class="absolute left-0 z-0 w-auto top-12 h-72 flamingo" style="transform: translateX(20px);">
             <div class="animate-float">
-                <img src="{{ asset('assets') }}/image/ballon.svg" alt="Flamingo illustration"
-                    class="h-48 transform sm:52">
+                {{-- <img src="{{ asset('assets') }}/image/ballon.svg" alt="Flamingo illustration"
+                    class="h-48 transform sm:52"> --}}
+                <img src="{{ asset('assets') }}/image/home/cartoon-plane.svg" alt="Flamingo illustration"
+                    class="h-48 w-48 transform sm:52">
                 <img src="{{ asset('assets') }}/image/home/ship.svg" alt="ship" class="h-48 transform sm:52">
             </div>
         </div>

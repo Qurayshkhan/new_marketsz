@@ -18,6 +18,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    suites: {
+        type: Array,
+        default: () => [],
+    },
     filters: {
         type: Object,
         default: () => ({}),
@@ -52,6 +56,7 @@ const handleNavigate = (id) => {
                     <!-- Filter Section -->
                     <PackageFilter
                         :customers="customers"
+                        :suites="suites"
                         :current-filters="filters"
                     />
 

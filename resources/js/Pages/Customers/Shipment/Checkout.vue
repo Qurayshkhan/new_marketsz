@@ -138,7 +138,7 @@ watch([couponDiscount, loyaltyDiscount], () => {
             @click="confirmRecordDeletion"
             class="bg-primary-500 text-white w-full py-2 px-4 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
         >
-            Ship Now
+            Estimated Total
         </button>
 
         <Modal :show="confirmingRecordDeletion" @close="closeModal">

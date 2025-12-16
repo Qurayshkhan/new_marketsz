@@ -80,6 +80,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/', [ShipmentController::class, 'index'])->name('admin.shipments');
         Route::get('edit/{ship}', [ShipmentController::class, 'edit'])->name('admin.shipments.edit');
         Route::post('/update/{ship}', [ShipmentController::class, 'update'])->name('admin.shipments.update');
+        Route::post('/update-status/{ship}', [ShipmentController::class, 'updateStatus'])->name('admin.shipments.update-status');
         Route::get('/packages/{ship}', [ShipmentController::class, 'shipPackages'])->name('admin.shipments.packages');
         Route::get('/outbond', [ShipmentController::class, 'outbondRequests'])->name('admin.shipments.outbond');
     });

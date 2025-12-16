@@ -10911,31 +10911,31 @@
                     <img src="assets/image/home/us-with-plane.svg" alt="U.S. illustration" style='width:300px'>
                     {{-- <img src="assets/image/home/island.svg" alt="Island illustration" class="city"> --}}
 
-                    <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" class="dolphin left-dolphin delay-0">
+                    {{-- <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg" class="dolphin left-dolphin delay-0">
                     <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg"
                         class="delay-1000 dolphin left-dolphin">
                     <img src="{{ asset('assets') }}/image/home/blue-dolphin.svg"
-                        class="dolphin left-dolphin delay-2000">
+                        class="dolphin left-dolphin delay-2000"> --}}
 
 
                     <div class="w-full">
                         <img src="{{ asset('assets') }}/image/home/ship.svg" alt="Ship"
                             class="z-10 -mb-px xl:mx-0 city ship">
                     </div>
-                    <img src="{{ asset('assets') }}/image/home/dolphin-left.svg" class="dolphin right-dolphin delay-0">
+                    {{-- <img src="{{ asset('assets') }}/image/home/dolphin-left.svg" class="dolphin right-dolphin delay-0">
                     <img src="{{ asset('assets') }}/image/home/dolphin-left.svg"
                         class="delay-1000 dolphin right-dolphin">
                     <img src="{{ asset('assets') }}/image/home/dolphin-left.svg"
-                        class="dolphin right-dolphin delay-2000">
+                        class="dolphin right-dolphin delay-2000"> --}}
                     <img src="assets/image/home/home2.svg" alt="EU illustration" class="city">
                 </div>
             </div>
             <div class="py-[2.3rem] hero-heading-and-content-inner">
-                <h1> Get Your <span>USA</span> Shipping Address for the Dutch Caribbean </h1>
+                <h1> Get Your Tax-Free <span>USA </span>  Shipping Address for the  Caribbean </h1>
                 <p>
                     Shop on any online store using your unique and personal Marketsz
                     USA Shipping Address and we deliver your orders to your
-                    doorstep at your home or business in the Dutch Caribbean.
+                    doorstep at your home or business in the  Caribbean.
                 </p>
                 <div class="hero-check-and-text">
                     <div>

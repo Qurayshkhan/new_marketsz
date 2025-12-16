@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
     <aside
         :class="{
-            'w-96': isSidebarOpen,
+            'w-80': isSidebarOpen,
             'w-0': !isSidebarOpen,
             'hidden md:block': !isSidebarOpen && !isMobile,
         }"

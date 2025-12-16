@@ -44,6 +44,7 @@ class PackageController extends Controller
             'date_from' => 'nullable|date',
             'date_to' => 'nullable|date|after_or_equal:date_from',
             'sender_id' => 'nullable|exists:users,id',
+            'suite' => 'nullable|string|max:255',
             'tracking_id' => 'nullable|string|max:255',
             'total_value_min' => 'nullable|numeric|min:0',
             'total_value_max' => 'nullable|numeric|min:0|gte:total_value_min',
@@ -52,12 +53,23 @@ class PackageController extends Controller
         // Get customers for sender dropdown
         $customers = $this->userRepository->customers();
 
+        // Get unique suites from customers
+        $suites = User::where('type', User::USER_TYPE_CUSTOMER)
+            ->where('is_active', 1)
+            ->whereNotNull('suite')
+            ->where('suite', '!=', '')
+            ->distinct()
+            ->orderBy('suite')
+            ->pluck('suite')
+            ->toArray();
+
         // Get packages with filters
         $packages = $this->packageRepository->packages($validated);
 
         return Inertia::render('Package/Report', [
             'packages' => $packages,
             'customers' => $customers,
+            'suites' => $suites,
             'filters' => $validated
         ]);
     }

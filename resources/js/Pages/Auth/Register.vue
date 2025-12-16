@@ -79,7 +79,7 @@ const submit = () => {
                         />
                     </div>
                     <h1 class="mb-1 text-black title-1">
-                        Get Your FREE USA Shipping Address
+                        Get Your TAX-FREE USA Shipping Address
                     </h1>
                     <p class="mx-auto text-lg text-gray-600 md:text-xl">
                         As soon as your register, you can instantly get your

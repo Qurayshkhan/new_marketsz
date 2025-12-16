@@ -40,6 +40,13 @@ class PackageRepository implements PackageInterface
             $query->where('sender_id', $filters['sender_id']);
         }
 
+        // Apply suite filter
+        if (!empty($filters['suite'])) {
+            $query->whereHas('customer', function ($q) use ($filters) {
+                $q->where('suite', $filters['suite']);
+            });
+        }
+
         // Apply tracking ID filter
         if (!empty($filters['tracking_id'])) {
             $query->where('tracking_id', 'LIKE', '%' . $filters['tracking_id'] . '%');

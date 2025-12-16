@@ -2,7 +2,7 @@
        <img class="header-bg" src="{{ asset('assets/image/home/background.svg') }}" alt="background" width="100%">
 
        <nav class="font-bold text-md xl:text-lg">
-           <div class="flex items-center px-2 pt-4 lg:px-4 lg:p-8">
+           <div class="flex items-center px-2">
                <div class="justify-start flex-auto mr-0 md:flex md:flex-grow md:-mr-20 lg:-mr-20 xl:mr-0">
                    <a href="{{ route('web.home') }}"><img class="logo"
                            src="{{ asset('assets/image/logo-original.svg') }}" alt="app-logo"></a>

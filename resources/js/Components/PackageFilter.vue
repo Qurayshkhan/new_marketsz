@@ -115,6 +115,28 @@
                         </select>
                     </div>
 
+                    <!-- Suite Filter -->
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                            Suite
+                        </label>
+                        <select
+                            v-model="filters.suite"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                            <option value="">All Suites</option>
+                            <option
+                                v-for="suite in suites"
+                                :key="suite"
+                                :value="suite"
+                            >
+                                {{ suite }}
+                            </option>
+                        </select>
+                    </div>
+
                     <!-- Tracking ID Filter -->
                     <div>
                         <label
@@ -194,6 +216,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    suites: {
+        type: Array,
+        default: () => [],
+    },
     currentFilters: {
         type: Object,
         default: () => ({}),
@@ -206,6 +232,7 @@ const filters = ref({
     date_from: "",
     date_to: "",
     sender_id: "",
+    suite: "",
     tracking_id: "",
     total_value_min: "",
     total_value_max: "",
@@ -248,6 +275,7 @@ const getFilterLabel = (key, value) => {
         date_from: `From: ${value}`,
         date_to: `To: ${value}`,
         sender_id: `Sender: ${getSenderName(value)}`,
+        suite: `Suite: ${value}`,
         tracking_id: `Tracking: ${value}`,
         total_value_min: `Min Value: $${value}`,
         total_value_max: `Max Value: $${value}`,

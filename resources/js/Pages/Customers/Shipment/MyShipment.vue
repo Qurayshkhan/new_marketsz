@@ -24,12 +24,12 @@ const props = defineProps({
                             <tr>
                                 <th class="p-4 text-left">ID</th>
                                 <th class="p-4 text-left">Tracking Number</th>
-                                <th class="p-4 text-left">Total Weight</th>
+                                <!-- <th class="p-4 text-left">Total Weight</th> -->
                                 <th class="p-4 text-left">Total Price</th>
-                                <th class="p-4 text-left">Ship Payment</th>
+                                <!-- <th class="p-4 text-left">Ship Payment</th> -->
                                 <th class="p-4 text-left">Status</th>
-                                <th class="p-4 text-left">Invoice Status</th>
-                                <th class="p-4 text-right">Action</th>
+                                <!-- <th class="p-4 text-left">Invoice Status</th> -->
+                                <!-- <th class="p-4 text-right">Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -44,9 +44,9 @@ const props = defineProps({
                                 <td class="p-4">
                                     {{ shipment.tracking_number || "N/A" }}
                                 </td>
-                                <td class="p-4">
+                                <!-- <td class="p-4">
                                     {{ shipment.total_weight }} kg
-                                </td>
+                                </td> -->
                                 <td class="p-4">
                                     ${{ shipment.total_price.toFixed(2) }}
                                 </td>
@@ -74,10 +74,10 @@ const props = defineProps({
                                         {{ shipment.status }}
                                     </span>
                                 </td>
-                                <td class="p-4 capitalize">
+                                <!-- <td class="p-4 capitalize">
                                     {{ shipment.invoice_status }}
-                                </td>
-                                <td class="p-4 text-right relative">
+                                </td> -->
+                                <!-- <td class="p-4 text-right relative">
                                     <div class="dropdown dropdown-end">
                                         <label
                                             tabindex="0"
@@ -106,7 +106,7 @@ const props = defineProps({
                                             </li>
                                         </ul>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                     </table>

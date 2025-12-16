@@ -98,9 +98,12 @@ const submit = () => {
                     </PrimaryButton>
                 </div>
             </form>
-             <header class="w-full text-center md:w-1/2">
+            <header class="w-full text-center md:w-1/2">
                 <div class="flex justify-center">
-                    <img src="/assets/image/home/cartoon-plane.svg" alt="fish" />
+                    <img
+                        src="/assets/image/home/cartoon-plane.svg"
+                        alt="fish"
+                    />
                 </div>
             </header>
         </div>
@@ -108,7 +111,6 @@ const submit = () => {
             class="flex justify-center text-lg text-center text-gray-600 md:text-xl"
         >
             <div class="px-10">
-
                 <p class="mx-auto mb-2 text-lg text-gray-600 md:text-xl">
                     Ready to Shop Some More? Your packages are waiting
                 </p>
@@ -139,7 +141,7 @@ const submit = () => {
                         Other login Questions?
                         <a
                             class="text-blue-500 hover:text-primary-700"
-                            href="FAQ.html"
+                            :href="route('web.faqs')"
                             >Please see our FAQ.</a
                         >
                     </div>

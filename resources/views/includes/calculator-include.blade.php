@@ -26,57 +26,13 @@
                 id="headlessui-listbox" aria-labelledby="headlessui-listbox-button-5" role="listbox" tabindex="0"
                 aria-activedescendant="headlessui-listbox-option-64">
                 <option value="">Select your country</option>
-                <option value="">Curacao</option>
-                <option id="headlessui-listbox-option-50" role="option" tabindex="-1">Anguilla</option>
-                <option id="headlessui-listbox-option-51" role="option" tabindex="-1">Antigua and Barbuda</option>
-                <option id="headlessui-listbox-option-52" role="option" tabindex="-1">Argentina</option>
-                <option id="headlessui-listbox-option-53" role="option" tabindex="-1">Aruba</option>
-                <option id="headlessui-listbox-option-54" role="option" tabindex="-1">Bahamas</option>
-                <option id="headlessui-listbox-option-55" role="option" tabindex="-1">Barbados</option>
-                <option id="headlessui-listbox-option-56" role="option" tabindex="-1">Belize</option>
-                <option id="headlessui-listbox-option-57" role="option" tabindex="-1">Bermuda</option>
-                <option id="headlessui-listbox-option-58" role="option" tabindex="-1">Bonaire</option>
-                <option id="headlessui-listbox-option-59" role="option" tabindex="-1">British Guyana</option>
-                <option id="headlessui-listbox-option-60" role="option" tabindex="-1">Canada</option>
-                <option id="headlessui-listbox-option-61" role="option" tabindex="-1">Cayman Islands</option>
-                <option id="headlessui-listbox-option-62" role="option" tabindex="-1">Chile</option>
-                <option id="headlessui-listbox-option-63" role="option" tabindex="-1">Colombia</option>
-                <option id="headlessui-listbox-option-64" role="option" tabindex="-1" aria-selected="true">Curacao
-                </option>
-                <option id="headlessui-listbox-option-65" role="option" tabindex="-1">Dominica</option>
-                <option id="headlessui-listbox-option-66" role="option" tabindex="-1">Dominican Republic</option>
-                <option id="headlessui-listbox-option-67" role="option" tabindex="-1">French Guyana</option>
-                <option id="headlessui-listbox-option-68" role="option" tabindex="-1">Grenada</option>
-                <option id="headlessui-listbox-option-69" role="option" tabindex="-1">Guadeloupe</option>
-                <option id="headlessui-listbox-option-70" role="option" tabindex="-1">Guatemala</option>
-                <option id="headlessui-listbox-option-71" role="option" tabindex="-1">Haiti</option>
-                <option id="headlessui-listbox-option-72" role="option" tabindex="-1">Jamaica</option>
-                <option id="headlessui-listbox-option-73" role="option" tabindex="-1">Martinique</option>
-                <option id="headlessui-listbox-option-74" role="option" tabindex="-1">Mexico</option>
-                <option id="headlessui-listbox-option-75" role="option" tabindex="-1">Montserrat</option>
-                <option id="headlessui-listbox-option-76" role="option" tabindex="-1">Nevis</option>
-                <option id="headlessui-listbox-option-77" role="option" tabindex="-1">Panama</option>
-                <option id="headlessui-listbox-option-78" role="option" tabindex="-1">Puerto Rico</option>
-                <option id="headlessui-listbox-option-79" role="option" tabindex="-1">Saba</option>
-                <option id="headlessui-listbox-option-80" role="option" tabindex="-1">Saint Barthelemy</option>
-                <option id="headlessui-listbox-option-81" role="option" tabindex="-1">Saint Kitts and Nevis
-                </option>
-                <option id="headlessui-listbox-option-82" role="option" tabindex="-1">Saint Lucia</option>
-                <option id="headlessui-listbox-option-83" role="option" tabindex="-1">Saint Martin</option>
-                <option id="headlessui-listbox-option-84" role="option" tabindex="-1">Saint Vincent And The
-                    Grenadines</option>
-                <option id="headlessui-listbox-option-85" role="option" tabindex="-1">Sint Eustatius</option>
-                <option id="headlessui-listbox-option-86" role="option" tabindex="-1">Sint Maarten</option>
-                <option id="headlessui-listbox-option-87" role="option" tabindex="-1">Suriname</option>
-                <option id="headlessui-listbox-option-88" role="option" tabindex="-1">Trinidad and Tobago
-                </option>
-                <option id="headlessui-listbox-option-89" role="option" tabindex="-1">Turks and Caicos Islands
-                </option>
-                <option id="headlessui-listbox-option-90" role="option" tabindex="-1">Uruguay</option>
-                <option id="headlessui-listbox-option-91" role="option" tabindex="-1">Virgin Islands, British
-                </option>
-                <option id="headlessui-listbox-option-92" role="option" tabindex="-1">Virgin Islands, U.S.
-                </option>
+                @php
+                    $countriesJson = file_get_contents(resource_path('js/Data/countries.json'));
+                    $countries = json_decode($countriesJson, true);
+                @endphp
+                @foreach($countries as $country)
+                    <option value="{{ $country['name'] }}">{{ $country['name'] }}</option>
+                @endforeach
             </select>
         </div>
 

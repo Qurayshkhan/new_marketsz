@@ -65,11 +65,11 @@ const getFileUrl = (filePath) => {
         <div class="grid grid-cols-1">
             <div class="w-full">
                 <div class="card">
-                    <h1 class="text-2xl mb-4">Shipments</h1>
+                    <h1 class="mb-4 text-2xl">Shipments</h1>
 
                     <div class="card-body">
                         <div class="overflow-x-auto">
-                            <table class="table border text-center">
+                            <table class="table text-center border">
                                 <!-- head -->
                                 <thead class="text-black">
                                     <tr>
@@ -80,7 +80,7 @@ const getFileUrl = (filePath) => {
                                         <th class="border">Total Weight</th>
                                         <th class="border">Total Price</th>
                                         <th class="border">Status</th>
-                                        <th class="border">Invoice Status</th>
+                                        <!-- <th class="border">Invoice Status</th> -->
                                         <th class="border">Action</th>
                                     </tr>
                                 </thead>
@@ -157,7 +157,7 @@ const getFileUrl = (filePath) => {
                                                             shipment?.status ===
                                                             'cancelled',
                                                     }"
-                                                    class="px-2 py-1 rounded-full text-xs font-medium"
+                                                    class="px-2 py-1 text-xs font-medium rounded-full"
                                                 >
                                                     {{
                                                         shipment?.status
@@ -169,7 +169,7 @@ const getFileUrl = (filePath) => {
                                                     }}
                                                 </span>
                                             </td>
-                                            <td class="border">
+                                            <!-- <td class="border">
                                                 <span
                                                     :class="{
                                                         'bg-yellow-100 text-yellow-800':
@@ -182,7 +182,7 @@ const getFileUrl = (filePath) => {
                                                             shipment?.invoice_status ===
                                                             'unpaid',
                                                     }"
-                                                    class="px-2 py-1 rounded-full text-xs font-medium"
+                                                    class="px-2 py-1 text-xs font-medium rounded-full"
                                                 >
                                                     {{
                                                         shipment?.invoice_status
@@ -193,7 +193,7 @@ const getFileUrl = (filePath) => {
                                                         )
                                                     }}
                                                 </span>
-                                            </td>
+                                            </td> -->
                                             <td class="text-center border">
                                                 <div
                                                     class="flex items-center justify-center gap-2"
@@ -237,17 +237,17 @@ const getFileUrl = (filePath) => {
                                             v-if="expandedRows[shipment.id]"
                                             class="bg-gray-50"
                                         >
-                                            <td colspan="9" class="border p-4">
+                                            <td colspan="9" class="p-4 border">
                                                 <div
-                                                    class="text-left space-y-4"
+                                                    class="space-y-4 text-left"
                                                 >
                                                     <!-- Ship Request Information -->
                                                     <div
-                                                        class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                                        class="grid grid-cols-1 gap-4 md:grid-cols-2"
                                                     >
                                                         <div>
                                                             <h3
-                                                                class="font-semibold text-lg mb-2"
+                                                                class="mb-2 text-lg font-semibold"
                                                             >
                                                                 Ship Request
                                                                 Information
@@ -306,7 +306,7 @@ const getFileUrl = (filePath) => {
                                                         <!-- Shipment Details -->
                                                         <div>
                                                             <h3
-                                                                class="font-semibold text-lg mb-2"
+                                                                class="mb-2 text-lg font-semibold"
                                                             >
                                                                 Shipment Details
                                                             </h3>
@@ -361,7 +361,7 @@ const getFileUrl = (filePath) => {
                                                                                 shipment?.status ===
                                                                                 'cancelled',
                                                                         }"
-                                                                        class="font-semibold ml-2"
+                                                                        class="ml-2 font-semibold"
                                                                     >
                                                                         {{
                                                                             shipment?.status
@@ -382,19 +382,19 @@ const getFileUrl = (filePath) => {
                                                     <!-- Shipment Method & Address -->
                                                     <div>
                                                         <h3
-                                                            class="font-semibold text-lg mb-2"
+                                                            class="mb-2 text-lg font-semibold"
                                                         >
                                                             Shipment Method &
                                                             Address
                                                         </h3>
                                                         <div
-                                                            class="bg-white p-3 rounded border"
+                                                            class="p-3 bg-white border rounded"
                                                         >
                                                             <p
                                                                 v-if="
                                                                     shipment?.internationalShipping
                                                                 "
-                                                                class="text-sm mb-2"
+                                                                class="mb-2 text-sm"
                                                             >
                                                                 <strong
                                                                     >Shipping
@@ -418,7 +418,7 @@ const getFileUrl = (filePath) => {
                                                                     Address:</strong
                                                                 >
                                                                 <div
-                                                                    class="mt-1 pl-4"
+                                                                    class="pl-4 mt-1"
                                                                 >
                                                                     <p>
                                                                         {{
@@ -494,12 +494,12 @@ const getFileUrl = (filePath) => {
                                                     <!-- Additional Services -->
                                                     <div>
                                                         <h3
-                                                            class="font-semibold text-lg mb-2"
+                                                            class="mb-2 text-lg font-semibold"
                                                         >
                                                             Additional Services
                                                         </h3>
                                                         <div
-                                                            class="bg-white p-3 rounded border"
+                                                            class="p-3 bg-white border rounded"
                                                         >
                                                             <div
                                                                 v-if="
@@ -516,7 +516,7 @@ const getFileUrl = (filePath) => {
                                                                     Options:</strong
                                                                 >
                                                                 <ul
-                                                                    class="list-disc pl-6 mt-1"
+                                                                    class="pl-6 mt-1 list-disc"
                                                                 >
                                                                     <li
                                                                         v-for="option in shipment?.packing_options"
@@ -536,7 +536,7 @@ const getFileUrl = (filePath) => {
                                                                             v-if="
                                                                                 option.price
                                                                             "
-                                                                            class="text-green-600 font-semibold"
+                                                                            class="font-semibold text-green-600"
                                                                         >
                                                                             ({{
                                                                                 formatCurrency(
@@ -562,7 +562,7 @@ const getFileUrl = (filePath) => {
                                                                     Options:</strong
                                                                 >
                                                                 <ul
-                                                                    class="list-disc pl-6 mt-1"
+                                                                    class="pl-6 mt-1 list-disc"
                                                                 >
                                                                     <li
                                                                         v-for="option in shipment?.shipping_preference_options"
@@ -582,7 +582,7 @@ const getFileUrl = (filePath) => {
                                                                             v-if="
                                                                                 option.price
                                                                             "
-                                                                            class="text-green-600 font-semibold"
+                                                                            class="font-semibold text-green-600"
                                                                         >
                                                                             ({{
                                                                                 formatCurrency(
@@ -617,7 +617,7 @@ const getFileUrl = (filePath) => {
                                                     <!-- Packages Information -->
                                                     <div>
                                                         <h3
-                                                            class="font-semibold text-lg mb-2"
+                                                            class="mb-2 text-lg font-semibold"
                                                         >
                                                             Consolidated
                                                             Packages ({{
@@ -638,10 +638,10 @@ const getFileUrl = (filePath) => {
                                                             <div
                                                                 v-for="pkg in shipment?.packages"
                                                                 :key="pkg.id"
-                                                                class="bg-white p-4 rounded border"
+                                                                class="p-4 bg-white border rounded"
                                                             >
                                                                 <div
-                                                                    class="flex justify-between items-start mb-2"
+                                                                    class="flex items-start justify-between mb-2"
                                                                 >
                                                                     <div>
                                                                         <p
@@ -722,10 +722,10 @@ const getFileUrl = (filePath) => {
                                                                                 )
                                                                             "
                                                                             target="_blank"
-                                                                            class="text-blue-600 hover:text-blue-800 text-sm underline"
+                                                                            class="text-sm text-blue-600 underline hover:text-blue-800"
                                                                         >
                                                                             <i
-                                                                                class="fas fa-file mr-1"
+                                                                                class="mr-1 fas fa-file"
                                                                             ></i>
                                                                             {{
                                                                                 file.name
@@ -749,14 +749,14 @@ const getFileUrl = (filePath) => {
                                                                         >Items:</strong
                                                                     >
                                                                     <div
-                                                                        class="space-y-2 mt-2 pl-4"
+                                                                        class="pl-4 mt-2 space-y-2"
                                                                     >
                                                                         <div
                                                                             v-for="item in pkg?.items"
                                                                             :key="
                                                                                 item.id
                                                                             "
-                                                                            class="border-l-2 border-gray-300 pl-3"
+                                                                            class="pl-3 border-l-2 border-gray-300"
                                                                         >
                                                                             <p
                                                                                 class="font-medium"
@@ -819,7 +819,7 @@ const getFileUrl = (filePath) => {
                                                                                             )
                                                                                         "
                                                                                         target="_blank"
-                                                                                        class="text-xs text-blue-600 hover:text-blue-800 underline"
+                                                                                        class="text-xs text-blue-600 underline hover:text-blue-800"
                                                                                     >
                                                                                         {{
                                                                                             file.name
@@ -860,10 +860,10 @@ const getFileUrl = (filePath) => {
                                                                                 )
                                                                             "
                                                                             target="_blank"
-                                                                            class="text-blue-600 hover:text-blue-800 text-sm underline"
+                                                                            class="text-sm text-blue-600 underline hover:text-blue-800"
                                                                         >
                                                                             <i
-                                                                                class="fas fa-file-invoice mr-1"
+                                                                                class="mr-1 fas fa-file-invoice"
                                                                             ></i>
                                                                             Invoice
                                                                             #{{

@@ -28,7 +28,7 @@ const props = defineProps({
                                         <th class="border">Total weight</th>
                                         <th class="border">Total Price</th>
                                         <th class="border">Status</th>
-                                        <th class="border">Invoice Status</th>
+                                        <!-- <th class="border">Invoice Status</th> -->
                                         <td class="border">Action</td>
                                     </tr>
                                 </thead>
@@ -62,9 +62,9 @@ const props = defineProps({
                                         <td class="border">
                                             {{ shipment?.status ?? "" }}
                                         </td>
-                                        <td class="border">
+                                        <!-- <td class="border">
                                             {{ shipment?.invoice_status ?? "" }}
-                                        </td>
+                                        </td> -->
                                         <td class="text-center">
                                             <Link
                                                 :href="

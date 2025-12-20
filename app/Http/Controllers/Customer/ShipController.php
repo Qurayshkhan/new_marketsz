@@ -215,14 +215,56 @@ class ShipController extends Controller
             if ($ship->user_id !== Auth::id()) {
                 return Redirect::back()->withErrors(['message' => 'Unauthorized access to shipment.']);
             }
-            $this->shipRepository->update($ship, [
-                'international_shipping_option_id' => $request->input('international_shipping_option_id'),
-                'packing_option_id' => json_encode($request->input('packing_option_id')),
-                'shipping_preference_option_id' => json_encode($request->input('shipping_preference_option_id')),
+            // Prepare data for update, ensuring JSON fields are properly handled
+            $updateData = [
                 'estimated_shipping_charges' => $request->input('estimated_shipping_charges'),
                 'subtotal' => $request->input('subtotal'),
                 'user_address_id' => $request->input('user_address_id'),
-            ]);
+            ];
+
+            // Handle JSON fields - ensure they are in the correct format for JSON columns
+            // Laravel's JSON casting will automatically encode arrays/objects to JSON strings
+            if ($request->has('international_shipping_option_id')) {
+                $intShipping = $request->input('international_shipping_option_id');
+                // If it's a string, try to decode it; if it's a number, convert to array; otherwise use as-is
+                if (is_string($intShipping)) {
+                    $decoded = json_decode($intShipping, true);
+                    $updateData['international_shipping_option_id'] = $decoded !== null ? $decoded : $intShipping;
+                } elseif (is_numeric($intShipping)) {
+                    // Convert single number to array for consistency
+                    $updateData['international_shipping_option_id'] = [$intShipping];
+                } else {
+                    $updateData['international_shipping_option_id'] = $intShipping;
+                }
+            }
+
+            if ($request->has('packing_option_id')) {
+                $packing = $request->input('packing_option_id');
+                // Ensure it's an array
+                if (is_string($packing)) {
+                    $decoded = json_decode($packing, true);
+                    $updateData['packing_option_id'] = $decoded !== null ? $decoded : (is_numeric($packing) ? [$packing] : $packing);
+                } elseif (is_numeric($packing)) {
+                    $updateData['packing_option_id'] = [$packing];
+                } else {
+                    $updateData['packing_option_id'] = is_array($packing) ? $packing : [$packing];
+                }
+            }
+
+            if ($request->has('shipping_preference_option_id')) {
+                $preference = $request->input('shipping_preference_option_id');
+                // Ensure it's an array
+                if (is_string($preference)) {
+                    $decoded = json_decode($preference, true);
+                    $updateData['shipping_preference_option_id'] = $decoded !== null ? $decoded : (is_numeric($preference) ? [$preference] : $preference);
+                } elseif (is_numeric($preference)) {
+                    $updateData['shipping_preference_option_id'] = [$preference];
+                } else {
+                    $updateData['shipping_preference_option_id'] = is_array($preference) ? $preference : [$preference];
+                }
+            }
+
+            $this->shipRepository->update($ship, $updateData);
 
             $user = Auth::user();
             $stripeCharge = null;

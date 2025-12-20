@@ -25,6 +25,12 @@ class Ship extends Model
         'invoice_status'
     ];
 
+    protected $casts = [
+        'international_shipping_option_id' => 'array',
+        'packing_option_id' => 'array',
+        'shipping_preference_option_id' => 'array',
+    ];
+
     public function packages()
     {
         return $this->belongsToMany(Package::class, 'ship_packages', 'ship_id', 'package_id');

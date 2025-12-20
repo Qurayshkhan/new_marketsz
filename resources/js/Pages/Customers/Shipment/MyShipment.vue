@@ -12,14 +12,14 @@ const props = defineProps({
         <Head title="My Shipments" />
 
         <div class="p-6">
-            <h1 class="text-3xl font-bold mb-6 text-gray-800">My Shipments</h1>
+            <h1 class="mb-6 text-3xl font-bold text-gray-800">My Shipments</h1>
 
             <!-- Table wrapper without overflow clipping -->
             <div class="bg-white rounded-lg">
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead
-                            class="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 uppercase text-sm"
+                            class="text-sm text-gray-700 uppercase bg-gradient-to-r from-gray-100 to-gray-200"
                         >
                             <tr>
                                 <th class="p-4 text-left">ID</th>
@@ -36,7 +36,7 @@ const props = defineProps({
                             <tr
                                 v-for="shipment in shipments"
                                 :key="shipment.id"
-                                class="border-b hover:bg-gray-50 transition"
+                                class="transition border-b hover:bg-gray-50"
                             >
                                 <td class="p-4 font-medium text-gray-700">
                                     {{ shipment.id }}
@@ -50,16 +50,16 @@ const props = defineProps({
                                 <td class="p-4">
                                     ${{ shipment.total_price.toFixed(2) }}
                                 </td>
-                                <td class="p-4">
+                                <!-- <td class="p-4">
                                     ${{
                                         shipment.estimated_shipping_charges.toFixed(
                                             2
                                         )
                                     }}
-                                </td>
+                                </td> -->
                                 <td class="p-4">
                                     <span
-                                        class="px-3 py-1 rounded-full text-xs font-semibold"
+                                        class="px-3 py-1 text-xs font-semibold rounded-full"
                                         :class="{
                                             'bg-yellow-100 text-yellow-800':
                                                 shipment.status === 'pending',
@@ -77,7 +77,7 @@ const props = defineProps({
                                 <!-- <td class="p-4 capitalize">
                                     {{ shipment.invoice_status }}
                                 </td> -->
-                                <!-- <td class="p-4 text-right relative">
+                                <!-- <td class="relative p-4 text-right">
                                     <div class="dropdown dropdown-end">
                                         <label
                                             tabindex="0"
